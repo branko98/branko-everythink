@@ -7,24 +7,24 @@ const metrics = [
 ];
 ---
 
-<section id="hero" class="max-w-[1200px] mx-auto px-6 pt-20 pb-24 md:pt-28 md:pb-32">
-  <div class="grid md:grid-cols-12 gap-10 items-start">
-    <div class="md:col-span-7">
+<section id="hero" class="max-w-[1200px] mx-auto px-6 pt-16 pb-16 md:pt-20 md:pb-24">
+  <div class="grid md:grid-cols-12 gap-8 md:gap-10 items-start">
+    <div class="md:col-span-8">
       <h1
-        class="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-medium leading-[1.05] text-[color:var(--color-ink)]"
+        class="text-[32px] sm:text-4xl md:text-[44px] lg:text-[52px] font-normal leading-[1.12] tracking-tight text-[color:var(--color-ink)]"
       >
         B2B SaaS companies don't have an ads problem. They have a leak between
         the ad, the site, the CRM and sales, and{" "}
-        <span class="font-semibold">nobody owns the whole chain.</span>
+        <span class="font-medium">nobody owns the whole chain.</span>
       </h1>
-      <p class="mt-8 max-w-xl text-base md:text-lg text-[color:var(--color-muted)] leading-relaxed">
+      <p class="mt-6 max-w-xl text-sm md:text-base text-[color:var(--color-muted)] leading-relaxed">
         Seven years building growth for B2B SaaS — the channels, the tracking,
         the CRM, and the systems that connect them.
       </p>
     </div>
 
     <aside
-      class="md:col-span-5 md:mt-4 border border-[color:var(--color-rule)] rounded-md bg-[color:var(--color-canvas)] p-5"
+      class="md:col-span-4 border border-[color:var(--color-rule)] rounded-md bg-[color:var(--color-canvas)] p-5"
     >
       <div class="mono-label mb-4">Case study</div>
       <div class="flex items-baseline gap-3">
@@ -69,15 +69,15 @@ const metrics = [
   </div>
 
   <div
-    class="mt-20 md:mt-28 grid grid-cols-2 md:grid-cols-4 border-t border-[color:var(--color-rule)]"
+    class="mt-14 md:mt-20 grid grid-cols-2 md:grid-cols-4 border-t border-[color:var(--color-rule)]"
   >
     {
       metrics.map((m) => (
-        <div class="py-6 md:py-8 pr-6 border-b md:border-b-0 md:border-r border-[color:var(--color-rule)] last:border-r-0">
-          <div class="font-mono text-2xl md:text-3xl tracking-tight text-[color:var(--color-ink)]">
+        <div class="py-5 md:py-6 pr-4 md:pr-6 border-b md:border-b-0 md:border-r border-[color:var(--color-rule)] last:border-r-0 last:border-b-0">
+          <div class="font-mono text-xl md:text-2xl tracking-tight text-[color:var(--color-ink)]">
             {m.value}
           </div>
-          <div class="mt-2 mono-label leading-tight">{m.label}</div>
+          <div class="mt-2 mono-label leading-snug">{m.label}</div>
         </div>
       ))
     }
