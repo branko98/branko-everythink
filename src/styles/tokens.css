@@ -1,0 +1,76 @@
+/* Dizajn tokeni — sve vrednosti su izvučene iz
+   reference/00-global/summary.md + reference/00-global/styles.json
+   (i reference/00-header/styles.json za CTA dugme).
+   Ne unositi nove vrednosti bez izvora. */
+
+:root {
+  /* Boje */
+  --color-bg: rgb(254, 254, 254);
+  --color-text: rgb(15, 20, 31);
+  --color-muted: rgb(71, 84, 103);     /* nav link text (header) */
+  --color-dark: rgb(30, 33, 36);       /* CTA text/arrow */
+  --color-line: rgb(208, 213, 221);    /* svi dashed grid borderi i CTA border */
+
+  /* Fontovi — Alliance No.1 (lokalno) za naslove i brand; Inter za body; Geist Mono za mono. */
+  --font-body: "Inter Variable", Inter, Arial, sans-serif;
+  --font-heading: "Alliance", "Inter Variable", Inter, Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Body tipografija */
+  --text-body-size: 16px;
+  --text-body-line: 20px;
+  --text-body-weight: 400;
+
+  /* Naslov H1 (iz reference/01-hero/styles-heading.json → .main-heading) */
+  --text-h1-size: 35.7px;
+  --text-h1-line: 48px;
+  --text-h1-tracking: -1.2px;
+  --text-h1-weight: 600;
+
+  /* Lead / subtitle paragraf (iz reference/01-hero/styles-subtitle.json → .content-paragraph) */
+  --text-lead-size: 16px;
+  --text-lead-line: 26px;
+  --text-lead-tracking: -0.14px;
+
+  /* Boja sivih delova velikog naslova (izmereno iz reference/01-hero/design.png).
+     Tamni delovi koriste --color-dark (rgb(30, 33, 36)). */
+  --color-heading-muted: rgb(138, 139, 143);
+
+  /* Širina hero teksta (iz styles-heading.json → .hero-text width) */
+  --hero-text-width: 832px;
+
+  /* Case-study kartica (iz reference/02-case-study/styles.json) */
+  --color-card-border: rgb(234, 236, 240);   /* .slider-3 border-color */
+  --color-chip-bg: rgb(239, 241, 245);       /* .category-badge background */
+  --color-link-blue: rgb(0, 110, 232);       /* .blue-link-wrapper color */
+  --card-radius: 12px;                        /* .slider-3 border-radius */
+  --card-padding: 40px;                       /* .hero-slider-wrapper padding */
+  --card-height: 300px;                       /* .slider-3 height */
+
+  /* Nav link tipografija (iz .dropdown-nav .text-block) */
+  --text-nav-size: 14px;
+  --text-nav-line: 20px;
+
+  /* CTA "Get started" tipografija (iz .start-here-nav-link) */
+  --text-cta-size: 12.8px;
+  --text-cta-line: 12.8px;
+  --text-cta-weight: 500;
+
+  /* Kontejner (iz .container.w-container) */
+  --container-width: 1114px;
+  --container-side-padding: 0px;
+  --container-border: 1px dashed var(--color-line);
+
+  /* Razmak ispod headera (iz .below-nav-container: padding 50px 0 50px 0) */
+  --below-nav-padding-y: 50px;
+
+  /* Header (iz .white-navbar) */
+  --header-height: 70px;
+  --header-padding-x: 20px;
+
+  /* CTA dugme (iz .cta-button.white + .div-block-510) */
+  --cta-border: 1px solid var(--color-line);
+  --cta-radius: 50px;
+  --cta-padding-y: 10px;
+  --cta-padding-x: 15px;
+}

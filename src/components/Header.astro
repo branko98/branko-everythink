@@ -1,0 +1,74 @@
+---
+// Header — sadržaj po reference/00-header/design.png:
+//   logo (public/logo.png) levo, "Get started" dugme desno.
+// Vrednosti (visina, boje, border, tipografija) iz reference/00-header/styles.json.
+// Logo intrinsic dimensions: 1397 × 173 (aspect 8.075).
+// Prikazana visina 38 px = wordmark visina u design.png ×0.5 (izmeren bbox y=39..113).
+---
+
+<header class="site-header">
+  <div class="site-header__container container">
+    <a href="/" class="brand" aria-label="branko/everythink — home">
+      <img src="/logo.png" alt="branko/everythink" width="307" height="38" />
+    </a>
+
+    <a href="#get-started" class="cta">
+      <span class="cta__label">Get started</span>
+      <span class="cta__arrow" aria-hidden="true">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 5h7M5.5 2.5 8 5 5.5 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: var(--header-height);
+    padding: 0 var(--header-padding-x);
+    background: var(--color-bg);
+  }
+
+  .site-header__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+  }
+  .brand img {
+    display: block;
+    height: 38px;
+    width: auto; /* fallback ako browser ne primeni intrinsic width */
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: var(--cta-padding-y) var(--cta-padding-x);
+    border: var(--cta-border);
+    border-radius: var(--cta-radius);
+    color: var(--color-dark);
+    font-family: var(--font-body);
+    font-size: var(--text-cta-size);
+    line-height: var(--text-cta-line);
+    font-weight: var(--text-cta-weight);
+  }
+
+  .cta__arrow {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-dark);
+  }
+</style>

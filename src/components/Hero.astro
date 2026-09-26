@@ -1,0 +1,102 @@
+---
+// Hero — 01-hero (naslov + podnaslov).
+// Sadržaj i podela boja: reference/01-hero/design.png.
+// Vrednosti tipografije: reference/01-hero/styles-heading.json
+//   (h1 = Alliance 600, 35.7 / 48, tracking -1.2)
+//   i styles-subtitle.json (p = Inter 400, 16 / 26, tracking -0.14).
+//
+// Layout (izmereno iz design.png; ×2 → ÷2 za live):
+//   [.below-nav-container spacer 100 px — poklapa poziciju naslova na originalu y=170]
+//   [heading section: top+bottom dashed border, ~145 px, padding 9 / 0 / 8]
+//     └─ grid 834 / 278 (leva kolona: h1, desna: prazna sa dashed left)
+//   [subtitle section: samo bottom border, ~98 px, padding 36.5 / 0 / 20.5]
+//     └─ grid 3×370.66 (leva: p, srednja i desna: prazne sa dashed left)
+---
+
+<div class="container below-nav-container hero-spacer" aria-hidden="true"></div>
+
+<section class="container hero-heading top-border bottom-border">
+  <div class="hero-heading__grid">
+    <div class="hero-heading__text">
+      <h1 class="hero-h1">
+        <span class="hero-h1__muted">B2B SaaS companies don&rsquo;t have an ads problem. They have a leak between the ad, the site, the CRM and sales and </span><span class="hero-h1__dark">nobody owns the whole chain.</span>
+      </h1>
+    </div>
+    <div class="hero-heading__aside" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="container hero-subtitle bottom-border">
+  <div class="hero-subtitle__grid">
+    <div class="hero-subtitle__text">
+      <p class="hero-lead">
+        Seven years building growth for B2B SaaS &ndash; the channels, the tracking, the CRM, and the systems that connect them.
+      </p>
+    </div>
+    <div class="hero-subtitle__col" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  /* Heading blok — dashed linija gore i dole. Padding je 0 jer se optički razmak
+     između linije i teksta dobija iz font leading-a (line-height 48 na 35.7 = 6 px na svakoj strani). */
+  .hero-heading {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .hero-heading__grid {
+    display: grid;
+    grid-template-columns: var(--hero-text-width) 1fr;
+  }
+  .hero-heading__text {
+    max-width: var(--hero-text-width);
+  }
+  .hero-heading__aside {
+    border-left: var(--container-border);
+  }
+
+  .hero-h1 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--text-h1-size);
+    line-height: var(--text-h1-line);
+    letter-spacing: var(--text-h1-tracking);
+    font-weight: var(--text-h1-weight);
+    color: var(--color-dark);
+  }
+  .hero-h1__muted { color: var(--color-heading-muted); }
+  .hero-h1__dark  { color: var(--color-dark); }
+
+  /* Subtitle blok — samo donji border (gornji je deljeni sa heading-om).
+     Padding je 0 na sekciji da bi srednji dashed border-left prošao punom
+     visinom sekcije; vertikalni razmak teksta postavljen na sam tekst. */
+  .hero-subtitle {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  /* Subtitle grid — dve kolone po designu (original ima 3, ali design pobeđuje).
+     Podela je približno 50/50. */
+  .hero-subtitle__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-subtitle__col {
+    border-left: var(--container-border);
+  }
+  .hero-subtitle__text {
+    padding-top: 30px;
+    padding-bottom: 15px;
+  }
+  .hero-lead {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-lead-size);
+    line-height: var(--text-lead-line);
+    letter-spacing: var(--text-lead-tracking);
+    color: var(--color-dark);
+  }
+
+  /* Spacer nema linije gore/dole (samo dashed strane iz .container),
+     dolazi odmah nakon fixed/sticky headera. */
+  .hero-spacer { }
+</style>

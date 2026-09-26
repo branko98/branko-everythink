@@ -1,1 +1,82 @@
-@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/geist-mono/400.css";
+@import "@fontsource/geist-mono/500.css";
+@import "@fontsource/geist-mono/600.css";
+@import "@fontsource/geist-mono/700.css";
+@import "./tokens.css";
+
+/* Alliance No.2 — lokalno iz /public/fonts/alliance/
+   Težine 300/400/500/600 (odabran No.2 jer se poklapa sa design.png). */
+@font-face {
+  font-family: "Alliance";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/alliance/alliance-no2-300.otf") format("opentype");
+}
+@font-face {
+  font-family: "Alliance";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/alliance/alliance-no2-400.otf") format("opentype");
+}
+@font-face {
+  font-family: "Alliance";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/alliance/alliance-no2-500.otf") format("opentype");
+}
+@font-face {
+  font-family: "Alliance";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/alliance/alliance-no2-600.otf") format("opentype");
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+img, svg, video { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* Body — iz reference/00-global/summary.md */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line);
+  font-weight: var(--text-body-weight);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Kontejner — pravi vertikalne dashed linije preko cele stranice
+   (iz .container.w-container) */
+.container {
+  width: var(--container-width);
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--container-side-padding);
+  border-left: var(--container-border);
+  border-right: var(--container-border);
+}
+
+/* Razmak ispod nav-a (iz .below-nav-container) */
+.below-nav-container {
+  padding-top: var(--below-nav-padding-y);
+  padding-bottom: var(--below-nav-padding-y);
+}
+
+/* Horizontalna dashed linija — pomoćna klasa za dividere po sekcijama */
+.hdivider {
+  border: 0;
+  border-top: 1px dashed var(--color-line);
+  margin: 0;
+}
+.top-border { border-top: 1px dashed var(--color-line); }
+.bottom-border { border-bottom: 1px dashed var(--color-line); }

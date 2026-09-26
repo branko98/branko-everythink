@@ -1,5 +1,11 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import CaseStudy from "../components/CaseStudy.astro";
 ---
 
-<BaseLayout title="branko/everythink"></BaseLayout>
+<Layout title="branko/everythink">
+  <Hero />
+  <CaseStudy />
+  <section class="container" style="height: 600px;"></section>
+</Layout>
