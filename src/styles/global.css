@@ -161,12 +161,45 @@
   border-bottom: 1px dashed var(--color-brand-border);
 }
 
-.hero-grid-light-noblock {
+/* Webflow layout base (from omnius shared.css) */
+.w-layout-grid {
+  display: grid;
+  grid-row-gap: 16px;
+  grid-column-gap: 16px;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+}
+
+/* .hero-grid — later rule wins in omnius, keep those */
+.hero-grid {
+  grid-row-gap: 50px;
+  border-bottom: 1px none var(--color-dark-lines);
+  grid-template-rows: auto;
+  grid-template-columns: 1fr;
+}
+.hero-grid.light-theme {
+  border-bottom-color: var(--color-brand-border);
+}
+.hero-grid.light-theme.without-grid {
   display: block;
 }
 
+/* .hero-content-wrapper — omnius has two rules; the later one wins */
 .hero-content-wrapper {
-  padding: 30px 40px;
+  border-bottom-style: none;
+  padding-top: 50px;
+}
+.hero-content-wrapper.tablet-border-bottom-none {
+  border-bottom-style: none;
+}
+
+/* .hero-empty-wrapper — display:none by default in omnius (structural placeholder) */
+.hero-empty-wrapper {
+  border-left-style: none;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  display: none;
 }
 
 .content-paragraph {
@@ -176,7 +209,9 @@
   margin: 0;
   max-width: 720px;
 }
-.content-paragraph strong { font-weight: 600; }
+.strong-bold {
+  font-weight: 700;
+}
 
 /* -------- .hero-slider-wrapper (omnius homepage graph-section) -------- */
 
