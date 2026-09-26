@@ -1,0 +1,31 @@
+---
+import TestimonialCard from "./TestimonialCard.astro";
+
+const testimonials = [
+  {
+    company: "Native Teams",
+    quote:
+      "We truly saw everythink as an extension of our in-house team. As a result of the collaboration, we have **clearer strategy, better SEO performance overall, and notable KPI improvements**.",
+    authorName: "Barbara Barko",
+    authorRole: "SEO Marketing Manager @ Native Teams",
+  },
+  {
+    company: "ANNA",
+    quote:
+      "everythink completely owns the project — taking control and monitoring performance. The speed at which they deliver is insane — **I honestly don't think they have 100 people working around the clock.**",
+    authorName: "Sergei Fedorov",
+    authorRole: "Head of Growth @ ANNA",
+  },
+];
+---
+
+{
+  testimonials.map((t) => (
+    <TestimonialCard
+      company={t.company}
+      quote={t.quote}
+      authorName={t.authorName}
+      authorRole={t.authorRole}
+    />
+  ))
+}

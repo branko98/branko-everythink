@@ -1,26 +1,37 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Hero from "../components/sections/Hero.astro";
-import About from "../components/sections/About.astro";
-import Services from "../components/sections/Services.astro";
-import Approach from "../components/sections/Approach.astro";
-import Work from "../components/sections/Work.astro";
-import Results from "../components/sections/Results.astro";
-import Testimonials from "../components/sections/Testimonials.astro";
-import FAQ from "../components/sections/FAQ.astro";
-import Availability from "../components/sections/Availability.astro";
-import Contact from "../components/sections/Contact.astro";
+import HeroLeak from "../components/sections/HeroLeak.astro";
+import TestimonialCard from "../components/sections/TestimonialCard.astro";
+import EveryAgencyGrid from "../components/sections/EveryAgencyGrid.astro";
+import Comparison from "../components/sections/Comparison.astro";
+import DarkCTA from "../components/sections/DarkCTA.astro";
+import TestimonialsList from "../components/sections/TestimonialsList.astro";
+
+const worldFirstQuote =
+  "The collaboration with the everythink team was overall smooth and professional. The POC is very knowledgeable, and the team is always open to feedback and adjustments while also being very supportive in working hand-in-hand to continuously **drive business impact**. I appreciate the team's dedication to refining and adapting, which helps keep our SEO efforts moving in the right direction day by day. The team has been easy to work with and quite responsive whenever I need clarification or support. Communication is **professional and solutions-oriented**, especially when discussing SEO challenges or performance updates. Overall, the experience working with the everythink team has been really positive, and I'm happy with our partnership. Some of the key benefits from collaborating with everythink include their **solid expertise and authority in SEO/GEO, flexibility and openness to feedback**, and the fact that they consistently stay up to date with the latest industry trends.";
+
+const worldFirstMeta = [
+  { label: "Industry", value: "Fintech / FX" },
+  {
+    label: "Duration",
+    value: "UK-based fintech, part of first international",
+  },
+  { label: "Headquarters", value: "London" },
+  { label: "URL", value: "worldfirst.com" },
+];
 ---
 
-<BaseLayout title="Branko — consulting">
-  <Hero />
-  <About />
-  <Services />
-  <Approach />
-  <Work />
-  <Results />
-  <Testimonials />
-  <FAQ />
-  <Availability />
-  <Contact />
+<BaseLayout title="branko/everythink — B2B SaaS growth, whole chain">
+  <HeroLeak />
+  <TestimonialCard
+    company="WorldFirst"
+    quote={worldFirstQuote}
+    authorName="Ying Teng Tang"
+    authorRole="Global SEO Manager @ WorldFirst"
+    meta={worldFirstMeta}
+  />
+  <EveryAgencyGrid />
+  <Comparison />
+  <DarkCTA />
+  <TestimonialsList />
 </BaseLayout>

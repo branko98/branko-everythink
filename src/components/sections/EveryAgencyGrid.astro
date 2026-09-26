@@ -1,0 +1,67 @@
+---
+const cards = [
+  {
+    title: "What looks profitable only because you stop counting at the lead?",
+    body: "Cost per demo is a platform number. Cost per customer only exists once the ad, the CRM and the closed deal are connected, and then the campaign that looked best usually isn't.",
+    colStart: "md:col-start-1",
+  },
+  {
+    title: "Does every button on your landing page fire?",
+    body: "By developing research, company data, and pre-programmed rules, tracking effectively automates the answer — most of the time it doesn't fire.",
+    colStart: "md:col-start-5",
+  },
+  {
+    title: "How long does a paid lead sit before someone calls it?",
+    body: "Traditional handoffs are labor-intensive and time-consuming, while the outcomes generated get worse the longer the lead sits cold.",
+    colStart: "md:col-start-9",
+  },
+  {
+    title: "Which of your pages actually rank, and which just exist?",
+    body: "Content programs ship pages. Programmatic ones ship signals. Only one of the two shows up in the CRM and the P&L a quarter later.",
+    colStart: "md:col-start-3",
+  },
+];
+---
+
+<section
+  id="everything"
+  class="max-w-[1200px] mx-auto px-6 py-24 md:py-32 border-t border-[color:var(--color-rule)]"
+>
+  <h2
+    class="max-w-3xl text-3xl md:text-5xl font-medium leading-[1.1] text-[color:var(--color-ink)]"
+  >
+    Every agency owns one of these. The money is lost between them.
+    That's the whole idea behind{" "}
+    <span class="font-semibold">everythink</span>.
+  </h2>
+
+  <div
+    class="mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-12 gap-y-6 relative"
+  >
+    <div
+      class="hidden md:grid pointer-events-none absolute inset-0 grid-cols-12"
+      aria-hidden="true"
+    >
+      {
+        Array.from({ length: 12 }).map(() => (
+          <div class="border-l border-dashed border-[color:var(--color-rule)] first:border-l-0" />
+        ))
+      }
+    </div>
+
+    {
+      cards.map((c) => (
+        <div class={`md:col-span-4 ${c.colStart} relative`}>
+          <div class="p-6 md:p-7 border border-[color:var(--color-rule)] bg-[color:var(--color-paper)]">
+            <h3 class="text-lg md:text-xl font-medium leading-snug text-[color:var(--color-ink)]">
+              {c.title}
+            </h3>
+            <p class="mt-4 text-sm md:text-[15px] leading-relaxed text-[color:var(--color-muted)]">
+              {c.body}
+            </p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

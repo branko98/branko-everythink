@@ -1,0 +1,64 @@
+---
+const brands = [
+  "YCombinator",
+  "Reuters",
+  "Bloomberg",
+  "MidWatchmey",
+  "Speedwork",
+  "Entrepreneur First",
+];
+---
+
+<section class="max-w-[1200px] mx-auto px-6 py-16 md:py-24">
+  <div
+    class="rounded-md bg-[color:var(--color-ink)] text-[color:var(--color-ink-invert)] p-8 md:p-14"
+  >
+    <div class="flex items-center gap-2 opacity-70">
+      <span
+        class="inline-block w-2.5 h-2.5 rounded-full border border-[color:var(--color-ink-invert)]"
+      ></span>
+      <span class="mono-label !text-[color:var(--color-ink-invert)] !opacity-70">
+        everythink
+      </span>
+    </div>
+
+    <h2
+      class="mt-10 max-w-2xl text-3xl md:text-5xl font-medium leading-[1.1]"
+    >
+      AI-native SEO Agency, maximizing the growth probability on ∞ Perplexity.
+    </h2>
+
+    <p class="mt-6 max-w-2xl text-base md:text-lg opacity-80 leading-relaxed">
+      everythink is a B2B SEO & GEO agency, partnering exclusively with SaaS,
+      Fintech & AI companies. The result? Compounding growth made through organic
+      positioning: everywhere people search for information, including both Google
+      and LLM-based engines.
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row gap-3">
+      <a
+        href="mailto:branko.j.98@gmail.com"
+        class="inline-flex items-center justify-center px-5 py-3 rounded-sm bg-[color:var(--color-ink-invert)] text-[color:var(--color-ink)] text-sm font-medium hover:opacity-90 transition-opacity"
+      >
+        Contact our team
+      </a>
+      <a
+        href="#"
+        class="inline-flex items-center justify-center px-5 py-3 rounded-sm border border-[color:var(--color-ink-invert)]/30 text-sm font-medium hover:bg-[color:var(--color-ink-invert)]/10 transition-colors"
+      >
+        Schedule a meeting
+      </a>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-[color:var(--color-ink-invert)]/10">
+      <div class="mono-label !text-[color:var(--color-ink-invert)] !opacity-60 mb-4">
+        As seen in / trusted by
+      </div>
+      <div
+        class="flex flex-wrap gap-x-8 gap-y-3 text-sm font-medium opacity-70"
+      >
+        {brands.map((b) => <span>{b}</span>)}
+      </div>
+    </div>
+  </div>
+</section>

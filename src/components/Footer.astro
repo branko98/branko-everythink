@@ -4,9 +4,21 @@ const year = new Date().getFullYear();
 
 <footer class="border-t border-[color:var(--color-rule)] mt-24">
   <div
-    class="max-w-6xl mx-auto px-6 py-8 flex items-center justify-between text-sm text-[color:var(--color-muted)]"
+    class="max-w-[1200px] mx-auto px-6 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
   >
-    <span>© {year} Branko</span>
-    <a href="mailto:branko.j.98@gmail.com">branko.j.98@gmail.com</a>
+    <img
+      src="/logo-everythink.png"
+      alt="branko/everythink"
+      class="h-4 w-auto opacity-80"
+    />
+    <div class="flex items-center gap-6 text-sm text-[color:var(--color-muted)]">
+      <a
+        href="mailto:branko.j.98@gmail.com"
+        class="hover:text-[color:var(--color-ink)] transition-colors"
+      >
+        branko.j.98@gmail.com
+      </a>
+      <span>© {year}</span>
+    </div>
   </div>
 </footer>

@@ -24,3 +24,8 @@ pnpm-debug.log*
 !.vscode/settings.json
 !.vscode/extensions.json
 .idea/
+
+# design sources (runtime copies live in public/)
+Aliance Font/
+Consultihng website.pdf
+logo example.png
