@@ -8,6 +8,16 @@
   linije, boje, stil komponenti.
 - Sav tekst, logotipi i imena klijenata u dizajnu su **PLACEHOLDER**.
 
+## Razmera (design ↔ live)
+
+- `design-full.png` je širok **3132 px**.
+- Sajt snimamo na viewport-u **1440 × 900** (headless, bez scrollbara).
+- Container u dizajnu meri **2226 px** (leva dashed linija na x=447.5,
+  desna na x=2673.5 u `design-full.png`).
+- Container na live meri **1114 px** (`.container.w-container`).
+- **Razmera dizajn → live: 2226 / 1114 = 1.998 (praktično ×2).**
+- Vratno: 1 px na live ≈ 2 px u `design-full.png`.
+
 ## Redosled sekcija
 
 Redosled ispod je redosled na sajtu.

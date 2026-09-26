@@ -19,6 +19,9 @@ pnpm-debug.log*
 # macOS
 .DS_Store
 
+# playwright MCP page dumps (transient)
+.playwright-mcp/
+
 # editors
 .vscode/*
 !.vscode/settings.json
