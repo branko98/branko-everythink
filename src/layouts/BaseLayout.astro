@@ -1,20 +1,12 @@
 ---
 import "../styles/global.css";
-import "../styles/nav.css";
-import "../styles/hero.css";
-import "../styles/hero-cm.css";
-import Nav from "../components/Nav.astro";
-import Footer from "../components/Footer.astro";
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const {
-  title,
-  description = "B2B SaaS growth — owning the whole chain between ads, site, CRM and sales.",
-} = Astro.props;
+const { title, description = "" } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
@@ -28,23 +20,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
   </head>
-  <body class="min-h-screen flex flex-col">
-    <Nav />
-    <main class="flex-1">
-      <slot />
-    </main>
-    <Footer />
+  <body>
+    <slot />
   </body>
 </html>
