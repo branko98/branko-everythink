@@ -32,14 +32,14 @@ async function dismissCookies(page) {
   }
 }
 
-async function capture(page, selector, outPng, outJson) {
-  const loc = page.locator(selector).first();
+async function capture(page, selector, outPng, outJson, { index = 0 } = {}) {
+  const loc = page.locator(selector).nth(index);
   await loc.scrollIntoViewIfNeeded();
   await page.waitForTimeout(2000);
   await loc.screenshot({ path: outPng, scale: 'css', animations: 'disabled' });
-  const data = await page.evaluate((sel) => window.__extract(sel), selector);
+  const data = await page.evaluate(([sel, idx]) => window.__extract(sel, idx), [selector, index]);
   await fs.writeFile(outJson, JSON.stringify(data, null, 2));
-  console.log(`  saved ${path.relative(ROOT, outPng)}  and  ${path.relative(ROOT, outJson)}  hits=${data.matchCount}`);
+  console.log(`  saved ${path.relative(ROOT, outPng)}  and  ${path.relative(ROOT, outJson)}  hits=${data.matchCount} idx=${index}`);
   return data;
 }
 
@@ -128,6 +128,18 @@ async function main() {
     path.join(ROOT, '01-hero/original-heading.png'),
     path.join(ROOT, '01-hero/styles-heading.json'));
 
+  // ---------- 02-case-study (omnius.so, .section.graph-section) ----------
+  console.log('== 02-case-study (omnius.so, .section.graph-section) ==');
+  await capture(page, '.section.graph-section',
+    path.join(ROOT, '02-case-study/original.png'),
+    path.join(ROOT, '02-case-study/styles.json'));
+
+  // ---------- 08-cta-dark (omnius.so, .cta-wrapper.gradient-background...) ----------
+  console.log('== 08-cta-dark (omnius.so, .cta-wrapper.gradient-background.cta-height.dark-mode-cta-new-style) ==');
+  await capture(page, '.cta-wrapper.gradient-background.cta-height.dark-mode-cta-new-style',
+    path.join(ROOT, '08-cta-dark/original.png'),
+    path.join(ROOT, '08-cta-dark/styles.json'));
+
   // ---------- 01-hero subtitle (content-marketing) ----------
   console.log('== 01-hero subtitle (content-marketing, .hero-grid.light-theme.without-grid) ==');
   await page.goto('https://www.omnius.so/content-marketing', { waitUntil: 'load' });
@@ -136,6 +148,44 @@ async function main() {
   await capture(page, '.hero-grid.light-theme.without-grid',
     path.join(ROOT, '01-hero/original-subtitle.png'),
     path.join(ROOT, '01-hero/styles-subtitle.json'));
+
+  // ---------- 03/05/06 (programmatic-seo) ----------
+  console.log('== programmatic-seo ==');
+  await page.goto('https://www.omnius.so/programmatic-seo', { waitUntil: 'load' });
+  await dismissCookies(page);
+  await withExtract(page);
+
+  console.log('== 03-stats (.stats-grid-4-cols) ==');
+  await capture(page, '.stats-grid-4-cols',
+    path.join(ROOT, '03-stats/original.png'),
+    path.join(ROOT, '03-stats/styles.json'));
+
+  console.log('== 05-section-heading (.heading-grid) ==');
+  await capture(page, '.heading-grid',
+    path.join(ROOT, '05-section-heading/original.png'),
+    path.join(ROOT, '05-section-heading/styles.json'));
+
+  console.log('== 06-question-cards (.container.container-flex) ==');
+  await capture(page, '.container.container-flex',
+    path.join(ROOT, '06-question-cards/original.png'),
+    path.join(ROOT, '06-question-cards/styles.json'));
+
+  // ---------- 04/09 (geo-agency) ----------
+  console.log('== geo-agency ==');
+  await page.goto('https://www.omnius.so/geo-agency', { waitUntil: 'load' });
+  await dismissCookies(page);
+  await withExtract(page);
+
+  console.log('== 04-testimonial-featured ([data-w-id]) ==');
+  await capture(page, '[data-w-id="f8e998fe-cee6-c8ce-f335-f4becaabef63"]',
+    path.join(ROOT, '04-testimonial-featured/original.png'),
+    path.join(ROOT, '04-testimonial-featured/styles.json'));
+
+  console.log('== 09-testimonial-list (.testimonial-wrapper nth=1) ==');
+  await capture(page, '.testimonial-wrapper',
+    path.join(ROOT, '09-testimonial-list/original.png'),
+    path.join(ROOT, '09-testimonial-list/styles.json'),
+    { index: 1 });
 
   await browser.close();
   console.log('DONE');
