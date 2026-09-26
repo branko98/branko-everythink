@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Alliance No.2";
+  font-family: "Alliance";
   src: url("/fonts/AllianceNo2-Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Alliance No.2";
+  font-family: "Alliance";
   src: url("/fonts/AllianceNo2-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Alliance No.2";
+  font-family: "Alliance";
   src: url("/fonts/AllianceNo2-SemiBold.otf") format("opentype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Alliance No.2";
+  font-family: "Alliance";
   src: url("/fonts/AllianceNo2-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
@@ -31,18 +31,14 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Alliance No.2", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  --color-ink: #1e2124;
-  --color-paper: #fefefe;
-  --color-canvas: #f9f9fa;
+  --font-display: "Alliance", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-black-primary: #1e2124;
+  --color-background-white: #fefefe;
+  --color-brand-border: #d0d5dd;
+  --color-dark-lines: #333333;
+  --color-gray-canvas: #f9f9fa;
+  --color-link-primary: #006ee8;
   --color-muted: #667085;
-  --color-rule: #d0d5dd;
-  --color-card: #eaecf0;
-  --color-accent: #006ee8;
-  --color-highlight: #e2e9fd;
-  --color-ink-invert: #fefefe;
 }
 
 @layer base {
@@ -51,41 +47,128 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-
   body {
-    background-color: var(--color-paper);
-    color: var(--color-ink);
+    background-color: var(--color-background-white);
+    color: var(--color-black-primary);
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.5;
+    margin: 0;
   }
-
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    color: var(--color-ink);
-  }
-  h1 { font-size: 40px; line-height: 1.2; font-weight: 600; letter-spacing: -0.01em; }
-  h2 { font-size: 30px; line-height: 1.15; font-weight: 700; letter-spacing: -0.005em; }
-  h3 { font-size: 20px; line-height: 1.25; font-weight: 600; }
-
   ::selection {
-    background-color: var(--color-ink);
-    color: var(--color-paper);
+    background-color: var(--color-black-primary);
+    color: var(--color-background-white);
   }
 }
 
-@utility mono-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-muted);
+/* --------------------------------------------------------------
+   omnius-mirrored components. Class names + values pulled from
+   cdn.prod.website-files.com/…/omniussite.webflow.*.css so future
+   updates can be diffed against their live styles 1-to-1.
+-------------------------------------------------------------- */
+
+.white-navbar {
+  z-index: 50;
+  background-color: var(--color-background-white);
+  padding-left: 20px;
+  padding-right: 20px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
-@utility container-rail {
+.header-container {
   max-width: 1114px;
   margin-left: auto;
   margin-right: auto;
-  border-left: 1px dashed var(--color-rule);
-  border-right: 1px dashed var(--color-rule);
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border-right: 1px dashed var(--color-brand-border);
+  border-left: 1px dashed var(--color-brand-border);
 }
+
+.container-rail {
+  max-width: 1114px;
+  margin-left: auto;
+  margin-right: auto;
+  border-right: 1px dashed var(--color-brand-border);
+  border-left: 1px dashed var(--color-brand-border);
+}
+
+.below-nav-container {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.section-hero {
+  border-top: 1px dashed var(--color-brand-border);
+  border-bottom: 1px dashed var(--color-brand-border);
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.main-heading-grid {
+  display: grid;
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+  grid-template-columns: 3fr 1fr;
+  grid-auto-columns: 1fr;
+}
+@media (max-width: 991px) {
+  .main-heading-grid { grid-template-columns: 3.5fr 0.75fr; }
+}
+@media (max-width: 767px) {
+  .main-heading-grid { grid-template-columns: 1fr; }
+}
+
+.hero-text {
+  align-self: flex-start;
+  max-width: 832px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+.main-heading {
+  color: var(--color-black-primary);
+  font-family: var(--font-display);
+  font-size: 35.7px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: -1.2px;
+  margin: 0;
+}
+@media (max-width: 767px) {
+  .main-heading { font-size: 33px; line-height: 42px; }
+}
+
+.hero-empty-block {
+  border-left: 1px dashed var(--color-brand-border);
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+@media (max-width: 767px) {
+  .hero-empty-block { display: none; }
+}
+
+.hero-grid-light-noblock {
+  display: block;
+  border-bottom: 1px dashed var(--color-brand-border);
+}
+
+.hero-content-wrapper {
+  padding: 30px 40px;
+}
+
+.content-paragraph {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-black-primary);
+  margin: 0;
+  max-width: 720px;
+}
+.content-paragraph strong { font-weight: 600; }

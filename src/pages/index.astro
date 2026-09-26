@@ -1,37 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import HeroLeak from "../components/sections/HeroLeak.astro";
-import TestimonialCard from "../components/sections/TestimonialCard.astro";
-import EveryAgencyGrid from "../components/sections/EveryAgencyGrid.astro";
-import Comparison from "../components/sections/Comparison.astro";
-import DarkCTA from "../components/sections/DarkCTA.astro";
-import TestimonialsList from "../components/sections/TestimonialsList.astro";
-
-const worldFirstQuote =
-  "The collaboration with the everythink team was overall smooth and professional. The POC is very knowledgeable, and the team is always open to feedback and adjustments while also being very supportive in working hand-in-hand to continuously **drive business impact**. I appreciate the team's dedication to refining and adapting, which helps keep our SEO efforts moving in the right direction day by day. The team has been easy to work with and quite responsive whenever I need clarification or support. Communication is **professional and solutions-oriented**, especially when discussing SEO challenges or performance updates. Overall, the experience working with the everythink team has been really positive, and I'm happy with our partnership. Some of the key benefits from collaborating with everythink include their **solid expertise and authority in SEO/GEO, flexibility and openness to feedback**, and the fact that they consistently stay up to date with the latest industry trends.";
-
-const worldFirstMeta = [
-  { label: "Industry", value: "Fintech / FX" },
-  {
-    label: "Duration",
-    value: "UK-based fintech, part of first international",
-  },
-  { label: "Headquarters", value: "London" },
-  { label: "URL", value: "worldfirst.com" },
-];
+import BelowNav from "../components/sections/BelowNav.astro";
+import Hero from "../components/sections/Hero.astro";
+import HeroSubhead from "../components/sections/HeroSubhead.astro";
 ---
 
-<BaseLayout title="branko/everythink — B2B SaaS growth, whole chain">
-  <HeroLeak />
-  <TestimonialCard
-    company="WorldFirst"
-    quote={worldFirstQuote}
-    authorName="Ying Teng Tang"
-    authorRole="Global SEO Manager @ WorldFirst"
-    meta={worldFirstMeta}
-  />
-  <EveryAgencyGrid />
-  <Comparison />
-  <DarkCTA />
-  <TestimonialsList />
+<BaseLayout title="branko/everythink">
+  <BelowNav />
+  <Hero />
+  <HeroSubhead />
 </BaseLayout>
