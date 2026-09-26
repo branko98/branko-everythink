@@ -25,47 +25,49 @@ const rows = [
 
 <section
   id="works-when"
-  class="max-w-[1200px] mx-auto px-6 py-16 md:py-24 border-t border-[color:var(--color-rule)]"
+  class="border-b border-dashed border-[color:var(--color-rule)]"
 >
-  <h2
-    class="max-w-2xl text-2xl md:text-4xl font-normal leading-[1.15] tracking-tight text-[color:var(--color-ink)]"
-  >
-    This works when you're already spending, and it isn't working.
-  </h2>
+  <div class="container-rail px-5 md:px-10 py-16 md:py-20">
+    <h2 class="max-w-[720px]">
+      This works when you're already spending, and it isn't working.
+    </h2>
 
-  <div class="mt-10 md:mt-12 border border-[color:var(--color-rule)] rounded-md overflow-hidden">
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 border-b border-[color:var(--color-rule)] bg-[color:var(--color-canvas)]"
-    >
-      <div class="p-4 md:p-5 border-b md:border-b-0 md:border-r border-[color:var(--color-rule)]">
-        <span class="mono-label">Good example</span>
-      </div>
-      <div class="p-4 md:p-5">
-        <span class="mono-label">Bad example</span>
-      </div>
-    </div>
-
-    {
-      rows.map((r, i) => (
-        <div
-          class={`grid grid-cols-1 md:grid-cols-2 ${
-            i < rows.length - 1 ? "border-b border-[color:var(--color-rule)]" : ""
-          }`}
-        >
-          <div class="p-5 md:p-6 border-b md:border-b-0 md:border-r border-[color:var(--color-rule)] text-sm md:text-[15px] leading-relaxed">
-            <span class="font-medium underline decoration-[color:var(--color-accent)] decoration-2 underline-offset-4">
-              {r.good.lead}
-            </span>{" "}
-            <span class="text-[color:var(--color-muted)]">{r.good.rest}</span>
-          </div>
-          <div class="p-5 md:p-6 text-sm md:text-[15px] leading-relaxed">
-            <span class="font-medium underline decoration-[color:var(--color-accent)] decoration-2 underline-offset-4">
-              {r.bad.lead}
-            </span>{" "}
-            <span class="text-[color:var(--color-muted)]">{r.bad.rest}</span>
-          </div>
+    <div class="mt-10 md:mt-12 border border-[color:var(--color-card)] rounded-xl overflow-hidden">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 border-b border-dashed border-[color:var(--color-rule)] bg-[color:var(--color-canvas)]"
+      >
+        <div class="p-4 md:p-5 border-b md:border-b-0 md:border-r border-dashed border-[color:var(--color-rule)]">
+          <span class="mono-label">Good example</span>
         </div>
-      ))
-    }
+        <div class="p-4 md:p-5">
+          <span class="mono-label">Bad example</span>
+        </div>
+      </div>
+
+      {
+        rows.map((r, i) => (
+          <div
+            class={`grid grid-cols-1 md:grid-cols-2 ${
+              i < rows.length - 1
+                ? "border-b border-dashed border-[color:var(--color-rule)]"
+                : ""
+            }`}
+          >
+            <div class="p-5 md:p-6 border-b md:border-b-0 md:border-r border-dashed border-[color:var(--color-rule)] text-[14px] leading-[1.65]">
+              <span class="font-semibold text-[color:var(--color-ink)]">
+                {r.good.lead}
+              </span>{" "}
+              <span class="text-[color:var(--color-muted)]">{r.good.rest}</span>
+            </div>
+            <div class="p-5 md:p-6 text-[14px] leading-[1.65]">
+              <span class="font-semibold text-[color:var(--color-ink)]">
+                {r.bad.lead}
+              </span>{" "}
+              <span class="text-[color:var(--color-muted)]">{r.bad.rest}</span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>

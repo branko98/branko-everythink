@@ -7,79 +7,92 @@ const metrics = [
 ];
 ---
 
-<section id="hero" class="max-w-[1200px] mx-auto px-6 pt-16 pb-16 md:pt-20 md:pb-24">
-  <div class="grid md:grid-cols-12 gap-8 md:gap-10 items-start">
-    <div class="md:col-span-8">
-      <h1
-        class="text-[32px] sm:text-4xl md:text-[44px] lg:text-[52px] font-normal leading-[1.12] tracking-tight text-[color:var(--color-ink)]"
-      >
-        B2B SaaS companies don't have an ads problem. They have a leak between
-        the ad, the site, the CRM and sales, and{" "}
-        <span class="font-medium">nobody owns the whole chain.</span>
-      </h1>
-      <p class="mt-6 max-w-xl text-sm md:text-base text-[color:var(--color-muted)] leading-relaxed">
-        Seven years building growth for B2B SaaS — the channels, the tracking,
-        the CRM, and the systems that connect them.
-      </p>
-    </div>
+<section id="hero" class="border-b border-dashed border-[color:var(--color-rule)]">
+  <div class="container-rail px-5 md:px-10 pt-14 pb-16 md:pt-20 md:pb-20">
+    <div class="grid md:grid-cols-12 gap-8 items-start">
+      <div class="md:col-span-8">
+        <h1 class="max-w-[720px]">
+          B2B SaaS companies don't have an ads problem. They have a leak
+          between the ad, the site, the CRM and sales, and{" "}
+          <span class="font-bold">nobody owns the whole chain.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-[15px] text-[color:var(--color-muted)] leading-relaxed">
+          Seven years building growth for B2B SaaS — the channels, the tracking,
+          the CRM, and the systems that connect them.
+        </p>
+      </div>
 
-    <aside
-      class="md:col-span-4 border border-[color:var(--color-rule)] rounded-md bg-[color:var(--color-canvas)] p-5"
-    >
-      <div class="mono-label mb-4">Case study</div>
-      <div class="flex items-baseline gap-3">
-        <span
-          class="font-mono text-3xl md:text-4xl tracking-tight text-[color:var(--color-ink)]"
+      <aside
+        class="md:col-span-4 border border-[color:var(--color-card)] rounded-xl bg-[color:var(--color-canvas)] p-5"
+      >
+        <div class="mono-label mb-3">Case study</div>
+        <div class="flex items-baseline gap-2">
+          <span
+            class="font-mono text-[26px] tracking-tight text-[color:var(--color-ink)]"
+          >
+            +227.9%
+          </span>
+          <span class="text-[13px] text-[color:var(--color-muted)]">
+            in signups
+          </span>
+        </div>
+        <div class="mt-1 text-[12px] text-[color:var(--color-muted)]">
+          Myos — attributed organic signups, 6 months
+        </div>
+        <svg
+          viewBox="0 0 320 80"
+          class="mt-4 w-full h-20 text-[color:var(--color-ink)]"
+          aria-hidden="true"
         >
-          +227.9%
-        </span>
-        <span class="text-sm text-[color:var(--color-muted)]">in signups</span>
-      </div>
-      <div class="mt-1 text-xs text-[color:var(--color-muted)]">
-        Myos — attributed organic signups, 6 months
-      </div>
-      <svg
-        viewBox="0 0 320 90"
-        class="mt-5 w-full h-24 text-[color:var(--color-ink)]"
-        aria-hidden="true"
-      >
-        <polyline
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          points="0,80 30,74 60,70 90,66 120,58 150,52 180,42 210,36 240,28 270,20 300,14 320,10"
-        ></polyline>
-        <line
-          x1="0"
-          y1="88"
-          x2="320"
-          y2="88"
-          stroke="currentColor"
-          stroke-opacity="0.15"
-          stroke-width="1"
-        ></line>
-      </svg>
-      <a
-        href="#"
-        class="mt-4 inline-block text-sm underline decoration-[color:var(--color-accent)] decoration-2 underline-offset-4 hover:opacity-70"
-      >
-        Case study →
-      </a>
-    </aside>
+          <polyline
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            points="0,72 30,66 60,62 90,56 120,50 150,44 180,36 210,30 240,22 270,16 300,12 320,8"
+          ></polyline>
+          <line
+            x1="0"
+            y1="76"
+            x2="320"
+            y2="76"
+            stroke="currentColor"
+            stroke-opacity="0.15"
+            stroke-width="1"
+          ></line>
+        </svg>
+        <a
+          href="#"
+          class="mt-3 inline-flex items-center gap-1 text-[13px] font-medium text-[color:var(--color-accent)] hover:opacity-70"
+        >
+          Case study
+          <span aria-hidden="true">→</span>
+        </a>
+      </aside>
+    </div>
   </div>
 
   <div
-    class="mt-14 md:mt-20 grid grid-cols-2 md:grid-cols-4 border-t border-[color:var(--color-rule)]"
+    class="border-t border-dashed border-[color:var(--color-rule)]"
   >
-    {
-      metrics.map((m) => (
-        <div class="py-5 md:py-6 pr-4 md:pr-6 border-b md:border-b-0 md:border-r border-[color:var(--color-rule)] last:border-r-0 last:border-b-0">
-          <div class="font-mono text-xl md:text-2xl tracking-tight text-[color:var(--color-ink)]">
-            {m.value}
-          </div>
-          <div class="mt-2 mono-label leading-snug">{m.label}</div>
-        </div>
-      ))
-    }
+    <div class="container-rail">
+      <div class="grid grid-cols-2 md:grid-cols-4">
+        {
+          metrics.map((m, i) => (
+            <div
+              class={`px-5 md:px-6 py-6 md:py-7 ${
+                i < metrics.length - 1
+                  ? "border-b md:border-b-0 md:border-r border-dashed border-[color:var(--color-rule)]"
+                  : ""
+              } ${i === 1 ? "border-b md:border-b-0" : ""}`}
+            >
+              <div class="font-mono text-[22px] md:text-[24px] tracking-tight text-[color:var(--color-ink)] leading-none">
+                {m.value}
+              </div>
+              <div class="mt-2 mono-label leading-snug">{m.label}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </div>
 </section>
