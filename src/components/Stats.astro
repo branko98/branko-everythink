@@ -1,0 +1,98 @@
+---
+// 03-stats — 4 statistike u redu (broj + tekst), sa crnim vertikalnim markerom
+// u gornjem levom uglu i dashed vertikalnim linijama između kolona.
+// Vrednosti iz reference/03-stats/styles.json (+ 991/767/479).
+// Placeholder brojevi iz dizajna.
+
+interface Stat { number: string; text: string; }
+
+const stats: Stat[] = [
+  { number: "8.4M+",   text: "Attributed organic signups in 2024" },
+  { number: "80K+",    text: "Pages created in 2024" },
+  { number: "+426.7%", text: "Average YoY Organic Traffic Increase" },
+  { number: "00",      text: "Vanity metrics" },
+];
+---
+
+<section class="container stats bottom-border">
+  <div class="stats__grid">
+    {stats.map((s, i) => (
+      <div class={`stats__item${i < stats.length - 1 ? " stats__item--divider" : ""}`}>
+        <span class="stats__mark" aria-hidden="true"></span>
+        <div class="stats__wrapper">
+          <div class="stats__number">{s.number}</div>
+          <div class="stats__text">{s.text}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .stats__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stats__item {
+    position: relative;
+    padding: 30px;
+    min-width: 0;
+  }
+  .stats__item--divider {
+    border-right: 1px dashed var(--color-line);
+  }
+
+  .stats__mark {
+    position: absolute;
+    left: -1px;
+    top: 38px;
+    width: 2px;
+    height: 26px;
+    background: var(--color-dark);
+  }
+
+  .stats__wrapper { min-width: 0; }
+
+  .stats__number {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 38px;
+    color: var(--color-dark);
+    margin: 0 0 15px 0;
+  }
+  .stats__text {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 20.16px;
+    color: var(--color-muted);
+    padding-right: 20px;
+  }
+
+  /* ≤ 991 — container postaje fluid; grid ostaje 4-col (po originalu). */
+
+  /* ≤ 767 — 2×2: dve kolone, dva reda. Vertikalna dashed samo između kolona;
+     item u drugom redu gubi border-right (poslednji u redu) preko :nth-child. */
+  @media (max-width: 767px) {
+    .stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stats__item--divider:nth-child(2n) {
+      border-right: 0;
+    }
+  }
+
+  /* ≤ 479 — 1 kolona; nema vertikalnih dashed linija između item-ova. */
+  @media (max-width: 479px) {
+    .stats__grid {
+      grid-template-columns: 1fr;
+    }
+    .stats__item--divider {
+      border-right: 0;
+    }
+    .stats__number {
+      font-size: 26px;
+    }
+  }
+</style>
