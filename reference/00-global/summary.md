@@ -62,3 +62,30 @@ Ista klasa kao `.container.w-container` sa modifikatorom `below-nav-container`:
 
 Body koristi `Inter, Arial, sans-serif` — Alliance i Geistmono su primenjeni
 selektivno preko dodatnih klasa (biće mapirani po sekciji).
+
+## Responsive
+
+Snimljeno sa omnius.so na 991×900, 767×900, 479×900, 1920×900
+(Webflow breakpointi: 991 tablet, 767 mobilni položeno, 479 mobilni uspravno).
+Fajlovi: `styles-991.json`, `styles-767.json`, `styles-479.json`, `styles-1920.json`.
+
+### Container (`.container.w-container`)
+
+| Viewport | Container box | `max-width` | Vertikalni padding | Dashed L/D |
+|---:|---:|---:|---:|:---:|
+| **1920** | 1114 px | 1114 px | 50 / 50 | ostaje |
+| **1440** | 1114 px | 1114 px | 50 / 50 | ostaje |
+| **991**  | 951 px  | none     | 50 / 50 | ostaje |
+| **767**  | 727 px  | none     | 30 / 30 | ostaje |
+| **479**  | 439 px  | none     | 30 / 30 | ostaje |
+
+- Container je **kapiran na 1114 px na >= 991**; ispod 991 postaje **fluid**
+  (raste sa viewport-om minus ~40 px bočnih margina koje daju roditeljski elementi).
+- Iznad 1440 (npr. 1920) **ništa se ne menja** — container ostaje 1114 px.
+- Vertikalni padding u varijantama sa `.below-nav-container` pada sa **50 → 30**
+  na 767 i 479.
+- **Dashed leva/desna linija (1px dashed rgb(208, 213, 221)) ostaje vidljiva na svim širinama.**
+
+### Body
+
+- `font-size: 16px` **na svim širinama** (ne skalira se).

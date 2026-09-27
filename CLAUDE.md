@@ -6,6 +6,8 @@
 - Screenshotove sa Playwright-a pravi po sekcijama, ne cele stranice.
 
 # Pravila izrade
+- **Pre izrade bilo koje sekcije pročitaj `DESIGN.md`. Nova sekcija mora da se 
+  uklopi u taj sistem.**
 - Stack: Astro + običan CSS. Svaka sekcija je zasebna komponenta u 
   `src/components/`.
 - Sve vrednosti isključivo iz `src/styles/tokens.css`. Bez hardkodovanih boja, 
