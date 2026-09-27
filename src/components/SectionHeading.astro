@@ -19,17 +19,26 @@
 </section>
 
 <style>
+  /* Padding je na ćeliji sa naslovom (ne na sekciji) da bi grid ćelije
+     bile visine cele sekcije. Aside ćelija se stretch-uje na tu visinu,
+     pa njen dashed border-left ide od gornje do donje ivice sekcije
+     (isti pristup kao u Hero heading bloku). */
   .section-heading {
-    padding-top: var(--below-nav-padding-y);
-    padding-bottom: var(--below-nav-padding-y);
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   .section-heading__grid {
     display: grid;
     grid-template-columns: 742px 1fr;
+    align-items: stretch;
   }
 
-  .section-heading__main { min-width: 0; }
+  .section-heading__main {
+    min-width: 0;
+    padding-top: var(--below-nav-padding-y);
+    padding-bottom: var(--below-nav-padding-y);
+  }
   .section-heading__aside {
     border-left: var(--container-border);
   }
@@ -47,10 +56,11 @@
   .section-heading__dark  { color: var(--color-dark); }
 
   /* SVG reči "everythink" — inline, skalira se sa naslovom (visina u em).
-     ViewBox 1151×233; crna u izvoru (fill="#000000"). */
+     Bazna visina 0.9em pomnožena sa --heading-wordmark-scale da bi wordmark
+     bio malo veći od okolnih slova. ViewBox 1151×233; fill="#000000". */
   .section-heading__word {
     display: inline-block;
-    height: 0.9em;
+    height: calc(0.9em * var(--heading-wordmark-scale));
     width: auto;
     vertical-align: baseline;
     transform: translateY(0.12em);

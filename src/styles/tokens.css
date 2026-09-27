@@ -34,6 +34,11 @@
   --text-h2-tracking: -1.28px;
   --text-h2-weight: 600;
 
+  /* Skala za inline SVG wordmark-ove ("everythink") u naslovima.
+     Bazna visina je 0.9em; ova skala je množi da wordmark bude malo veći
+     od okolnih slova. */
+  --heading-wordmark-scale: 1.15;
+
   /* Lead / subtitle paragraf (iz reference/01-hero/styles-subtitle.json → .content-paragraph) */
   --text-lead-size: 16px;
   --text-lead-line: 26px;
