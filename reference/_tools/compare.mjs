@@ -1,16 +1,20 @@
 // Compare tool.
-// Uzima screenshot lokalne sekcije, sastavlja uporedni prikaz sa
-// design.png (skaliran ×0.5) i original*.png, snima u
-// reference/_previews/compare-<slug>.png.
+// Uzima screenshot lokalne sekcije na zadatom viewport-u, sastavlja uporedni
+// prikaz sa design.png i original*.png koji odgovaraju toj širini, snima u
+// reference/_previews/compare-<slug>[-<width>].png.
 //
 // Selector može biti jedan CSS izraz, ili više razdvojenih zarezom — u tom
 // slučaju uzima uniju bounding box-eva svih pronađenih elemenata.
 //
-// Za original slike: ako postoji <sectionDir>/original.png koristi njega;
-// inače traži sve fajlove koji počinju sa "original" i slaže ih vertikalno.
+// Za original slike: bira samo one koji odgovaraju zadatoj širini.
+//   width=1440 → original.png / original-heading.png / original-subtitle.png
+//   width=N    → original-N.png / original-heading-N.png / original-subtitle-N.png
 //
 // Usage:
-//   node reference/_tools/compare.mjs <slug> [--url=…] --selector="sel1, sel2, …"
+//   node reference/_tools/compare.mjs <slug> --selector="…" [--width=N] [--url=…]
+//
+// Primer:
+//   node reference/_tools/compare.mjs 01-hero --width=991 --selector=".hero-heading, .hero-subtitle"
 
 import { chromium } from "playwright";
 import fs from "node:fs/promises";
@@ -37,33 +41,50 @@ async function exists(p) {
   try { await fs.access(p); return true; } catch { return false; }
 }
 
+// Filtrira original*.png fajlove tako da vrati samo one za zadatu širinu.
+// Pravilo: fajl se prihvata ako
+//   width=1440  → nema sufiks -<n> (bez cifara pre .png)
+//   width=N     → ima sufiks -N
+function selectOriginals(files, width) {
+  const re = /^original(?:-[a-zA-Z]+)?(-(\d+))?\.png$/i;
+  const out = [];
+  for (const f of files) {
+    const m = re.exec(f);
+    if (!m) continue;
+    const suf = m[2] ? Number(m[2]) : 1440;
+    if (suf === width) out.push(f);
+  }
+  return out.sort();
+}
+
 async function main() {
   const [slug, ...rest] = process.argv.slice(2);
   if (!slug) {
-    console.error('Usage: node compare.mjs <slug> [--url=…] --selector="sel1, sel2, …"');
+    console.error('Usage: node compare.mjs <slug> --selector="…" [--width=N] [--url=…]');
     process.exit(1);
   }
   const args = argMap(rest);
   const url = args.get("url") || "http://localhost:4321/";
   const selectorArg = args.get("selector") || "body";
+  const width = Number(args.get("width") ?? 1440);
   const selectors = selectorArg.split(",").map(s => s.trim()).filter(Boolean);
 
   const sectionDir = path.join(ROOT, slug);
   const designPath = path.join(sectionDir, "design.png");
-  const outPath = path.join(PREVIEWS, `compare-${slug}.png`);
+  const outName = width === 1440 ? `compare-${slug}.png` : `compare-${slug}-${width}.png`;
+  const outPath = path.join(PREVIEWS, outName);
   await fs.mkdir(PREVIEWS, { recursive: true });
 
-  const hasDesign = await exists(designPath);
+  const hasDesign = width === 1440 && await exists(designPath);
 
-  // Naći sve original*.png u sectionDir
+  // Naći original*.png za odgovarajuću širinu
   const dirFiles = await fs.readdir(sectionDir).catch(() => []);
-  const originalFiles = dirFiles.filter(f => /^original.*\.png$/i.test(f)).sort();
+  const originalFiles = selectOriginals(dirFiles, width);
 
   const browser = await chromium.launch();
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+  const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1 });
   const page = await context.newPage();
 
-  // 1) Screenshot lokalne sekcije — unija bbox-a svih selektora
   await page.goto(url, { waitUntil: "networkidle" });
   await page.waitForTimeout(500);
 
@@ -83,17 +104,17 @@ async function main() {
   const y1 = Math.max(...boxes.map(b => b.y + b.height));
   const clip = { x: Math.floor(x0), y: Math.floor(y0), width: Math.ceil(x1 - x0), height: Math.ceil(y1 - y0) };
 
-  const minePath = path.join(PREVIEWS, `_tmp-${slug}-mine.png`);
+  const minePath = path.join(PREVIEWS, `_tmp-${slug}-${width}-mine.png`);
   await page.screenshot({ path: minePath, clip, scale: "css", animations: "disabled" });
 
-  // 2) Sastavi HTML za poređenje
   const parts = [];
   if (hasDesign) parts.push({ label: "design.png (×0.5)", src: await fileToDataUrl(designPath), scale: 0.5 });
   for (const f of originalFiles) {
     parts.push({ label: `${f} (1:1)`, src: await fileToDataUrl(path.join(sectionDir, f)), scale: 1 });
   }
-  parts.push({ label: `mine — [${selectorArg}] @ ${url}`, src: await fileToDataUrl(minePath), scale: 1 });
+  parts.push({ label: `mine @ ${width}×900 — [${selectorArg}] ${url}`, src: await fileToDataUrl(minePath), scale: 1 });
 
+  const composeW = Math.max(width, 900) + 40;
   const html = `<!doctype html><html><head><meta charset="utf-8"><style>
     body { margin: 0; padding: 20px; background: #eee; font-family: -apple-system, sans-serif; font-size: 12px; color: #333; }
     .row { margin-bottom: 24px; }
@@ -109,7 +130,7 @@ async function main() {
     `).join("")}
   </body></html>`;
 
-  await page.setViewportSize({ width: 1700, height: 2000 });
+  await page.setViewportSize({ width: composeW, height: 2400 });
   await page.setContent(html);
   await page.evaluate((scales) => {
     const imgs = Array.from(document.images);

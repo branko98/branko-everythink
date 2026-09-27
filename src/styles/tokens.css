@@ -73,4 +73,46 @@
   --cta-radius: 50px;
   --cta-padding-y: 10px;
   --cta-padding-x: 15px;
+
+  /* Bočni razmak container-a od ivice viewport-a na mobile (≤ 991).
+     Na desktopu container je fiksne širine i centriran (margin auto),
+     pa se ovaj token ne koristi. */
+  --container-outer-margin: 20px;
+
+  /* Visina logotipa u header-u. Menja se na ≤ 479 da bi logo + CTA
+     stali u jedan red na 375 px. */
+  --header-logo-height: 38px;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE — redefinicije tokena po Webflow breakpointima.
+   Vrednosti iz reference/00-global/summary.md (Responsive) i
+   reference/01-hero/summary.md (Responsive).
+   -------------------------------------------------------------------------- */
+
+/* Tablet: ≤ 991 — container postaje fluid, h1 pada 35.7 → 33. */
+@media (max-width: 991px) {
+  :root {
+    --text-h1-size: 33px;
+  }
+}
+
+/* Mobilni landscape: ≤ 767 — vertikalni padding container-a 50 → 30. */
+@media (max-width: 767px) {
+  :root {
+    --below-nav-padding-y: 30px;
+  }
+}
+
+/* Mobilni portrait: ≤ 479 — glavni lom. */
+@media (max-width: 479px) {
+  :root {
+    --text-h1-size: 26px;
+    --text-h1-line: 39px;
+    --text-h1-tracking: -1px;
+    --text-lead-size: 15px;
+    --text-lead-line: 24.375px;
+    --card-padding: 25px;
+    --header-logo-height: 24px;
+  }
 }

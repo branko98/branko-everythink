@@ -21,3 +21,7 @@
   (`reference/_previews/compare-<slug>.png`, generisano sa 
   `node reference/_tools/compare.mjs <slug> --selector=…`) pre nego što kažeš da 
   je gotova.
+- **Svaka sekcija se radi odmah responsive i proverava na 1440, 991, 767, 479 i 
+  375 px. Sekcija nije gotova dok ne prođe sve širine bez horizontalnog skrola.**
+  Overflow check: `node reference/_tools/overflow-check.mjs`.
+  Compare po širini: `node reference/_tools/compare.mjs <slug> --width=<N> --selector=…`.

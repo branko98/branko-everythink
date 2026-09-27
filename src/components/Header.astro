@@ -33,6 +33,11 @@
     padding: 0 var(--header-padding-x);
     background: var(--color-bg);
   }
+  /* Ispod 991 .container preuzima safe-area margin (20 px);
+     header ne treba svoj padding. */
+  @media (max-width: 991px) {
+    .site-header { padding: 0; }
+  }
 
   .site-header__container {
     display: flex;
@@ -40,17 +45,21 @@
     align-items: center;
     justify-content: space-between;
     height: var(--header-height);
+    gap: 12px; /* minimalni razmak logo ↔ CTA na uskim ekranima */
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
+    min-width: 0;
+    flex-shrink: 1;
   }
   .brand img {
     display: block;
-    height: 38px;
-    width: auto; /* fallback ako browser ne primeni intrinsic width */
+    height: var(--header-logo-height); /* 38 default; 24 na ≤ 479 */
+    width: auto;
   }
+  .cta { flex-shrink: 0; }
 
   .cta {
     display: inline-flex;

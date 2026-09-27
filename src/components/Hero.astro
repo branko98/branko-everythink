@@ -50,9 +50,31 @@
   }
   .hero-heading__text {
     max-width: var(--hero-text-width);
+    min-width: 0;
   }
   .hero-heading__aside {
     border-left: var(--container-border);
+  }
+
+  /* ≤ 991 — container postaje fluid; grid ostaje 2-col (naslov | aside).
+     Proporcija 4fr/1fr = 80:20 prati original (781/167 na 991, 597/128 na 767). */
+  @media (max-width: 991px) {
+    .hero-heading__grid {
+      grid-template-columns: 4fr 1fr;
+    }
+    .hero-heading__text {
+      max-width: none;
+    }
+  }
+
+  /* ≤ 479 — grid se preslaguje u jednu kolonu; aside se sklapa. */
+  @media (max-width: 479px) {
+    .hero-heading__grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-heading__aside {
+      display: none;
+    }
   }
 
   .hero-h1 {
@@ -86,6 +108,18 @@
   .hero-subtitle__text {
     padding-top: 30px;
     padding-bottom: 15px;
+    min-width: 0;
+  }
+
+  /* ≤ 991 — subtitle prelazi u 1-col (kao na originalu za 3-col varijantu).
+     Desna prazna kolona i njena dashed vertikalna linija se sklapaju. */
+  @media (max-width: 991px) {
+    .hero-subtitle__grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-subtitle__col {
+      display: none;
+    }
   }
   .hero-lead {
     margin: 0;

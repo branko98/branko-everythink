@@ -133,6 +133,10 @@ const gridXs = Array.from({ length: GRID_LINES }, (_, i) => (i * CHART_W) / (GRI
   .case-study {
     padding: 0 var(--header-padding-x);
   }
+  /* Ispod 991 .container preuzima safe-area margin (20 px); sekcija ne treba svoj. */
+  @media (max-width: 991px) {
+    .case-study { padding: 0; }
+  }
 
   /* Kartica */
   .case-slider {
@@ -272,4 +276,26 @@ const gridXs = Array.from({ length: GRID_LINES }, (_, i) => (i * CHART_W) / (GRI
     fill: var(--color-dark);
   }
 
+  /* ≤ 479 — po originalu: tekst iznad grafika (column layout),
+     card postaje viša, padding kartice pada (kroz --card-padding token),
+     grafikon niži i puna širina. Media query na kraju bloka da bi imao veću
+     specifičnost od baznih pravila iznad (ista specifičnost, kasniji redosled). */
+  @media (max-width: 479px) {
+    .case-slide {
+      flex-direction: column;
+      align-items: stretch;
+      height: auto;
+      gap: 20px;
+    }
+    .case-slide__content {
+      width: 100%;
+      height: auto;
+      gap: 12px;
+    }
+    .case-slide__chart {
+      height: 156px;
+      width: 100%;
+      flex: 0 0 156px; /* poništi flex: 1 1 auto iz baznog pravila */
+    }
+  }
 </style>

@@ -56,7 +56,8 @@ body {
 }
 
 /* Kontejner — pravi vertikalne dashed linije preko cele stranice
-   (iz .container.w-container) */
+   (iz .container.w-container). Na desktopu fiksne širine i centriran;
+   ispod 991 postaje fluid (max-width: none, margin-inline: 20 px). */
 .container {
   width: var(--container-width);
   max-width: var(--container-width);
@@ -64,6 +65,14 @@ body {
   padding-inline: var(--container-side-padding);
   border-left: var(--container-border);
   border-right: var(--container-border);
+}
+
+@media (max-width: 991px) {
+  .container {
+    width: auto;
+    max-width: none;
+    margin-inline: var(--container-outer-margin);
+  }
 }
 
 /* Razmak ispod nav-a (iz .below-nav-container) */
