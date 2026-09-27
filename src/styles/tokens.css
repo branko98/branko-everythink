@@ -51,6 +51,11 @@
   /* Širina hero teksta (iz styles-heading.json → .hero-text width) */
   --hero-text-width: 832px;
 
+  /* Testimonial highlight background (iz reference/04-testimonial-featured/styles.json
+     → .testimonial-text-bold background-color). Koristi se u citatima
+     testimoniala (04 i kasnije 09) kao pozadinski marker za istaknute fraze. */
+  --color-highlight: rgb(224, 233, 255);
+
   /* Case-study kartica (iz reference/02-case-study/styles.json) */
   --color-card-border: rgb(234, 236, 240);   /* .slider-3 border-color */
   --color-chip-bg: rgb(239, 241, 245);       /* .category-badge background */

@@ -1,0 +1,310 @@
+---
+// 04-testimonial-featured — logo klijenta gore levo, dugačak citat (Geist Mono)
+// sa više highlight span-ova, ime + pozicija + firma osobe, avatar dole desno,
+// i definition red (INDUSTRY / DEFINITION / HEADQUARTERS / URL) ispod dashed
+// linije.
+//
+// Vrednosti tipografije i boja iz reference/04-testimonial-featured/styles.json.
+// Responsive: styles-991/767/479.json + summary.md.
+//
+// Content ispod je PLACEHOLDER — logo i avatar su neutralni sivi blokovi
+// (bez preuzimanja slika sa originala); tekst se lako menja preko `data`
+// objekta na vrhu.
+
+interface QuoteSegment { text: string; hl?: boolean }
+interface QuoteParagraph { parts: QuoteSegment[] }
+interface Data {
+  person: { name: string; title: string };
+  quote: QuoteParagraph[];
+  fields: { industry: string; definition: string; hq: string; url: string };
+}
+
+const data: Data = {
+  person: {
+    name: "Placeholder Name",
+    title: "Placeholder role @ Placeholder Co.",
+  },
+  quote: [
+    {
+      parts: [
+        { text: "“The collaboration with the team overall was smooth and professional. They were knowledgeable, open to feedback, and supportive in working hand-in-hand to continuously " },
+        { text: "drive business impact", hl: true },
+        { text: ". I appreciated the team’s dedication to refining and adapting, which helped keep our efforts moving day by day." },
+      ],
+    },
+    {
+      parts: [
+        { text: "The team was easy to work with and responsive whenever I needed clarification or support. Communication was " },
+        { text: "professional and solutions-oriented", hl: true },
+        { text: ", especially when discussing challenges or performance updates. Overall, the experience has been really positive, and I’m happy with our partnership." },
+      ],
+    },
+    {
+      parts: [
+        { text: "Some of the key benefits from collaborating with them include their " },
+        { text: "solid expertise and authority in the domain, flexibility and openness to feedback", hl: true },
+        { text: ", and the fact that they consistently stay up to date with the latest industry trends.”" },
+      ],
+    },
+  ],
+  fields: {
+    industry: "Placeholder industry",
+    definition: "Placeholder company description that spans a couple of lines to show how the value wraps under its label.",
+    hq: "Placeholder City",
+    url: "https://example.com",
+  },
+};
+---
+
+<section class="tf container">
+  <div class="tf__wrapper">
+    <span class="tf__accent" aria-hidden="true"></span>
+
+    <div class="tf__grid">
+      <div class="tf__info">
+        <div class="tf__logo" role="img" aria-label="Client logo"></div>
+        <div class="tf__person">
+          <div class="tf__name">{data.person.name}</div>
+          <div class="tf__title">{data.person.title}</div>
+        </div>
+      </div>
+
+      <div class="tf__quote">
+        {data.quote.map((p) => (
+          <p class="tf__paragraph">
+            {p.parts.map((seg) => (
+              seg.hl
+                ? <mark class="tf__hl">{seg.text}</mark>
+                : <>{seg.text}</>
+            ))}
+          </p>
+        ))}
+      </div>
+
+      <div class="tf__avatar" role="img" aria-label="Author avatar"></div>
+    </div>
+
+    <div class="tf__def">
+      <dl class="tf__def-grid">
+        <div class="tf__def-item">
+          <dt class="tf__def-label">Industry</dt>
+          <dd class="tf__def-value">{data.fields.industry}</dd>
+        </div>
+        <div class="tf__def-item">
+          <dt class="tf__def-label">Definition</dt>
+          <dd class="tf__def-value">{data.fields.definition}</dd>
+        </div>
+        <div class="tf__def-item">
+          <dt class="tf__def-label">Headquarters</dt>
+          <dd class="tf__def-value">{data.fields.hq}</dd>
+        </div>
+        <div class="tf__def-item">
+          <dt class="tf__def-label">URL</dt>
+          <dd class="tf__def-value"><a href={data.fields.url}>{data.fields.url}</a></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Vertikalni razmak sekcije (u dizajnu ima dosta praznog prostora
+     iznad/ispod sadržaja — to je namerno; DESIGN.md § 5). */
+  .tf {
+    padding-block: 65px;
+  }
+
+  .tf__wrapper {
+    position: relative;
+    padding: 50px;
+  }
+
+  /* Levi mali vertikalni akcent (2×26 px) na dashed liniji container-a.
+     CSS umesto rastera (DESIGN.md § 6). Left: -1px da preklopi 1 px
+     dashed border-left container-a. */
+  .tf__accent {
+    position: absolute;
+    left: -1px;
+    top: 50px;
+    width: 2px;
+    height: 26px;
+    background: var(--color-text);
+  }
+
+  /* Glavni grid: info | citat | avatar. Proporcije iz originalnog
+     testimonial-grid (227 / 604 / 151 sa 16 px gap). */
+  .tf__grid {
+    display: grid;
+    grid-template-columns: 227px 1fr 151px;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  /* Info kolona — logo top, ime+titula bottom (space-between). */
+  .tf__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  /* Logo placeholder — neutralni sivi blok, iste dimenzije kao
+     .testimonial-logo u originalu (120 × 16). */
+  .tf__logo {
+    width: 120px;
+    height: 16px;
+    background: var(--color-line);
+    border-radius: 2px;
+  }
+
+  .tf__name {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28.8px;
+    color: var(--color-text);
+    margin: 0 0 5px 0;
+  }
+  .tf__title {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 21px;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Citat — Geist Mono, iz styles.json (.testimonial-paragraph). */
+  .tf__quote {
+    min-width: 0;
+  }
+  .tf__paragraph {
+    margin: 0 0 1.6em 0;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25.6px;
+    color: var(--color-text);
+  }
+  .tf__paragraph:last-child { margin-bottom: 0; }
+
+  /* Highlight — svetlo plava pozadinska podloga, bez padding-a
+     (DESIGN.md § 3 "Highlight na citatima"). */
+  .tf__hl {
+    background-color: var(--color-highlight);
+    color: var(--color-text);
+    font-weight: 700;
+    padding: 0;
+  }
+
+  /* Avatar placeholder — neutralni sivi blok 80 × 88 (iz
+     .testimonial-vector.large), poravnat u donji-desni ugao ćelije. */
+  .tf__avatar {
+    align-self: end;
+    justify-self: end;
+    width: 80px;
+    height: 88px;
+    background: var(--color-line);
+    border-radius: 6px;
+  }
+
+  /* Definition red — full-width unutar container-a. Negativna horizontalna
+     margina (-50) poništava wrapper padding pa border-top ide od jedne
+     dashed strane do druge. */
+  .tf__def {
+    margin: 40px -50px 0 -50px;
+    padding: 40px 0 0 50px;
+    border-top: 1px dashed var(--color-line);
+  }
+  .tf__def-grid {
+    display: grid;
+    grid-template-columns: 226fr 339fr 181fr 271fr;
+    gap: 16px;
+    margin: 0;
+  }
+  .tf__def-item {
+    min-width: 0;
+    padding-right: 16px;
+  }
+  .tf__def-label {
+    margin: 0 0 10px 0;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+  .tf__def-value {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--color-text);
+  }
+  .tf__def-value a {
+    color: var(--color-text);
+    text-decoration: none;
+    word-break: break-all;
+  }
+
+  /* ≤ 991 — glavni grid → 1 kolona (per original: testimonial-grid
+     `grid-template-columns: 851px` u fluid containeru). Info ostaje
+     column (logo iznad imena), avatar se stack-uje ispod. Definition
+     ostaje 4-col do 767. */
+  @media (max-width: 991px) {
+    .tf__grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .tf__info {
+      justify-content: flex-start;
+      gap: 20px;
+    }
+    .tf__avatar {
+      justify-self: end;
+      align-self: start;
+    }
+  }
+
+  /* ≤ 767 — definition 2 kolone (per original: 235.3 / 411.7 px).
+     Wrapper padding pada 50 → 40 da bi blok imao vazduha unutar fluid
+     kontejnera. */
+  @media (max-width: 767px) {
+    .tf { padding-block: 45px; }
+    .tf__wrapper { padding: 40px; }
+    .tf__accent { top: 40px; }
+    .tf__def {
+      margin: 30px -40px 0 -40px;
+      padding: 30px 0 0 40px;
+    }
+    .tf__def-grid {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 30px;
+    }
+  }
+
+  /* ≤ 479 — puna 1-col preslag. Wrapper padding 40 → 25 horizontalno
+     (per original 479). Definition red isto 1-col da ne beži URL van
+     ekrana. */
+  @media (max-width: 479px) {
+    .tf { padding-block: 30px; }
+    .tf__wrapper { padding: 30px 25px; }
+    .tf__accent { top: 30px; }
+    .tf__def {
+      margin: 25px -25px 0 -25px;
+      padding: 25px 0 0 25px;
+    }
+    .tf__def-grid {
+      grid-template-columns: 1fr;
+      row-gap: 24px;
+    }
+    .tf__avatar {
+      width: 60px;
+      height: 66px;
+    }
+  }
+</style>
