@@ -31,3 +31,12 @@ Box na live: `x=164, y=..., w=1112, h=205.5`.
 Struktura je vrlo jednostavna — jedan `<h2>` levo, opcioni prateći tekst/CTA desno.
 Cela sekcija u dizajnu ima veliki gornji razmak; taj razmak dolazi iz parent
 containera i padding-a sekcije, ne iz samog `.heading-grid`.
+
+## Responsive (iz `styles-991/767/479.json` i `original-991/767/479.png`)
+
+- **991**: grid postaje **1 kolona** (aside sklopljen). Naslov ostaje 36.7/51.38.
+  Širina teksta 712 (fluid).
+- **767**: 1 kolona, isti font 36.7/51.38.
+- **479**: 1 kolona, naslov pada na **27/42** (`letter-spacing -1.28` ostaje).
+- Bez horizontalnog dashed border-a između sekcija — sopstveni `bottom-border`
+  container-a je dovoljan.

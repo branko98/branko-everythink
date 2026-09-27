@@ -27,6 +27,13 @@
   --text-h1-tracking: -1.2px;
   --text-h1-weight: 600;
 
+  /* Naslov H2 — veliki section heading (iz reference/05-section-heading/styles.json).
+     Slična uloga kao h1, ali sopstvene vrednosti (36.7 / 51.38 / -1.28). */
+  --text-h2-size: 36.7px;
+  --text-h2-line: 51.38px;
+  --text-h2-tracking: -1.28px;
+  --text-h2-weight: 600;
+
   /* Lead / subtitle paragraf (iz reference/01-hero/styles-subtitle.json → .content-paragraph) */
   --text-lead-size: 16px;
   --text-lead-line: 26px;
@@ -110,6 +117,8 @@
     --text-h1-size: 26px;
     --text-h1-line: 39px;
     --text-h1-tracking: -1px;
+    --text-h2-size: 27px;
+    --text-h2-line: 42px;
     --text-lead-size: 15px;
     --text-lead-line: 24.375px;
     --card-padding: 25px;

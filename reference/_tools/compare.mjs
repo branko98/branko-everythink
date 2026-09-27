@@ -86,12 +86,22 @@ async function main() {
   const page = await context.newPage();
 
   await page.goto(url, { waitUntil: "networkidle" });
+  await page.addStyleTag({ content: "astro-dev-toolbar, astro-dev-overlay { display:none !important; }" }).catch(() => {});
   await page.waitForTimeout(500);
+
+  // Full-page-relative boundingBox: getBoundingClientRect + scroll offset.
+  async function pageBox(sel) {
+    return await page.evaluate((s) => {
+      const el = document.querySelector(s);
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return { x: r.left + window.scrollX, y: r.top + window.scrollY, width: r.width, height: r.height };
+    }, sel);
+  }
 
   const boxes = [];
   for (const sel of selectors) {
-    const loc = page.locator(sel).first();
-    const b = await loc.boundingBox().catch(() => null);
+    const b = await pageBox(sel);
     if (b) boxes.push(b);
   }
   if (boxes.length === 0) {
@@ -105,7 +115,7 @@ async function main() {
   const clip = { x: Math.floor(x0), y: Math.floor(y0), width: Math.ceil(x1 - x0), height: Math.ceil(y1 - y0) };
 
   const minePath = path.join(PREVIEWS, `_tmp-${slug}-${width}-mine.png`);
-  await page.screenshot({ path: minePath, clip, scale: "css", animations: "disabled" });
+  await page.screenshot({ path: minePath, clip, fullPage: true, scale: "css", animations: "disabled" });
 
   const parts = [];
   if (hasDesign) parts.push({ label: "design.png (×0.5)", src: await fileToDataUrl(designPath), scale: 0.5 });
@@ -141,7 +151,18 @@ async function main() {
   }, parts.map(p => p.scale));
   await page.waitForTimeout(200);
 
-  const body = await page.locator("body").boundingBox();
+  // Cap ni jedna strana output-a ne sme preći 1800px (pravilo iz CLAUDE.md
+   // — moraš moći da ga otvoriš bez preview.mjs koraka). Ako bi prešao,
+   // apliciramo `zoom` na body pre snimanja.
+  const MAX_OUT = 1800;
+  let body = await page.locator("body").boundingBox();
+  const maxDim = Math.max(body.width, body.height);
+  if (maxDim > MAX_OUT) {
+    const zoom = MAX_OUT / maxDim;
+    await page.evaluate((z) => { document.body.style.zoom = String(z); }, zoom);
+    await page.waitForTimeout(50);
+    body = await page.locator("body").boundingBox();
+  }
   await page.screenshot({ path: outPath, clip: { x: 0, y: 0, width: Math.ceil(body.width), height: Math.ceil(body.height) } });
 
   await fs.rm(minePath, { force: true });

@@ -1,8 +1,12 @@
 # Pravila za rad sa slikama
 - Nikad ne otvaraj (view/read) sliku čija je bilo koja strana veća od 1800px.
-- Kad treba da pogledaš veliku sliku, prvo napravi umanjenu kopiju (max 1800px 
-  po dužoj strani) u reference/_previews/ i gledaj samo nju.
+- Svaku sliku otvaraj ISKLJUČIVO preko putanje koju vrati 
+  `node reference/_tools/preview.mjs <put>` — nikad direktno. Alat vraća 
+  original ako je već ≤ 1800px po obe strane, inače pravi umanjenu kopiju u 
+  `reference/_previews/` i vraća putanju do nje.
 - Originale nikad ne umanjuj niti prepisuj — oni ostaju u punoj rezoluciji.
+- `compare.mjs` MORA da pravi `compare-*.png` koji nisu veći od 1800px ni po 
+  jednoj strani. Ako preti da pređe, alat mora sam da smanji output pre snimanja.
 - Screenshotove sa Playwright-a pravi po sekcijama, ne cele stranice.
 
 # Pravila izrade

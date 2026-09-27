@@ -1,0 +1,250 @@
+{
+  "selector": ".heading-grid",
+  "matchCount": 1,
+  "index": 0,
+  "viewport": {
+    "w": 991,
+    "h": 900,
+    "dpr": 1
+  },
+  "fonts": [
+    {
+      "family": "webflow-icons",
+      "weight": "400",
+      "style": "normal",
+      "stretch": "normal",
+      "unicodeRange": "U+0-10FFFF"
+    },
+    {
+      "family": "Inter",
+      "weight": "100 900",
+      "style": "normal",
+      "stretch": "normal",
+      "unicodeRange": "U+0-10FFFF"
+    },
+    {
+      "family": "Alliance",
+      "weight": "600",
+      "style": "normal",
+      "stretch": "normal",
+      "unicodeRange": "U+0-10FFFF"
+    }
+  ],
+  "chosen": {
+    "tag": "div",
+    "classes": [
+      "w-layout-grid",
+      "heading-grid"
+    ],
+    "box": {
+      "x": 21,
+      "y": 191,
+      "w": 949,
+      "h": 206
+    }
+  },
+  "parents": [
+    {
+      "tag": "div",
+      "classes": [
+        "container",
+        "heading-container",
+        "w-container"
+      ],
+      "box": {
+        "x": 20,
+        "y": 191,
+        "w": 951,
+        "h": 206
+      },
+      "styles": {
+        "display": "block",
+        "position": "static",
+        "width": "951px",
+        "height": "205.5px",
+        "flex-direction": "row",
+        "font-family": "Inter, Arial, sans-serif",
+        "font-size": "14px",
+        "line-height": "20px",
+        "color": "rgb(30, 33, 36)",
+        "border-right": "1px dashed rgb(208, 213, 221)",
+        "border-left": "1px dashed rgb(208, 213, 221)"
+      }
+    },
+    {
+      "tag": "section",
+      "classes": [
+        "section",
+        "heading-section"
+      ],
+      "box": {
+        "x": 0,
+        "y": 191,
+        "w": 991,
+        "h": 207
+      },
+      "styles": {
+        "display": "block",
+        "position": "static",
+        "width": "991px",
+        "height": "206.5px",
+        "flex-direction": "row",
+        "font-family": "Inter, Arial, sans-serif",
+        "font-size": "14px",
+        "line-height": "20px",
+        "color": "rgb(30, 33, 36)",
+        "border-bottom": "1px dashed rgb(208, 213, 221)",
+        "padding": "0px 20px"
+      }
+    }
+  ],
+  "tree": {
+    "tag": "div",
+    "classes": [
+      "w-layout-grid",
+      "heading-grid"
+    ],
+    "box": {
+      "x": 21,
+      "y": 191,
+      "w": 949,
+      "h": 206
+    },
+    "styles": {
+      "display": "grid",
+      "position": "static",
+      "width": "949px",
+      "height": "205.5px",
+      "grid-template-columns": "949px",
+      "grid-template-rows": "205.5px 0px",
+      "flex-direction": "row",
+      "font-family": "Inter, Arial, sans-serif",
+      "font-size": "14px",
+      "line-height": "20px",
+      "color": "rgb(30, 33, 36)"
+    },
+    "children": [
+      {
+        "tag": "div",
+        "classes": [
+          "heading-main-wrapper"
+        ],
+        "box": {
+          "x": 21,
+          "y": 191,
+          "w": 712,
+          "h": 206
+        },
+        "styles": {
+          "display": "block",
+          "position": "static",
+          "width": "712px",
+          "max-width": "712px",
+          "height": "205.5px",
+          "grid-column": "span 1 / span 1",
+          "grid-row": "span 1 / span 1",
+          "flex-direction": "row",
+          "font-family": "Inter, Arial, sans-serif",
+          "font-size": "14px",
+          "line-height": "20px",
+          "color": "rgb(30, 33, 36)"
+        },
+        "children": [
+          {
+            "tag": "h1",
+            "classes": [
+              "content-heading"
+            ],
+            "box": {
+              "x": 21,
+              "y": 198,
+              "w": 649,
+              "h": 190
+            },
+            "text": "Holistic Programmatic SEO partners of innovative SaaS & Fintech companies.We ma…",
+            "styles": {
+              "display": "inline",
+              "position": "static",
+              "grid-column": "span 1 / span 1",
+              "grid-row": "span 1 / span 1",
+              "flex-direction": "row",
+              "font-family": "Alliance, sans-serif",
+              "font-size": "36.7px",
+              "font-weight": "600",
+              "line-height": "51.38px",
+              "letter-spacing": "-1.28px",
+              "color": "rgb(15, 20, 31)"
+            },
+            "children": [
+              {
+                "tag": "br",
+                "box": {
+                  "x": 644,
+                  "y": 249,
+                  "w": 0,
+                  "h": 36
+                },
+                "styles": {
+                  "display": "inline",
+                  "position": "static",
+                  "flex-direction": "row",
+                  "font-family": "Alliance, sans-serif",
+                  "font-size": "36.7px",
+                  "font-weight": "600",
+                  "line-height": "51.38px",
+                  "letter-spacing": "-1.28px",
+                  "color": "rgb(15, 20, 31)"
+                }
+              },
+              {
+                "tag": "br",
+                "box": {
+                  "x": 670,
+                  "y": 301,
+                  "w": 0,
+                  "h": 36
+                },
+                "styles": {
+                  "display": "inline",
+                  "position": "static",
+                  "flex-direction": "row",
+                  "font-family": "Alliance, sans-serif",
+                  "font-size": "36.7px",
+                  "font-weight": "600",
+                  "line-height": "51.38px",
+                  "letter-spacing": "-1.28px",
+                  "color": "rgb(15, 20, 31)"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "div",
+        "classes": [
+          "heading-empty-wrapper"
+        ],
+        "box": {
+          "x": 21,
+          "y": 397,
+          "w": 949,
+          "h": 0
+        },
+        "styles": {
+          "display": "block",
+          "position": "relative",
+          "width": "949px",
+          "grid-column": "span 1 / span 1",
+          "grid-row": "span 1 / span 1",
+          "flex-direction": "row",
+          "font-family": "Inter, Arial, sans-serif",
+          "font-size": "14px",
+          "line-height": "20px",
+          "color": "rgb(30, 33, 36)",
+          "border-left": "1px dashed rgb(208, 213, 221)"
+        }
+      }
+    ]
+  }
+}
