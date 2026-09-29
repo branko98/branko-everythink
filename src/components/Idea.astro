@@ -1,0 +1,28 @@
+---
+import { idea } from '../data/home';
+---
+<section class="row row--line spacer" aria-hidden="true"><div class="wrap"></div></section>
+
+<section class="row row--line idea">
+  <div class="wrap">
+    <h2 class="display idea__title" data-type="1500">{idea.muted}<span class="strong">{idea.strong}</span> <img class="idea__mark" src="/wordmark.png" alt="everythink." width="750" height="149" /></h2>
+  </div>
+</section>
+
+<style>
+  .spacer { height: 286px; }
+  .idea__title {
+    max-width: 780px;
+    min-height: 169px;
+    padding-right: 20px;
+    border-right: 1px dashed var(--line);
+    font-size: clamp(29px, 2.2vw + 10px, 40px);
+    line-height: 1.3;
+  }
+  .idea__mark { display: inline-block; height: 0.84em; width: auto; vertical-align: -0.13em; margin-left: 0.12em; }
+
+  @media (max-width: 767px) {
+    .spacer { height: 96px; }
+    .idea__title { max-width: none; min-height: 0; border-right: 0; padding: 22px 14px 26px; }
+  }
+</style>

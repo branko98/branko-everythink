@@ -1,43 +1,29 @@
-# branko-everythink
+# Everythink – website (Astro)
 
-Personal consulting site. Astro + TypeScript + Tailwind CSS v4, deployed to Cloudflare Pages.
-
-## Struktura
-
-- `src/pages/index.astro` — homepage, komponuje sekcije iz `src/components/sections/`
-- `src/pages/work/tapihq.astro` — case study
-- `src/layouts/BaseLayout.astro` — deljeni HTML shell
-- `src/styles/global.css` — Tailwind entry + dizajn tokeni preko `@theme`
-
-## Komande
-
-```sh
-npm install       # instaliraj zavisnosti
-npm run dev       # dev server na http://localhost:4321
-npm run build     # produkcioni build u dist/
-npm run preview   # servira dist/ lokalno
-npm run check     # astro check (TS + template)
-npm run format    # prettier na svim fajlovima
+## Pokretanje
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # statički sajt u dist/
+npm run preview
 ```
 
-## Deploy (Cloudflare Pages)
+## Gde se menja šta
+- **Sav tekst:** `src/data/home.ts` – dizajn ne treba dirati.
+  - `[[tekst]]` = istaknuto (plava pozadina; u "Bad example" koloni crvena)
+  - `**tekst**` = bold
+- **Boje, fontovi, širina kolone:** `src/styles/global.css` (`:root` promenljive)
+- **Animacije:** `src/styles/motion.css` + `src/scripts/animations.ts`
+- **Sekcije:** `src/components/*.astro`, redosled u `src/pages/index.astro`
+- **Logo / wordmark:** `public/logo.png`, `public/wordmark.png` (zameniti SVG verzijom kad bude spremna)
 
-1. Napravi git repo i push-uj na GitHub:
-   ```sh
-   git init
-   git add .
-   git commit -m "initial scaffold"
-   git branch -M main
-   git remote add origin git@github.com:<user>/<repo>.git
-   git push -u origin main
-   ```
-2. U Cloudflare dashboard-u: **Workers & Pages → Create → Pages → Connect to Git**.
-3. Odaberi repo. Framework preset: **Astro**. Build command: `npm run build`. Output directory: `dist`. Node version: 24.
-4. Deploy. Cloudflare će automatski redeploy-ovati na svaki push na `main`, sa preview deploy-ovima za PR-ove.
-5. Pre production deploy-a: zameni `site` URL u `astro.config.mjs` sa pravim domenom.
+## Animacije
+- Naslovi se iskucavaju kad uđu u ekran (`data-type="1500"` = trajanje u ms)
+- Fade-up blokova (`data-reveal`, kašnjenje preko `--d`)
+- Brojači u statistikama, iscrtavanje grafikona, iscrtavanje "stepenica" sa pitanjima
+- Pomeranje highlight-a u citatima, kursor pored avatara
+- Sve je isključeno ako posetilac ima uključeno "reduce motion", i sajt radi bez JS-a.
 
-## Sledeći koraci
-
-- Popuni sekcije u `src/components/sections/` (trenutno prazni stub-ovi).
-- Izaberi font i dodaj preko `@fontsource-variable/<font>` paketa.
-- Dodaj scroll animacije po potrebi (biblioteka po izboru — nije uključena unapred).
+## Fontovi
+Inter (variable, optical size) + IBM Plex Mono, self-hosted preko Fontsource (bez Google Fonts poziva – bolje za GDPR).
+Ako se potvrdi da Omnius koristi drugi font, menja se u `src/layouts/Base.astro` i `--font-sans` / `--font-mono`.

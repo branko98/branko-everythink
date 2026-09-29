@@ -1,0 +1,42 @@
+---
+import Testimonial from './Testimonial.astro';
+import Arrow from './Arrow.astro';
+import { featuredTestimonial as f } from '../data/home';
+---
+<section class="row featured">
+  <div class="wrap wrap--line">
+    <Testimonial size="featured" logo={f.logo} name={f.name} role={f.role} company={f.company} avatar={f.avatar || undefined} paragraphs={f.paragraphs} />
+  </div>
+</section>
+
+<section class="row details-row">
+  <div class="wrap wrap--line">
+    <dl class="details">
+      {f.details.map((d, i) => (
+        <div class="details__item" data-reveal style={`--d:${i * 80}ms`}>
+          <dt>{d.label}</dt>
+          <dd>{d.href ? <a href={d.href} target="_blank" rel="noopener">{d.value} <Arrow dir="out" /></a> : d.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .details { margin: 0; display: grid; grid-template-columns: 280px 380px 200px minmax(0, 1fr); min-height: 135px; padding: 46px 0 32px; }
+  .details__item:first-child { padding-left: 42px; }
+  .details__item { padding-right: 24px; }
+  dt { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  dd { margin: 14px 0 0; font-size: 15px; line-height: 22px; color: var(--text); max-width: 340px; }
+  dd a { color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  dd a:hover { color: var(--ink); text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .details { grid-template-columns: 220px minmax(0, 1.4fr) minmax(0, .8fr) minmax(0, 1fr); }
+    .details__item:first-child { padding-left: 32px; }
+  }
+  @media (max-width: 767px) {
+    .details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; padding: 28px 14px 28px 16px; }
+    .details__item:first-child { padding-left: 0; }
+  }
+</style>

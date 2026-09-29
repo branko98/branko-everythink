@@ -1,0 +1,140 @@
+---
+import Arrow from './Arrow.astro';
+import { about } from '../data/home';
+---
+<!--
+  One row on the grid:
+  [ photo ] [ story              ] [ dark CTA ]
+  [       ] [ name / tagline     ] [          ]
+  Photo + story together span 2/3 of the column, the CTA takes the last third.
+-->
+<section class="row row--line about" id="about" aria-labelledby="about-name">
+  <div class="wrap about__grid">
+    <figure class="about__photo" data-reveal>
+      <span class="about__frame">
+        <img src={about.photo} alt={about.name} width="480" height="600" decoding="async" />
+        <span class="sq sq--tl" aria-hidden="true"></span>
+        <span class="sq sq--br" aria-hidden="true"></span>
+      </span>
+    </figure>
+
+    <div class="about__body">
+      {about.paragraphs.map((p, i) => (
+        <p data-reveal style={`--d:${120 + i * 110}ms`}>{p}</p>
+      ))}
+    </div>
+
+    <span class="about__corner" aria-hidden="true"></span>
+
+    <div class="about__id">
+      <h2 class="about__name" id="about-name" data-type="700">{about.name}</h2>
+      <p class="about__tagline" data-reveal style="--d:120ms">{about.tagline} / {about.taglineMuted}</p>
+    </div>
+
+    <div class="about__cta" id="contact">
+      <div>
+        <h2 class="about__cta-title" data-type="700">{about.cta.title}</h2>
+        <p class="about__cta-text" data-reveal style="--d:150ms">{about.cta.text}</p>
+      </div>
+      <a class="pill about__cta-btn" href={about.cta.button.href}>{about.cta.button.label} <Arrow /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    grid-template-columns: 204px minmax(0, 1fr) calc(100% / 3);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      'photo body cta'
+      'corner id  cta';
+  }
+
+  /* photo cell */
+  .about__photo {
+    grid-area: photo;
+    position: relative;
+    margin: 0;
+    padding: 12px 15px 20px;
+    border-right: 1px dashed var(--line);
+    border-bottom: 1px dashed var(--line);
+  }
+  .about__photo img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #eef0f3; }
+  .sq { position: absolute; width: 8px; height: 8px; background: var(--ink); }
+  .about__frame { position: relative; display: block; }
+  .sq--tl { left: -4px; top: -4px; }
+  .sq--br { right: -4px; bottom: -4px; }
+
+  /* story cell */
+  .about__body {
+    grid-area: body;
+    padding: 20px 28px 24px 24px;
+    border-bottom: 1px dashed var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text);
+  }
+
+  .about__corner { grid-area: corner; border-right: 1px dashed var(--line); }
+
+  /* name cell */
+  .about__id { grid-area: id; padding: 18px 28px 22px 24px; }
+  .about__name { font-size: 26px; line-height: 1.15; font-weight: 500; letter-spacing: -0.035em; color: var(--ink-strong); }
+  .about__tagline { margin-top: 4px; font-size: 15px; line-height: 22px; color: var(--text-soft); }
+
+  /* dark CTA: last third, full height of the row */
+  .about__cta {
+    grid-area: cta;
+    background: var(--dark);
+    color: #fff;
+    padding: 30px 30px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .about__cta-title { font-size: 28px; line-height: 1.15; font-weight: 500; letter-spacing: -0.035em; }
+  .about__cta-title :global(.caret) { background: #fff; }
+  .about__cta-text { margin-top: 12px; font-size: 15.5px; line-height: 24px; color: #c9cad1; }
+  .about__cta-btn { align-self: flex-start; background: #fff; color: var(--ink); height: 44px; padding: 0 18px 0 20px; font-size: 15.5px; }
+  .about__cta-btn:hover { background: #ececef; color: var(--ink); }
+
+  /* photo reveal: wipe down instead of the default fade-up */
+  :global(.motion) .about__photo[data-reveal] img { clip-path: inset(0 0 100% 0); transition: clip-path 1.1s var(--ease) .1s; }
+  :global(.motion) .about__photo[data-reveal] { transform: none; opacity: 1; }
+  :global(.motion) .about__photo[data-reveal].is-in img { clip-path: inset(0 0 0 0); }
+
+  @media (max-width: 1000px) {
+    .about__grid { grid-template-columns: 170px minmax(0, 1fr) minmax(0, 0.9fr); }
+    .about__body { font-size: 15px; }
+  }
+  @media (max-width: 899px) {
+    .about__grid {
+      grid-template-columns: 170px minmax(0, 1fr);
+      grid-template-areas:
+        'photo body'
+        'corner id'
+        'cta cta';
+    }
+  }
+  @media (max-width: 767px) {
+    .about__grid {
+      grid-template-columns: 120px minmax(0, 1fr);
+      grid-template-areas:
+        'photo id'
+        'body body'
+        'cta cta';
+    }
+    .about__corner { display: none; }
+    .about__photo { padding: 14px 12px; }
+    .about__id { align-self: end; padding: 14px 16px; border-bottom: 1px dashed var(--line); }
+    .about__name { font-size: 22px; }
+    .about__tagline { font-size: 14px; line-height: 20px; }
+    .about__body { padding: 22px 16px 26px; }
+    .about__cta { margin: 0 -1px; padding: 34px 20px; }
+  }
+</style>

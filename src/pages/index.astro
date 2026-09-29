@@ -1,17 +1,58 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Hero from "../components/Hero.astro";
-import CaseStudy from "../components/CaseStudy.astro";
-import Stats from "../components/Stats.astro";
-import TestimonialFeatured from "../components/TestimonialFeatured.astro";
-import SectionHeading from "../components/SectionHeading.astro";
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import CaseCard from '../components/CaseCard.astro';
+import Stats from '../components/Stats.astro';
+import FeaturedTestimonial from '../components/FeaturedTestimonial.astro';
+import Idea from '../components/Idea.astro';
+import Questions from '../components/Questions.astro';
+import Fit from '../components/Fit.astro';
+import Testimonial from '../components/Testimonial.astro';
+import Dock from '../components/Dock.astro';
+import About from '../components/About.astro';
+import { site, testimonials } from '../data/home';
 ---
+<Base title={site.title} description={site.description}>
+  <Header />
+  <main>
+    <Hero />
+    <CaseCard />
+    <Stats />
+    <FeaturedTestimonial />
+    <Idea />
+    <Questions />
+    <Fit />
+    <About />
+    <div class="row after-about" aria-hidden="true">
+      <div class="wrap wrap--line">
+        <span class="tick tick--top" style="left:25%"></span>
+        <span class="tick tick--top" style="left:50%"></span>
+        <span class="tick tick--top" style="left:75%"></span>
+      </div>
+    </div>
+    {testimonials.map((t, i) => (
+      <section class="row">
+        <div class="wrap wrap--line">
+          <Testimonial
+            logo={t.logo}
+            name={t.name}
+            role={t.role}
+            company={t.company}
+            avatar={t.avatar || undefined}
+            paragraphs={[t.quote]}
+            logoStyle={i === 1 ? 'caps' : 'wordmark'}
+          />
+        </div>
+      </section>
+    ))}
+    <div class="row end" aria-hidden="true"><div class="wrap"></div></div>
+  </main>
+  <Dock />
+</Base>
 
-<Layout title="branko/everythink">
-  <Hero />
-  <CaseStudy />
-  <Stats />
-  <TestimonialFeatured />
-  <SectionHeading />
-  <section class="container" style="height: 600px;"></section>
-</Layout>
+<style>
+  .after-about { height: 158px; }
+  @media (max-width: 767px) { .after-about { height: 64px; } }
+  .end { height: 130px; } /* room so the fixed buttons never cover the last content */
+</style>

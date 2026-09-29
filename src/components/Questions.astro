@@ -1,0 +1,106 @@
+---
+import { questions } from '../data/home';
+import { rich } from '../utils/rich';
+
+// Desktop "staircase": card i sits in column COL[i], starting at TOP[i] (px).
+const COL = [0, 1, 2, 1];
+const TOP = [32, 314, 588, 830];
+const PADX = [21, 22, 23, 13];
+
+// Row lines (px from the top of the staircase). Keep in sync with src/scripts/stair.ts.
+const ROWS = { r1: 275, r2: 552, r3: 797, r4: 1070, r5: 1325 };
+
+const c1 = 'calc(100% / 3)';
+const c2 = 'calc(200% / 3)';
+// Black squares: always visible, sitting on the grid intersections the line passes through.
+const squares: [string, number][] = [
+  ['0px', 0],
+  ['0px', ROWS.r1], [c1, ROWS.r1],
+  [c1, ROWS.r2], [c2, ROWS.r2],
+  [c2, ROWS.r3],
+  [c1, ROWS.r4], [c2, ROWS.r4],
+  ['0px', ROWS.r5], [c1, ROWS.r5],
+];
+---
+<section class="row row--line qs" aria-label="Questions worth asking">
+  <div class="wrap">
+    <div class="stair" data-stair>
+      <div class="stair__grid" aria-hidden="true">
+        <span class="g g--v" style={`left:${c1}`}></span>
+        <span class="g g--v" style={`left:${c2}`}></span>
+        {[ROWS.r1, ROWS.r2, ROWS.r4, ROWS.r5].map((y) => <span class="g g--h" style={`top:${y}px`}></span>)}
+        <span class="g g--h g--wide" style={`top:${ROWS.r3}px`}></span>
+      </div>
+
+      <!-- one continuous line, drawn in step with scrolling (see stair.ts) -->
+      <svg class="stair__path" aria-hidden="true" preserveAspectRatio="none">
+        <path d="" fill="none" stroke="#141519" stroke-width="2" stroke-linejoin="miter" />
+      </svg>
+
+      <div class="stair__squares" aria-hidden="true">
+        {squares.map(([x, y]) => <span class="sq" style={`left:${x};top:${y}px`}></span>)}
+      </div>
+
+      {questions.map((q, i) => (
+        <article
+          class="q"
+          data-reveal
+          style={`--col:${COL[i]};--top:${TOP[i]}px;--padx:${PADX[i]}px;--d:150ms`}
+        >
+          <h3 class="q__title">{q.title}</h3>
+          <p class="q__body" set:html={rich(q.body)} />
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/stair.ts';
+</script>
+
+<style>
+  .stair { position: relative; height: 1590px; }
+  .g { position: absolute; }
+  .g--v { top: 0; bottom: 0; border-left: 1px dashed var(--line); }
+  .g--h { left: 0; right: 0; border-top: 1px dashed var(--line); }
+  .g--wide { left: -32px; right: -32px; }
+
+  .stair__path { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .sq { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; background: var(--ink); }
+
+  .q {
+    position: absolute;
+    top: var(--top);
+    left: calc(var(--col) * 100% / 3 + var(--padx));
+    width: min(330px, calc(100% / 3 - 36px));
+  }
+  .q__title { font-size: 22px; line-height: 30px; font-weight: 500; letter-spacing: -0.01em; color: #1a1a1f; }
+  .q__body { margin-top: 14px; font-size: 15px; line-height: 24px; color: var(--text); }
+  .q__body :global(strong) { font-weight: 600; color: var(--ink); }
+
+  /* ---------- stacked layout: one vertical line down the left edge ---------- */
+  @media (max-width: 899px) {
+    .stair { height: auto; padding: 0 0 40px; display: flex; flex-direction: column; }
+    .stair__grid, .stair__squares { display: none; }
+    .q {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: auto;
+      max-width: 520px;
+      padding: 26px 16px 30px 20px;
+    }
+    .q::after {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: -4px;
+      width: 8px;
+      height: 8px;
+      background: var(--ink);
+    }
+    .q + .q { border-top: 1px dashed var(--line); }
+    .q__title { font-size: 20px; line-height: 28px; }
+  }
+</style>

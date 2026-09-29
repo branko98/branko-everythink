@@ -1,83 +1,56 @@
 ---
-// Header — sadržaj po reference/00-header/design.png:
-//   logo (public/logo.png) levo, "Get started" dugme desno.
-// Vrednosti (visina, boje, border, tipografija) iz reference/00-header/styles.json.
-// Logo intrinsic dimensions: 1397 × 173 (aspect 8.075).
-// Prikazana visina 38 px = wordmark visina u design.png ×0.5 (izmeren bbox y=39..113).
+import Arrow from './Arrow.astro';
+import { site } from '../data/home';
 ---
-
-<header class="site-header">
-  <div class="site-header__container container">
-    <a href="/" class="brand" aria-label="branko/everythink — home">
-      <img src="/logo.png" alt="branko/everythink" width="307" height="38" />
+<!-- Sticky bar: always visible at the top while scrolling -->
+<header class="header" data-header>
+  <div class="wrap header__bar">
+    <a href="/" class="logo" aria-label="Branko / Everythink – home">
+      <img src="/logo.png" alt="branko / everythink" width="904" height="150" />
     </a>
-
-    <a href="#get-started" class="cta">
-      <span class="cta__label">Get started</span>
-      <span class="cta__arrow" aria-hidden="true">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 5h7M5.5 2.5 8 5 5.5 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
-    </a>
+    <a href={site.ctaHref} class="pill header__cta">{site.ctaLabel} <Arrow /></a>
   </div>
 </header>
+<!-- keeps the original empty band under the logo (design spacing + grid lines) -->
+<div class="row row--line header-space" aria-hidden="true"><div class="wrap"></div></div>
 
 <style>
-  .site-header {
+  .header {
     position: sticky;
     top: 0;
-    z-index: 100;
-    width: 100%;
-    height: var(--header-height);
-    padding: 0 var(--header-padding-x);
-    background: var(--color-bg);
+    z-index: 40;
+    height: 76px;
+    background: rgba(255, 255, 255, 0.88);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    backdrop-filter: saturate(1.4) blur(10px);
+    transition: background-color .25s ease;
   }
-  /* Ispod 991 .container preuzima safe-area margin (20 px);
-     header ne treba svoj padding. */
-  @media (max-width: 991px) {
-    .site-header { padding: 0; }
-  }
+  .header.is-stuck { background: rgba(255, 255, 255, 0.94); }
+  .header__bar { display: flex; align-items: flex-start; justify-content: space-between; padding-top: 18px; }
+  .header-space { height: 83px; }
 
-  .site-header__container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: var(--header-height);
-    gap: 12px; /* minimalni razmak logo ↔ CTA na uskim ekranima */
-  }
+  .logo { display: block; width: 296px; }
+  .logo img { width: 100%; height: auto; }
+  .header__cta { height: 40px; border: 1px solid #dcdce0; color: var(--ink); background: #fff; }
+  .header__cta:hover { color: var(--ink); border-color: #b9b9c0; }
 
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    min-width: 0;
-    flex-shrink: 1;
+  @media (max-width: 767px) {
+    .header { height: 64px; }
+    .header__bar { align-items: center; padding: 0 12px 0 14px; }
+    .logo { width: 176px; }
+    .header-space { height: 32px; }
   }
-  .brand img {
-    display: block;
-    height: var(--header-logo-height); /* 38 default; 24 na ≤ 479 */
-    width: auto;
-  }
-  .cta { flex-shrink: 0; }
-
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: var(--cta-padding-y) var(--cta-padding-x);
-    border: var(--cta-border);
-    border-radius: var(--cta-radius);
-    color: var(--color-dark);
-    font-family: var(--font-body);
-    font-size: var(--text-cta-size);
-    line-height: var(--text-cta-line);
-    font-weight: var(--text-cta-weight);
-  }
-
-  .cta__arrow {
-    display: inline-flex;
-    align-items: center;
-    color: var(--color-dark);
+  @media (max-width: 400px) {
+    .logo { width: 150px; }
+    .header__cta { padding: 0 12px 0 14px; font-size: 13.5px; }
   }
 </style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  if (header) {
+    const update = () => header.classList.toggle('is-stuck', window.scrollY > 8);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+</script>

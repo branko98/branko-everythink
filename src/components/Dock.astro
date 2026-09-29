@@ -1,0 +1,52 @@
+---
+import Arrow from './Arrow.astro';
+import { dock } from '../data/home';
+---
+<!-- Fixed to the bottom of the screen at all times -->
+<nav class="dock" aria-label="Get in touch">
+  <div class="dock__inner">
+    <a class="pill dock__primary" href={dock.primary.href}>{dock.primary.label} <Arrow /></a>
+    <a class="pill dock__secondary" href={dock.secondary.href}>{dock.secondary.label} <Arrow /></a>
+  </div>
+</nav>
+
+<style>
+  .dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .dock__inner {
+    pointer-events: auto;
+    display: flex;
+    gap: 14px;
+    padding: 7px;
+    border-radius: 999px;
+    background: rgba(243, 243, 245, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .dock .pill { height: 40px; font-size: 15px; font-weight: 500; padding: 0 14px 0 14px; gap: 12px; }
+  .dock__primary { background: #000; color: #fff; }
+  .dock__primary:hover { background: #26272c; color: #fff; }
+  .dock__secondary { background: #e6e6e9; color: var(--ink); }
+  .dock__secondary:hover { background: #dadadf; color: var(--ink); }
+
+  /* entrance */
+  :global(.motion) .dock__inner { transform: translateY(140%); animation: dock-in .8s var(--ease) .9s forwards; }
+  @keyframes dock-in { to { transform: none; } }
+
+  @media (max-width: 767px) {
+    .dock { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding: 0 12px; }
+    .dock__inner { gap: 8px; padding: 5px; }
+    .dock .pill { height: 44px; padding: 0 16px; }
+  }
+  @media (max-width: 360px) {
+    .dock .pill { padding: 0 12px; font-size: 13.5px; gap: 8px; }
+  }
+</style>

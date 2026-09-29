@@ -1,0 +1,93 @@
+---
+import { rich } from '../utils/rich';
+
+interface Props {
+  logo: string;
+  name: string;
+  role: string;
+  company: string;
+  paragraphs: string[];
+  avatar?: string;
+  size?: 'featured' | 'compact';
+  logoStyle?: 'wordmark' | 'caps';
+}
+const { logo, name, role, company, paragraphs, avatar, size = 'compact', logoStyle = 'wordmark' } = Astro.props;
+---
+<figure class:list={['t', `t--${size}`]} data-reveal>
+  <span class="t__bar" aria-hidden="true"></span>
+  <div class:list={['t__logo', `t__logo--${logoStyle}`]}>{logo}</div>
+
+  <blockquote class="t__quote mono">
+    {paragraphs.map((p) => <p set:html={rich(p)} />)}
+  </blockquote>
+
+  <figcaption class="t__who">
+    <span class="t__name">{name}</span>
+    <span class="t__role">{role}{size === 'featured' ? <br /> : ' '}@ {company}</span>
+  </figcaption>
+
+  <div class="t__face">
+    <span class="cursor-wrap" aria-hidden="true">
+      <svg class="cursor" width="14" height="14" viewBox="0 0 14 14"><path d="M1 1 L13 6 L7.5 7.5 L6 13 Z" fill="#c9cad0" /></svg>
+    </span>
+    {avatar ? <img class="t__avatar" src={avatar} alt="" width="64" height="64" loading="lazy" /> : <span class="t__avatar" aria-hidden="true"></span>}
+  </div>
+</figure>
+
+<style>
+  .t {
+    position: relative;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 280px minmax(0, 540px) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'logo quote face'
+      '.    quote face'
+      'who  quote face';
+    padding: 44px 0 30px;
+  }
+  .t--featured { padding: 40px 0 34px; }
+  .t--featured .t__bar { top: 44px; }
+  .t--compact { min-height: 224px; }
+
+  .t__bar { position: absolute; left: -1px; top: 48px; width: 2px; height: 22px; background: var(--ink); }
+  .t__logo { grid-area: logo; padding-left: 41px; font-weight: 700; letter-spacing: -0.03em; font-size: 23px; line-height: 30px; }
+  .t--compact .t__logo { font-size: 17px; }
+  .t__logo--caps { font-size: 26px !important; font-weight: 800; letter-spacing: 0.01em; }
+
+  .t__quote { grid-area: quote; margin: 0; font-size: 16px; line-height: 26px; color: #1a1b20; display: flex; flex-direction: column; gap: 26px; }
+
+  .t__who { grid-area: who; align-self: end; padding-left: 42px; display: flex; flex-direction: column; gap: 10px; }
+  .t__name { font-size: 18px; font-weight: 500; letter-spacing: -0.01em; }
+  .t__role { font-size: 12.5px; line-height: 20px; letter-spacing: 0.03em; color: #6b7080; text-transform: uppercase; }
+
+  .t__face { grid-area: face; align-self: end; justify-self: center; position: relative; padding-left: 12px; margin-left: 30px; }
+  .t__avatar { display: block; width: 76px; height: 76px; border-radius: 50%; background: #dcdde1; border: 1px solid #ececef; object-fit: cover; }
+  .cursor-wrap { position: absolute; left: 0; top: -16px; }
+
+  @media (max-width: 900px) {
+    .t { grid-template-columns: 220px minmax(0, 1fr) 110px; }
+    .t__logo, .t__who { padding-left: 32px; }
+    .t__face { margin-left: 0; }
+  }
+  @media (max-width: 767px) {
+    .t, .t--featured, .t--compact {
+      min-height: 0;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        'logo logo'
+        'quote quote'
+        'who face';
+      row-gap: 22px;
+      padding: 30px 16px 26px 0;
+    }
+    .t__bar { top: 32px; }
+    .t__logo, .t__who { padding-left: 16px; }
+    .t__quote { padding-left: 16px; font-size: 14.5px; line-height: 24px; gap: 20px; }
+    .t__who { align-self: center; }
+    .t__face { align-self: center; }
+    .t__avatar { width: 52px; height: 52px; }
+  }
+</style>
