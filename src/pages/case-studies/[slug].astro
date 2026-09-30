@@ -1,0 +1,220 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Dock from '../../components/Dock.astro';
+import Arrow from '../../components/Arrow.astro';
+import ResultChart from '../../components/ResultChart.astro';
+import FeaturedTestimonial from '../../components/FeaturedTestimonial.astro';
+import { about } from '../../data/home';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('case-studies');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const d = entry.data;
+
+const toc = headings.filter((h) => h.depth === 2);
+const words = (entry.body ?? '').replace(/---[\s\S]*?---/, '').split(/\s+/).filter(Boolean).length;
+const readMin = Math.max(1, Math.round(words / 220));
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const date = `${d.date.getUTCDate()} ${MONTHS[d.date.getUTCMonth()]} ${d.date.getUTCFullYear()}`;
+---
+<Base title={`${d.title} – Everythink`} description={d.lead}>
+  <Header />
+  <main>
+    <!-- title block -->
+    <section class="row row--line cs-hero">
+      <div class="wrap cs-hero__wrap">
+        <a class="cs-back" href="/"><Arrow dir="left" /> Home</a>
+        <span class="cs-bar" aria-hidden="true"></span>
+        <h1 class="cs-title" data-type="1300">{d.title}</h1>
+        <p class="cs-lead" data-reveal style="--d:150ms">{d.lead}</p>
+
+        <div class="cs-meta" data-reveal style="--d:250ms">
+          <div class="cs-meta__who">
+            <img class="cs-meta__avatar" src={d.author.photo} alt="" width="480" height="600" />
+            <span class="cs-meta__name">{d.author.name}</span>
+            <span class="cs-meta__sep" aria-hidden="true"></span>
+            <time datetime={d.date.toISOString().slice(0, 10)}>{date}</time>
+          </div>
+          <div class="cs-meta__right">
+            <span class="cs-meta__client">
+              <img src={d.client.logo} alt="" width="96" height="96" />
+              {d.client.name}
+            </span>
+            <span class="cs-meta__type">Case study</span>
+            <span class="cs-meta__read mono">• {readMin} min read</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- article + sidebar -->
+    <section class="row row--line cs-body">
+      <div class="wrap cs-body__grid">
+        <article class="prose" data-article>
+          <Content components={{ ResultChart }} chart={d.chart} />
+        </article>
+
+        <aside class="cs-side">
+          <div class="cs-side__sticky">
+            <nav class="toc" aria-label="On this page">
+              <p class="toc__title">On this page</p>
+              <ul>
+                {toc.map((h) => <li><a href={`#${h.slug}`} data-toc={h.slug}>{h.text}</a></li>)}
+              </ul>
+            </nav>
+
+            <div class="side-cta">
+              <p class="side-cta__title">{about.cta.title}</p>
+              <p class="side-cta__text">{about.cta.text}</p>
+              <a class="pill side-cta__btn" href={about.cta.button.href}>{about.cta.button.label} <Arrow /></a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    {d.testimonial && <FeaturedTestimonial data={d.testimonial as any} />}
+    {!d.testimonial && <FeaturedTestimonial />}
+
+    <div class="row end" aria-hidden="true"><div class="wrap"></div></div>
+  </main>
+  <Dock />
+</Base>
+
+<script>
+  // "On this page": highlight the section currently being read
+  const links = new Map<string, HTMLElement>();
+  document.querySelectorAll<HTMLElement>('[data-toc]').forEach((a) => links.set(a.dataset.toc!, a));
+  const heads = [...document.querySelectorAll<HTMLElement>('[data-article] h2[id]')];
+  const setActive = (id: string) => links.forEach((a, key) => a.classList.toggle('is-active', key === id));
+  if (heads.length) {
+    const update = () => {
+      const line = window.innerHeight * 0.3;
+      let current = heads[0].id;
+      for (const h of heads) if (h.getBoundingClientRect().top <= line) current = h.id;
+      setActive(current);
+    };
+    let queued = false;
+    window.addEventListener('scroll', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; update(); });
+    }, { passive: true });
+    update();
+  }
+</script>
+
+<style>
+  /* ---------- title block ---------- */
+  .cs-hero__wrap { position: relative; padding: 56px 50px 52px; }
+  .cs-back { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-soft); }
+  .cs-back:hover { color: var(--ink); }
+  .cs-bar { position: absolute; left: -1px; top: 118px; width: 2px; height: 30px; background: var(--ink); }
+  .cs-title {
+    margin-top: 28px;
+    max-width: 800px;
+    font-size: clamp(32px, 2.6vw + 10px, 46px);
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--ink-strong);
+    text-wrap: balance;
+  }
+  .cs-lead { margin-top: 26px; max-width: 680px; font-size: 18px; line-height: 29px; color: var(--text); }
+
+  .cs-meta { margin-top: 44px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+  .cs-meta__who { display: flex; align-items: center; gap: 14px; font-size: 16px; color: var(--ink); }
+  .cs-meta__avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; }
+  .cs-meta__sep { width: 1px; height: 22px; background: var(--line); }
+  .cs-meta__right { display: flex; align-items: center; gap: 14px; }
+  .cs-meta__client { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+  .cs-meta__client img { width: 22px; height: 22px; border-radius: 5px; }
+  .cs-meta__type { font-size: 16px; font-weight: 500; color: var(--link); }
+  .cs-meta__read { font-size: 13.5px; padding: 6px 12px; border-radius: 6px; background: #f0f0f2; color: var(--text-soft); }
+
+  /* ---------- body ---------- */
+  .cs-body__grid { display: grid; grid-template-columns: minmax(0, 1fr) 294px; }
+  .prose { padding: 40px 50px 72px; max-width: 790px; }
+  .cs-side { border-left: 1px dashed var(--line); }
+  .cs-side__sticky { position: sticky; top: 96px; padding: 48px 28px 40px; display: flex; flex-direction: column; gap: 32px; }
+
+  .toc__title { font-size: 16px; font-weight: 600; color: var(--ink); }
+  .toc ul { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .toc a { display: block; font-size: 15px; line-height: 22px; color: var(--text-soft); transition: color .2s; }
+  .toc a:hover { color: var(--ink); }
+  .toc a.is-active { color: var(--link); }
+
+  .side-cta { background: var(--dark); color: #fff; padding: 24px 22px 22px; display: flex; flex-direction: column; gap: 12px; }
+  .side-cta__title { font-size: 21px; line-height: 1.2; font-weight: 500; letter-spacing: -0.03em; }
+  .side-cta__text { font-size: 14.5px; line-height: 22px; color: #c9cad1; }
+  .side-cta__btn { margin-top: 8px; align-self: flex-start; background: #fff; color: var(--ink); height: 40px; }
+  .side-cta__btn:hover { background: #ececef; color: var(--ink); }
+
+  /* ---------- article typography (MDX output) ---------- */
+  .prose :global(h2) {
+    margin: 56px 0 0;
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    color: var(--ink-strong);
+    scroll-margin-top: 100px;
+  }
+  .prose :global(h2:first-child) { margin-top: 24px; }
+  .prose :global(h3) { margin: 40px 0 0; font-size: 23px; line-height: 1.3; font-weight: 500; letter-spacing: -0.025em; color: var(--ink-strong); scroll-margin-top: 100px; }
+  .prose :global(p) { margin: 18px 0 0; font-size: 17px; line-height: 29px; color: var(--text); }
+  .prose :global(h2 + p), .prose :global(h3 + p) { margin-top: 20px; }
+  .prose :global(strong) { font-weight: 600; color: var(--ink); }
+  .prose :global(a) { color: var(--link); }
+  .prose :global(a:hover) { text-decoration: underline; }
+  .prose :global(ul) { margin: 18px 0 0; padding-left: 22px; }
+  .prose :global(ul li) { margin-top: 8px; font-size: 17px; line-height: 28px; color: var(--text); }
+  .prose :global(ul li::marker) { color: var(--ink); }
+
+  /* numbered lists read as highlighted steps, like the highlights in quotes */
+  .prose :global(ol) { list-style: none; counter-reset: step; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .prose :global(ol li) { counter-increment: step; font-size: 17px; line-height: 29px; color: var(--ink); }
+  .prose :global(ol li > *) { display: inline; }
+  .prose :global(ol li) {
+    background-image: linear-gradient(var(--hl-bg), var(--hl-bg));
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: table;
+    padding: 0 4px;
+  }
+  .prose :global(ol li::before) { content: counter(step) '. '; }
+
+  @media (max-width: 1000px) {
+    .cs-body__grid { grid-template-columns: minmax(0, 1fr) 250px; }
+    .prose { padding: 36px 36px 64px; }
+    .cs-hero__wrap { padding: 48px 36px 44px; }
+  }
+  @media (max-width: 899px) {
+    .cs-body__grid { grid-template-columns: minmax(0, 1fr); }
+    .cs-side { border-left: 0; border-top: 1px dashed var(--line); order: -1; }
+    .cs-side__sticky { position: static; padding: 28px 36px; }
+    .side-cta { display: none; }
+    .toc ul { flex-direction: row; flex-wrap: wrap; gap: 8px 18px; }
+  }
+  @media (max-width: 767px) {
+    .cs-hero__wrap { padding: 32px 16px 34px; }
+    .cs-bar { top: 88px; height: 26px; }
+    .cs-title { margin-top: 22px; }
+    .cs-lead { margin-top: 18px; font-size: 16.5px; line-height: 27px; }
+    .cs-meta { margin-top: 30px; }
+    .cs-meta__right { flex-wrap: wrap; }
+    .cs-side__sticky { padding: 22px 16px; }
+    .prose { padding: 18px 16px 48px; }
+    .prose :global(h2) { font-size: 27px; margin-top: 44px; }
+    .prose :global(h3) { font-size: 20px; }
+    .prose :global(p), .prose :global(ul li), .prose :global(ol li) { font-size: 16px; line-height: 27px; }
+  }
+
+  .end { height: 130px; }
+</style>

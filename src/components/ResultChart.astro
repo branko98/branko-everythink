@@ -1,0 +1,59 @@
+---
+// Chart block used inside case study articles: metric chips on top,
+// the shared line chart, optional caption. Framed on the site grid.
+import LineChart from './LineChart.astro';
+
+interface Props {
+  data?: {
+    data: number[];
+    labels: string[];
+    metrics: { label: string; value: string }[];
+    caption?: string;
+  };
+}
+const { data } = Astro.props;
+---
+{data && (
+  <figure class="rc" data-reveal>
+    <span class="rc__sq rc__sq--tl" aria-hidden="true"></span>
+    <span class="rc__sq rc__sq--br" aria-hidden="true"></span>
+    <dl class="rc__metrics">
+      {data.metrics.map((m) => (
+        <div class="rc__metric">
+          <dt class="mono">{m.label}</dt>
+          <dd>{m.value}</dd>
+        </div>
+      ))}
+    </dl>
+    <LineChart
+      data={data.data}
+      labels={data.labels}
+      height={220}
+      mobileHeight={150}
+      label={`${data.metrics.map((m) => `${m.label}: ${m.value}`).join(', ')}. ${data.labels[0]} to ${data.labels[data.labels.length - 1]}.`}
+    />
+    {data.caption && <figcaption class="rc__caption">{data.caption}</figcaption>}
+  </figure>
+)}
+
+<style>
+  .rc {
+    position: relative;
+    margin: 36px 0 8px;
+    padding: 24px 28px 22px;
+    border: 1px dashed var(--line);
+  }
+  .rc__sq { position: absolute; width: 8px; height: 8px; background: var(--ink); }
+  .rc__sq--tl { left: -4px; top: -4px; }
+  .rc__sq--br { right: -4px; bottom: -4px; }
+  .rc__metrics { margin: 0 0 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .rc__metric { padding: 8px 14px 9px; background: #f0f0f2; border-radius: 4px; }
+  .rc__metric dt { font-size: 12px; line-height: 16px; color: var(--text-soft); }
+  .rc__metric dd { margin: 2px 0 0; font-size: 22px; line-height: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+  .rc__caption { margin-top: 16px; font-size: 13.5px; line-height: 21px; color: var(--text-soft); }
+
+  @media (max-width: 767px) {
+    .rc { padding: 18px 16px 16px; }
+    .rc__metric dd { font-size: 19px; }
+  }
+</style>

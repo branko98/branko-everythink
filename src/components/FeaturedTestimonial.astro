@@ -1,7 +1,11 @@
 ---
 import Testimonial from './Testimonial.astro';
 import Arrow from './Arrow.astro';
-import { featuredTestimonial as f } from '../data/home';
+import { featuredTestimonial } from '../data/home';
+
+// Defaults to the homepage testimonial; case studies pass their own.
+interface Props { data?: typeof featuredTestimonial }
+const f = Astro.props.data ?? featuredTestimonial;
 ---
 <section class="row featured">
   <div class="wrap wrap--line">

@@ -7,7 +7,7 @@ export const site = {
   description:
     'Seven years building growth for B2B SaaS - the channels, the tracking, the CRM, and the systems that connect them.',
   ctaLabel: 'Get started',
-  ctaHref: '#contact',
+  ctaHref: '/#contact',
 };
 
 export const hero = {
@@ -17,15 +17,18 @@ export const hero = {
 };
 
 export const caseCard = {
-  tag: 'Fintech',
-  highlight: '+227.9%',
-  text: ' in signups in 6 months.',
-  client: '[Client]',
-  clientCategory: '[Client category]',
+  tag: 'B2B SaaS',
+  highlight: '1.4 → 2.2',
+  text: ' demo bookings a day. In three months, on the same spend.',
+  client: 'Tapi',
+  clientCategory: 'Property Maintenance Software',
+  logo: '/tapi.png',
   linkLabel: 'Case study',
-  href: '#case',
+  href: '/case-studies/tapi/',
   // y-values 0–100 (growth curve), evenly spaced on x
   chart: [2, 6, 10, 16, 22, 24, 26, 30, 36, 43, 53, 60, 73, 82, 91, 92, 97],
+  // labels under the chart: first sits left, last sits right, the rest spread evenly
+  chartLabels: ['July', 'August', 'September'],
 };
 
 export const stats = [
@@ -115,7 +118,7 @@ export const testimonials = [
 
 // Floating buttons fixed to the bottom of the screen
 export const dock = {
-  primary: { label: 'Partner with us', href: '#contact' }, // TODO: link
+  primary: { label: 'Partner with us', href: '/#contact' }, // TODO: link
   secondary: { label: 'Book a call', href: '#meeting' }, // TODO: calendar link
 };
 

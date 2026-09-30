@@ -1,17 +1,7 @@
 ---
 import Arrow from './Arrow.astro';
+import LineChart from './LineChart.astro';
 import { caseCard as c } from '../data/home';
-
-const W = 632;
-const H = 192;
-const n = c.chart.length;
-const pts = c.chart
-  .map((v, i) => `${((i / (n - 1)) * W).toFixed(1)},${(H - 3 - (v / 100) * (H - 8)).toFixed(1)}`)
-  .join(' ');
-const last = c.chart[n - 1];
-const dotTop = H - 3 - (last / 100) * (H - 8);
-const gridCount = 23;
-const grid = Array.from({ length: gridCount }, (_, i) => (i / (gridCount - 1)) * (W - 1) + 0.5);
 ---
 <section class="row row--line case">
   <div class="wrap">
@@ -20,7 +10,7 @@ const grid = Array.from({ length: gridCount }, (_, i) => (i / (gridCount - 1)) *
         <span class="case__tag mono">{c.tag}</span>
         <p class="case__stat"><mark class="hl case__hl">{c.highlight}</mark>{c.text}</p>
         <div class="case__client">
-          <svg width="20" height="22" viewBox="0 0 20 22" aria-hidden="true"><path d="M3 3 C11 1 18 6 18 13 C18 18 13 21 8 20 C4 19 2 15 3 11 Z" fill="#6f9bf0" /></svg>
+          <img class="case__logo" src={c.logo} alt="" width="96" height="96" decoding="async" />
           <div>
             <div class="case__name">{c.client}</div>
             <div class="case__cat">{c.clientCategory}</div>
@@ -29,18 +19,12 @@ const grid = Array.from({ length: gridCount }, (_, i) => (i / (gridCount - 1)) *
         <a href={c.href} class="case__link">{c.linkLabel} <Arrow /></a>
       </div>
 
-      <div class="chart" role="img" aria-label={`Growth chart: ${c.highlight}${c.text}`}>
-        <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" fill="none" aria-hidden="true">
-          <g class="chart-grid" stroke="#e8e8eb" stroke-width="1">
-            {grid.map((x, i) => <line x1={x} y1="0" x2={x} y2={H - 2} style={`--i:${i}`} vector-effect="non-scaling-stroke" />)}
-          </g>
-          <line x1="0" y1={H - 1.5} x2={W} y2={H - 1.5} stroke="#d0d5dd" stroke-width="1" vector-effect="non-scaling-stroke" />
-          <polyline class="chart-line" points={pts} stroke="#141413" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
-        </svg>
-        <span class="chart-dot-wrap" style={`top:${(dotTop / H) * 100}%`}>
-          <span class="chart-dot-pulse"></span>
-          <span class="chart-dot"></span>
-        </span>
+      <div class="case__plot">
+        <LineChart
+          data={c.chart}
+          labels={c.chartLabels}
+          label={`Growth chart, ${c.chartLabels[0]} to ${c.chartLabels[c.chartLabels.length - 1]}: ${c.highlight}${c.text}`}
+        />
       </div>
     </article>
   </div>
@@ -51,34 +35,32 @@ const grid = Array.from({ length: gridCount }, (_, i) => (i / (gridCount - 1)) *
   .case__card {
     position: relative;
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 350px minmax(0, 1fr);
     min-height: 244px;
-    padding: 34px 42px 34px 0;
+    padding: 34px 42px 28px 0;
+    margin-bottom: 22px;
   }
   .case__info { padding-left: 36px; display: flex; flex-direction: column; align-items: flex-start; }
   .case__tag { font-size: 12px; padding: 3px 8px; border-radius: 4px; background: #f0f0f2; color: var(--text-soft); }
-  .case__stat { margin-top: 18px; max-width: 220px; font-size: 22px; line-height: 30px; font-weight: 500; letter-spacing: -0.01em; }
-  .case__hl { font-weight: 500; color: var(--ink); }
-  .case__client { margin-top: 26px; display: flex; align-items: center; gap: 10px; }
-  .case__name { font-size: 15px; font-weight: 600; }
-  .case__cat { margin-top: 3px; font-size: 13px; color: #7b7c84; }
+  .case__stat { margin-top: 18px; max-width: 300px; font-size: 22px; line-height: 30px; font-weight: 560; letter-spacing: -0.01em; }
+  .case__hl { font-weight: 560; color: var(--ink); }
+  .case__client { margin-top: 28px; display: flex; align-items: center; gap: 12px; }
+  .case__logo { width: 32px; height: 32px; border-radius: 7px; display: block; flex: none; }
+  .case__name { font-size: 17px; line-height: 22px; font-weight: 500; letter-spacing: -0.01em; }
+  .case__cat { margin-top: 1px; font-size: 13.5px; color: #7b7c84; }
   .case__link { margin-top: 26px; display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; }
   .case__link:hover .arrow { transform: translateX(2px); }
   .case__link .arrow { transition: transform .2s var(--ease); }
 
-  .chart { position: relative; align-self: start; margin-top: 13px; height: 192px; }
-  .chart svg { width: 100%; height: 100%; }
-  .chart-dot-wrap { position: absolute; right: -3px; width: 7px; height: 7px; margin-top: -3.5px; }
-  .chart-dot, .chart-dot-pulse { position: absolute; inset: 0; border-radius: 50%; background: #141413; }
-  .chart-dot-pulse { opacity: 0; }
+  .case__plot { align-self: start; margin-top: 13px; }
 
   @media (max-width: 900px) {
-    .case__card { grid-template-columns: 230px minmax(0, 1fr); padding-right: 28px; }
+    .case__card { grid-template-columns: 270px minmax(0, 1fr); padding-right: 28px; }
   }
   @media (max-width: 767px) {
-    .case__card { grid-template-columns: minmax(0, 1fr); padding: 26px 20px 26px 0; row-gap: 26px; }
+    .case__card { grid-template-columns: minmax(0, 1fr); padding: 26px 20px 8px 0; row-gap: 26px; }
     .case__info { padding-left: 14px; }
     .case__stat { max-width: 280px; font-size: 20px; line-height: 28px; }
-    .chart { margin: 0 0 0 14px; height: 150px; }
-  }
+    .case__plot { margin: 0 0 0 14px; }
+    }
 </style>
