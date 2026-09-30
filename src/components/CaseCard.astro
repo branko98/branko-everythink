@@ -53,8 +53,7 @@ const grid = Array.from({ length: gridCount }, (_, i) => (i / (gridCount - 1)) *
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
     min-height: 244px;
-    padding: 34px 42px 22px 0;
-    margin-bottom: 22px;
+    padding: 34px 42px 34px 0;
   }
   .case__info { padding-left: 36px; display: flex; flex-direction: column; align-items: flex-start; }
   .case__tag { font-size: 12px; padding: 3px 8px; border-radius: 4px; background: #f0f0f2; color: var(--text-soft); }
@@ -77,7 +76,7 @@ const grid = Array.from({ length: gridCount }, (_, i) => (i / (gridCount - 1)) *
     .case__card { grid-template-columns: 230px minmax(0, 1fr); padding-right: 28px; }
   }
   @media (max-width: 767px) {
-    .case__card { grid-template-columns: minmax(0, 1fr); padding: 26px 20px 8px 0; row-gap: 26px; }
+    .case__card { grid-template-columns: minmax(0, 1fr); padding: 26px 20px 26px 0; row-gap: 26px; }
     .case__info { padding-left: 14px; }
     .case__stat { max-width: 280px; font-size: 20px; line-height: 28px; }
     .chart { margin: 0 0 0 14px; height: 150px; }
