@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Dock from '../components/Dock.astro';
+import Arrow from '../components/Arrow.astro';
+---
+<Base title="Page not found – Everythink" description="This page doesn’t exist. Start from the homepage.">
+  <Header />
+  <main>
+    <section class="row row--line nf">
+      <div class="wrap nf__wrap">
+        <span class="nf__bar" aria-hidden="true"></span>
+        <p class="nf__code mono">404</p>
+        <h1 class="nf__title display">This page doesn’t exist. <span class="strong">The rest of the site does.</span></h1>
+        <a class="pill nf__btn" href="/">Back to the homepage <Arrow /></a>
+      </div>
+    </section>
+    <div class="row nf-end" aria-hidden="true"><div class="wrap"></div></div>
+  </main>
+  <Dock />
+</Base>
+
+<style>
+  .nf__wrap { position: relative; padding: 72px 42px 80px; }
+  .nf__bar { position: absolute; left: -1px; top: 72px; width: 2px; height: 22px; background: var(--ink); }
+  .nf__code { font-size: 13px; color: var(--text-soft); }
+  .nf__title { margin-top: 18px; max-width: 760px; font-size: clamp(30px, 2.4vw + 10px, 42px); line-height: 1.16; }
+  .nf__btn { margin-top: 32px; background: #000; color: #fff; height: 44px; padding: 0 18px 0 20px; font-size: 15.5px; }
+  .nf__btn:hover { background: #26272c; color: #fff; }
+  .nf-end { height: 160px; }
+  @media (max-width: 767px) {
+    .nf__wrap { padding: 44px 16px 56px; }
+    .nf__bar { top: 44px; }
+  }
+</style>
