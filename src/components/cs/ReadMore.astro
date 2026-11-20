@@ -1,0 +1,22 @@
+---
+// Emphasised link at the end of a chapter, pointing to a separate write-up.
+import Arrow from '../Arrow.astro';
+interface Props { label: string; href?: string }
+const { label, href } = Astro.props;
+---
+<p class="readmore" data-reveal>
+  <a class="readmore__link" href={href || undefined} aria-disabled={href ? undefined : 'true'}>{label} <Arrow /></a>
+</p>
+
+<style>
+  .readmore { margin: 30px 0 0; }
+  .readmore__link {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 11px 16px; border: 1.5px solid var(--ink); background: var(--hl-bg);
+    font-size: 15px; font-weight: 600; color: var(--hl-ink); text-decoration: none;
+  }
+  .readmore__link[href]:hover { background: var(--ink); color: #fff; }
+  .readmore__link :global(.arrow) { transition: transform .2s var(--ease); }
+  .readmore__link[href]:hover :global(.arrow) { transform: translateX(2px); }
+  .readmore__link:not([href]) { cursor: default; }
+</style>

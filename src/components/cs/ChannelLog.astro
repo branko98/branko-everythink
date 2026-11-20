@@ -1,0 +1,62 @@
+---
+// Channel test log: what each test asked, what it showed, and the verdict.
+import Figure from './Figure.astro';
+
+// win = the row the tests pointed at (highlighted); dark = a decision that kept the channel (black pill)
+interface Row { channel: string; scope: string; tested: string; showed: string; decision: string; win?: boolean; dark?: boolean }
+interface Props { title: string; sub: string; rows: Row[]; footnote?: string; caption?: string }
+const { title, sub, rows, footnote, caption } = Astro.props;
+---
+<Figure title={title} sub={sub} caption={caption} flush>
+  <div class="log" role="table" aria-label={title}>
+    <div class="log__row log__row--head mono" role="row">
+      <span role="columnheader">Channel</span>
+      <span role="columnheader">What was tested, and what it showed</span>
+      <span role="columnheader">Decision</span>
+    </div>
+    {rows.map((r) => (
+      <div class:list={['log__row', r.win && 'log__row--win']} role="row">
+        <div role="cell" class="log__ch">
+          <span class="log__name">{r.channel}</span>
+          <span class="log__scope mono">{r.scope}</span>
+        </div>
+        <div role="cell" class="log__what">
+          <span class="log__tested">{r.tested}</span>
+          <span class="log__showed">{r.showed}</span>
+        </div>
+        <div role="cell" class="log__dec">
+          <span class:list={['log__pill mono', (r.win || r.dark) && 'log__pill--win']}>{r.decision}</span>
+        </div>
+      </div>
+    ))}
+    {footnote && <p class="log__foot">{footnote}</p>}
+  </div>
+</Figure>
+
+<style>
+  .log__row { display: grid; grid-template-columns: 170px minmax(0, 1fr) 150px; gap: 18px; padding: 16px 24px; border-bottom: 1px dashed var(--line); align-items: center; }
+  .log__row--head { padding-top: 12px; padding-bottom: 12px; font-size: 12px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.03em; }
+  .log__row--win { background: var(--hl-bg); }
+  .log__ch, .log__what { display: flex; flex-direction: column; gap: 3px; }
+  .log__name { font-size: 18px; line-height: 24px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); }
+  .log__scope { font-size: 12px; color: var(--text-soft); }
+  .log__tested { font-size: 15px; line-height: 22px; color: var(--ink); }
+  .log__showed { font-size: 14px; line-height: 21px; color: var(--text-soft); }
+  .log__row--win .log__showed { color: var(--hl-ink); }
+  .log__dec { justify-self: end; }
+  .log__pill { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border: 1px solid #c9ced6; border-radius: 999px; font-size: 12.5px; color: var(--ink); white-space: nowrap; background: #fff; }
+  .log__pill--win { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; }
+  .log__row:last-of-type { border-bottom: 0; }
+  .log__foot { margin: 0; padding: 14px 24px 16px; font-size: 14px; line-height: 21px; color: var(--text-soft); }
+
+  @media (max-width: 767px) {
+    .log__row { grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; padding: 14px 16px; }
+    .log__row--head { display: none; }
+    .log__what { grid-column: 1 / -1; grid-row: 2; }
+    .log__dec { grid-row: 1; grid-column: 2; }
+    .log__foot { padding: 12px 16px 14px; }
+    .log__scope { display: none; }
+    .log__name { font-size: 17px; }
+    .log__ch { align-self: center; }
+  }
+</style>

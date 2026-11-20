@@ -1,0 +1,50 @@
+---
+// Before/after bars for a few headline metrics at the same spend.
+import Figure from './Figure.astro';
+
+interface Metric { label: string; before: number; after: number; delta: string } // before/after as % of the larger bar
+interface Props { title: string; sub: string; caption: string; metrics: Metric[]; footnote: string }
+const { title, sub, caption, metrics, footnote } = Astro.props;
+---
+<Figure title={title} sub={sub} caption={caption}>
+  <div class="ba">
+    {metrics.map((m) => (
+      <div class="ba__metric" role="img" aria-label={`${m.label}: ${m.delta}`}>
+        <p class="ba__label">{m.label}</p>
+        <div class="ba__bars">
+          <span class="ba__tag mono">Before</span>
+          <span class="ba__track"><span class="ba__bar ba__bar--before" style={`width:${m.before}%`}></span></span>
+          <span class="ba__tag mono">After</span>
+          <span class="ba__track"><span class="ba__bar ba__bar--after" style={`width:${m.after}%`}></span></span>
+        </div>
+        <p class="ba__delta">{m.delta}</p>
+      </div>
+    ))}
+    <p class="ba__foot">{footnote}</p>
+  </div>
+</Figure>
+
+<style>
+  .ba { display: flex; flex-direction: column; }
+  .ba__metric { display: grid; grid-template-columns: 170px minmax(0, 1fr) 76px; gap: 18px; align-items: center; padding: 18px 0; border-top: 1px dashed var(--line); }
+  .ba__metric:first-child { border-top: 0; padding-top: 4px; }
+  .ba__label { margin: 0; font-size: 15px; line-height: 21px; font-weight: 600; color: var(--ink); }
+  .ba__bars { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 8px 10px; align-items: center; }
+  .ba__tag { font-size: 12px; color: var(--text-soft); }
+  .ba__track { display: block; height: 18px; }
+  .ba__bar { display: block; height: 100%; }
+  .ba__bar--before { background: #e4e6eb; }
+  .ba__bar--after { background: var(--ink); }
+  .ba__delta { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-strong); text-align: right; font-variant-numeric: tabular-nums; }
+  .ba__foot { margin: 6px 0 0; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; line-height: 21px; color: var(--text-soft); }
+
+  :global(.motion) .ba__bar { transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease) .35s; }
+  :global(.motion) .ba__bar--after { transition-delay: .6s; }
+  :global(.motion .is-in) .ba__bar { transform: none; }
+
+  @media (max-width: 767px) {
+    .ba__metric { grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+    .ba__bars { grid-column: 1 / -1; grid-row: 2; }
+    .ba__delta { font-size: 20px; }
+  }
+</style>

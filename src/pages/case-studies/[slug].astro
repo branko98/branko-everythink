@@ -6,7 +6,10 @@ import Dock from '../../components/Dock.astro';
 import Arrow from '../../components/Arrow.astro';
 import ResultChart from '../../components/ResultChart.astro';
 import FeaturedTestimonial from '../../components/FeaturedTestimonial.astro';
+import DiagnosisChart from '../../components/cs/DiagnosisChart.astro';
+import Closing from '../../components/cs/Closing.astro';
 import { about } from '../../data/home';
+import { rich } from '../../utils/rich';
 
 export async function getStaticPaths() {
   const entries = await getCollection('case-studies');
@@ -17,41 +20,105 @@ const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const d = entry.data;
 
-const toc = headings.filter((h) => h.depth === 2);
-const words = (entry.body ?? '').replace(/---[\s\S]*?---/, '').split(/\s+/).filter(Boolean).length;
-const readMin = Math.max(1, Math.round(words / 220));
+// Section navigator: the article's sections, then the rows that follow it.
+// Numbered chapters (<Chapter n="01" /> right before a ## heading) keep their number.
+const chapterNo = new Map<string, string>();
+for (const m of (entry.body ?? '').matchAll(/<Chapter n="([^"]+)"[^>]*\/>\s*\n+## (.+)/g)) chapterNo.set(m[2].trim(), m[1]);
+const toc = [
+  ...headings.filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: h.text, n: chapterNo.get(h.text) ?? '' })),
+  ...(d.testimonial ? [{ slug: 'testimonial', text: 'Testimonial', n: '' }] : []),
+  ...(d.closing ? [{ slug: 'your-business', text: 'In your business', n: '' }] : []),
+];
+
+const prose = (entry.body ?? '')
+  .replace(/^import .*$/gm, '')
+  .replace(/<[^>]+>/g, ' ');
+const words = prose.split(/\s+/).filter(Boolean).length;
+const readMin = Math.max(1, Math.round(words / 230));
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const date = `${d.date.getUTCDate()} ${MONTHS[d.date.getUTCMonth()]} ${d.date.getUTCFullYear()}`;
 ---
 <Base title={`${d.title} – Everythink`} description={d.lead}>
   <Header />
   <main>
+    <!-- phone only: once the section list scrolls away, this bar shows where you are and opens the list -->
+    <div class="toc-bar" data-toc-bar hidden>
+      <button class="toc-bar__btn" type="button" aria-expanded="false" aria-controls="toc-bar-list" data-toc-bar-btn>
+        <span class="toc-bar__label mono">In this case study</span>
+        <span class="toc-bar__current" data-toc-bar-current>{toc[0]?.text}</span>
+        <svg class="toc-bar__chev" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+      <ol class="toc-bar__list" id="toc-bar-list" data-toc-bar-list hidden>
+        {toc.map((h) => (
+          <li>
+            <a href={`#${h.slug}`} data-toc={h.slug}>
+              <span class="toc__n mono" aria-hidden="true">{h.n || '-'}</span>
+              <span>{h.text}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+
     <!-- title block -->
     <section class="row row--line cs-hero">
       <div class="wrap cs-hero__wrap">
         <a class="cs-back" href="/"><Arrow dir="left" /> Home</a>
         <span class="cs-bar" aria-hidden="true"></span>
-        <h1 class="cs-title" data-type="1300">{d.title}</h1>
-        <p class="cs-lead" data-reveal style="--d:150ms">{d.lead}</p>
+        {d.titleMuted && d.titleStrongFirst ? (
+          <h1 class="cs-title display" data-type="1300"><span class="strong">{d.titleStrong}</span> {d.titleMuted}</h1>
+        ) : d.titleMuted ? (
+          <h1 class="cs-title display" data-type="1300">{d.titleMuted} <span class="strong">{d.titleStrong}</span></h1>
+        ) : (
+          <h1 class="cs-title" data-type="1300">{d.title}</h1>
+        )}
+        <p class="cs-lead" data-reveal style="--d:150ms" set:html={rich(d.lead)} />
 
         <div class="cs-meta" data-reveal style="--d:250ms">
-          <div class="cs-meta__who">
-            <img class="cs-meta__avatar" src={d.author.photo} alt="" width="480" height="600" />
-            <span class="cs-meta__name">{d.author.name}</span>
-            <span class="cs-meta__sep" aria-hidden="true"></span>
-            <time datetime={d.date.toISOString().slice(0, 10)}>{date}</time>
-          </div>
-          <div class="cs-meta__right">
-            <span class="cs-meta__client">
-              <img src={d.client.logo} alt="" width="96" height="96" />
-              {d.client.name}
-            </span>
-            <span class="cs-meta__type">Case study</span>
-            <span class="cs-meta__read mono">• {readMin} min read</span>
-          </div>
+          <span class="cs-meta__client">
+            <img src={d.client.logo} alt="" width="96" height="96" />
+            <span>{d.client.name}<small>{d.client.category}</small></span>
+          </span>
+          <span class="cs-meta__read mono">• {readMin} min read</span>
         </div>
       </div>
     </section>
+
+    <!-- headline results -->
+    {d.results.length > 0 && (
+      <section class="row row--line cs-results" aria-label="Results">
+        <div class="wrap">
+          <ul class="cs-results__grid" data-counters>
+            {d.results.map((r, i) => (
+              <li class="cs-stat" data-reveal style={`--d:${i * 90}ms`}>
+                <span class="cs-stat__bar" aria-hidden="true"></span>
+                {r.sentence ? (
+                  <span class="cs-stat__sentence" set:html={rich(r.sentence)} />
+                ) : (
+                  <>
+                    <span class="cs-stat__value" data-count={r.value}>{r.value}</span>
+                    <span class="cs-stat__label">{r.label}</span>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {d.disciplines.length > 0 && (
+      <section class="row row--line cs-disc">
+        <div class="wrap cs-disc__wrap">
+          <span class="cs-disc__label mono">Disciplines covered</span>
+          <ul class="cs-disc__list">
+            {d.disciplines.map((t) => <li class="mono">{t}</li>)}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {d.heroChart && <DiagnosisChart {...d.heroChart} />}
 
     <!-- article + sidebar -->
     <section class="row row--line cs-body">
@@ -62,158 +129,257 @@ const date = `${d.date.getUTCDate()} ${MONTHS[d.date.getUTCMonth()]} ${d.date.ge
 
         <aside class="cs-side">
           <div class="cs-side__sticky">
-            <nav class="toc" aria-label="On this page">
-              <p class="toc__title">On this page</p>
-              <ul>
-                {toc.map((h) => <li><a href={`#${h.slug}`} data-toc={h.slug}>{h.text}</a></li>)}
-              </ul>
+            <nav class="toc" aria-label="Case study sections" data-toc-nav>
+              <p class="toc__title mono">In this case study</p>
+              <ol class="toc__list">
+                {toc.map((h) => (
+                  <li>
+                    <a href={`#${h.slug}`} data-toc={h.slug}>
+                      <span class="toc__n mono" aria-hidden="true">{h.n || '-'}</span>
+                      <span class="toc__text">{h.text}</span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
             </nav>
 
             <div class="side-cta">
               <p class="side-cta__title">{about.cta.title}</p>
               <p class="side-cta__text">{about.cta.text}</p>
-              <a class="pill side-cta__btn" href={about.cta.button.href}>{about.cta.button.label} <Arrow /></a>
+              <button type="button" class="pill side-cta__btn" data-open-getstarted aria-haspopup="dialog" aria-controls="get-started">{about.cta.button.label} <Arrow /></button>
             </div>
           </div>
         </aside>
       </div>
     </section>
 
-    {d.testimonial && <FeaturedTestimonial data={d.testimonial as any} />}
-    {!d.testimonial && <FeaturedTestimonial />}
+    {d.footnote && (
+      <aside class="row row--line cs-footnote" aria-label="About this case study">
+        <div class="wrap"><p class="cs-footnote__text">{d.footnote}</p></div>
+      </aside>
+    )}
+
+    <div id="testimonial" class="cs-anchor" data-toc-target>
+      {d.testimonial ? <FeaturedTestimonial data={d.testimonial as any} /> : <FeaturedTestimonial />}
+    </div>
+
+    {d.closing && <Closing closing={d.closing} />}
+
 
     <div class="row end" aria-hidden="true"><div class="wrap"></div></div>
   </main>
   <Dock />
+  <script is:inline>
+    // Opening the case study from a link always starts at the top (some browsers and embedded
+    // previews carry over the previous page's scroll position). Links to a #section are left alone,
+    // and Back/Forward keeps the browser's own restore.
+    (function () {
+      if (location.hash) return;
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (nav && nav.type === 'back_forward') return;
+      var top = function () { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); };
+      top();
+      window.addEventListener('load', top, { once: true });
+    })();
+  </script>
 </Base>
 
 <script>
-  // "On this page": highlight the section currently being read
-  const links = new Map<string, HTMLElement>();
-  document.querySelectorAll<HTMLElement>('[data-toc]').forEach((a) => links.set(a.dataset.toc!, a));
-  const heads = [...document.querySelectorAll<HTMLElement>('[data-article] h2[id]')];
-  const setActive = (id: string) => links.forEach((a, key) => a.classList.toggle('is-active', key === id));
-  if (heads.length) {
-    const update = () => {
-      const line = window.innerHeight * 0.3;
-      let current = heads[0].id;
-      for (const h of heads) if (h.getBoundingClientRect().top <= line) current = h.id;
-      setActive(current);
-    };
-    let queued = false;
-    window.addEventListener('scroll', () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => { queued = false; update(); });
-    }, { passive: true });
-    update();
-  }
+  // Section navigator: highlight the section being read (sidebar on desktop, sticky picker on phones)
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc]')];
+  const ids = [...new Set(links.map((a) => a.dataset.toc!))];
+  const targets = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+  const nav = document.querySelector<HTMLElement>('[data-toc-nav]');
+  const bar = document.querySelector<HTMLElement>('[data-toc-bar]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-toc-bar-btn]');
+  const list = document.querySelector<HTMLElement>('[data-toc-bar-list]');
+  const current = document.querySelector<HTMLElement>('[data-toc-bar-current]');
+  const phone = window.matchMedia('(max-width: 899px)');
+
+  const setOpen = (open: boolean) => {
+    if (!btn || !list) return;
+    btn.setAttribute('aria-expanded', String(open));
+    list.hidden = !open;
+    bar?.classList.toggle('is-open', open);
+  };
+
+  const update = () => {
+    const line = window.innerHeight * 0.3;
+    let active = targets[0]?.id;
+    for (const t of targets) if (t.getBoundingClientRect().top <= line) active = t.id;
+    links.forEach((a) => a.classList.toggle('is-active', a.dataset.toc === active));
+    const label = links.find((a) => a.dataset.toc === active)?.querySelector('span:last-child')?.textContent;
+    if (current && label) current.textContent = label;
+
+    // the picker appears once the in-page list has scrolled up under the header
+    if (bar && nav) {
+      const show = phone.matches && nav.getBoundingClientRect().bottom < 64;
+      bar.hidden = !show;
+      if (!show) setOpen(false);
+    }
+  };
+
+  btn?.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+  list?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
+  document.addEventListener('click', (e) => { if (bar && !bar.contains(e.target as Node)) setOpen(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { setOpen(false); btn?.focus(); } });
+
+  let queued = false;
+  window.addEventListener('scroll', () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; update(); });
+  }, { passive: true });
+  phone.addEventListener('change', update);
+  update();
 </script>
 
 <style>
   /* ---------- title block ---------- */
-  .cs-hero__wrap { position: relative; padding: 56px 50px 52px; }
+  .cs-hero__wrap { position: relative; padding: 56px 50px 48px 42px; }
   .cs-back { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-soft); }
   .cs-back:hover { color: var(--ink); }
-  .cs-bar { position: absolute; left: -1px; top: 118px; width: 2px; height: 30px; background: var(--ink); }
+  .cs-bar { position: absolute; left: -1px; top: 122px; width: 2px; height: 32px; background: var(--ink); }
   .cs-title {
     margin-top: 28px;
-    max-width: 800px;
-    font-size: clamp(32px, 2.6vw + 10px, 46px);
+    max-width: 860px;
+    font-size: 40px;
     line-height: 1.15;
     font-weight: 500;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.045em;
     color: var(--ink-strong);
-    text-wrap: balance;
   }
-  .cs-lead { margin-top: 26px; max-width: 680px; font-size: 18px; line-height: 29px; color: var(--text); }
+  .cs-title.display { color: var(--muted-head); }
+  .cs-lead { margin-top: 24px; max-width: 760px; font-size: 17px; line-height: 27px; color: var(--text); }
 
-  .cs-meta { margin-top: 44px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
-  .cs-meta__who { display: flex; align-items: center; gap: 14px; font-size: 16px; color: var(--ink); }
-  .cs-meta__avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; }
-  .cs-meta__sep { width: 1px; height: 22px; background: var(--line); }
-  .cs-meta__right { display: flex; align-items: center; gap: 14px; }
-  .cs-meta__client { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
-  .cs-meta__client img { width: 22px; height: 22px; border-radius: 5px; }
-  .cs-meta__type { font-size: 16px; font-weight: 500; color: var(--link); }
+  .cs-meta { margin-top: 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+  .cs-meta__client { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .cs-meta__client img { width: 32px; height: 32px; border-radius: 7px; }
+  .cs-meta__client > span { display: flex; flex-direction: column; line-height: 19px; }
+  .cs-meta__client small { font-size: 12.5px; font-weight: 400; color: var(--text-soft); }
   .cs-meta__read { font-size: 13.5px; padding: 6px 12px; border-radius: 6px; background: #f0f0f2; color: var(--text-soft); }
+
+  /* ---------- footnote before the testimonial: quiet, clearly secondary ---------- */
+  .cs-footnote__text { max-width: 760px; padding: 22px 42px 24px; font-size: 12.5px; line-height: 20px; color: #9a9ba2; }
+
+  /* ---------- results + disciplines ---------- */
+  .cs-results__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .cs-stat { position: relative; padding: 32px 26px 30px; display: flex; flex-direction: column; border-right: 1px dashed var(--line); }
+  .cs-stat:last-child { border-right: 0; }
+  .cs-stat__bar { position: absolute; left: -1px; top: 40px; width: 2px; height: 26px; background: var(--ink); }
+  .cs-stat__value { font-size: 32px; line-height: 42px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-strong); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cs-stat__sentence { padding-top: 0; font-size: 16px; line-height: 24px; color: var(--text); }
+  .cs-stat__sentence :global(strong) { font-weight: 600; color: var(--ink-strong); }
+  .cs-stat__label { margin-top: 0; padding-top: 5px; font-size: 14.5px; line-height: 21px; color: var(--text-soft); }
+
+  .cs-disc__wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding: 18px 26px 18px 42px; }
+  .cs-disc__label { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-soft); }
+  .cs-disc__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .cs-disc__list li { font-size: 12.5px; padding: 5px 10px; border-radius: 4px; background: #f0f0f2; color: var(--ink); }
 
   /* ---------- body ---------- */
   .cs-body__grid { display: grid; grid-template-columns: minmax(0, 1fr) 294px; }
-  .prose { padding: 40px 50px 72px; max-width: 790px; }
+  .prose { padding: 28px 54px 80px 42px; min-width: 0; }
   .cs-side { border-left: 1px dashed var(--line); }
-  .cs-side__sticky { position: sticky; top: 96px; padding: 48px 28px 40px; display: flex; flex-direction: column; gap: 32px; }
+  .cs-side__sticky { position: sticky; top: 96px; padding: 44px 28px 40px; display: flex; flex-direction: column; gap: 30px; }
 
-  .toc__title { font-size: 16px; font-weight: 600; color: var(--ink); }
-  .toc ul { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-  .toc a { display: block; font-size: 15px; line-height: 22px; color: var(--text-soft); transition: color .2s; }
+  .toc__title { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-soft); padding-bottom: 12px; }
+  .toc__list, .toc-bar__list { list-style: none; margin: 0; padding: 0; border-top: 1px dashed var(--line); }
+  .toc__list li, .toc-bar__list li { border-bottom: 1px dashed var(--line); }
+  .toc a, .toc-bar__list a {
+    position: relative; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; align-items: baseline;
+    padding: 10px 0; font-size: 14.5px; line-height: 20px; color: var(--text); transition: color .2s;
+  }
   .toc a:hover { color: var(--ink); }
-  .toc a.is-active { color: var(--link); }
+  .toc__n { font-size: 11.5px; color: var(--text-soft); }
+  .toc a.is-active, .toc-bar__list a.is-active { color: var(--link); font-weight: 500; }
+  .toc a.is-active .toc__n, .toc-bar__list a.is-active .toc__n { color: var(--link); }
+  .toc a.is-active::before { content: ''; position: absolute; left: -29px; top: 10px; width: 2px; height: 20px; background: var(--link); }
+  .toc-bar { display: none; }
 
   .side-cta { background: var(--dark); color: #fff; padding: 24px 22px 22px; display: flex; flex-direction: column; gap: 12px; }
   .side-cta__title { font-size: 21px; line-height: 1.2; font-weight: 500; letter-spacing: -0.03em; }
   .side-cta__text { font-size: 14.5px; line-height: 22px; color: #c9cad1; }
-  .side-cta__btn { margin-top: 8px; align-self: flex-start; background: #fff; color: var(--ink); height: 40px; }
+  .side-cta__btn { margin-top: 8px; align-self: flex-start; border: 0; cursor: pointer; font-family: inherit; background: #fff; color: var(--ink); height: 40px; }
   .side-cta__btn:hover { background: #ececef; color: var(--ink); }
 
-  /* ---------- article typography (MDX output) ---------- */
-  .prose :global(h2) {
-    margin: 56px 0 0;
-    font-size: 32px;
-    line-height: 1.2;
+  .cs-anchor { scroll-margin-top: 80px; }
+  .cs-foot__wrap { padding: 20px 42px; }
+  .cs-foot__wrap p { font-size: 13px; line-height: 20px; color: var(--text-soft); }
+
+  /* ---------- article typography (MDX output; direct children only, so figures keep their own styles) ---------- */
+  .prose > :global(h2) {
+    margin: 64px 0 0;
+    font-size: 34px;
+    line-height: 1.15;
     font-weight: 500;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.04em;
     color: var(--ink-strong);
     scroll-margin-top: 100px;
   }
-  .prose :global(h2:first-child) { margin-top: 24px; }
-  .prose :global(h3) { margin: 40px 0 0; font-size: 23px; line-height: 1.3; font-weight: 500; letter-spacing: -0.025em; color: var(--ink-strong); scroll-margin-top: 100px; }
-  .prose :global(p) { margin: 18px 0 0; font-size: 17px; line-height: 29px; color: var(--text); }
-  .prose :global(h2 + p), .prose :global(h3 + p) { margin-top: 20px; }
-  .prose :global(strong) { font-weight: 600; color: var(--ink); }
-  .prose :global(a) { color: var(--link); }
-  .prose :global(a:hover) { text-decoration: underline; }
-  .prose :global(ul) { margin: 18px 0 0; padding-left: 22px; }
-  .prose :global(ul li) { margin-top: 8px; font-size: 17px; line-height: 28px; color: var(--text); }
-  .prose :global(ul li::marker) { color: var(--ink); }
-
-  /* numbered lists read as highlighted steps, like the highlights in quotes */
-  .prose :global(ol) { list-style: none; counter-reset: step; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .prose :global(ol li) { counter-increment: step; font-size: 17px; line-height: 29px; color: var(--ink); }
-  .prose :global(ol li > *) { display: inline; }
-  .prose :global(ol li) {
-    background-image: linear-gradient(var(--hl-bg), var(--hl-bg));
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    display: table;
-    padding: 0 4px;
-  }
-  .prose :global(ol li::before) { content: counter(step) '. '; }
+  .prose > :global(h2:first-child) { margin-top: 28px; }
+  .prose > :global(.chapter + h2) { margin-top: 14px; }
+  .prose > :global(h3) { margin: 44px 0 0; font-size: 22px; line-height: 1.3; font-weight: 560; letter-spacing: -0.02em; color: var(--ink-strong); scroll-margin-top: 100px; }
+  .prose > :global(p:not([class])) { margin: 18px 0 0; font-size: 17px; line-height: 29px; color: var(--text); }
+  .prose > :global(h3 + p:not([class])) { margin-top: 12px; }
+  .prose :global(p strong), .prose > :global(ul strong) { font-weight: 600; color: var(--ink); }
+  .prose > :global(p:not([class]) a) { color: var(--link); }
+  .prose > :global(ul) { margin: 16px 0 0; padding: 0; list-style: none; border-top: 1px dashed var(--line); }
+  .prose > :global(ul > li) { position: relative; padding: 12px 0 12px 26px; border-bottom: 1px dashed var(--line); font-size: 16.5px; line-height: 26px; color: var(--text); }
+  .prose > :global(ul > li::before) { content: ''; position: absolute; left: 4px; top: 21px; width: 7px; height: 7px; background: var(--ink); }
 
   @media (max-width: 1000px) {
     .cs-body__grid { grid-template-columns: minmax(0, 1fr) 250px; }
-    .prose { padding: 36px 36px 64px; }
-    .cs-hero__wrap { padding: 48px 36px 44px; }
+    .prose { padding: 24px 36px 64px 32px; }
+    .cs-hero__wrap { padding: 48px 36px 44px 32px; }
+    .cs-results__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cs-stat:nth-child(2) { border-right: 0; }
+    .cs-stat:nth-child(-n + 2) { border-bottom: 1px dashed var(--line); }
   }
   @media (max-width: 899px) {
     .cs-body__grid { grid-template-columns: minmax(0, 1fr); }
-    .cs-side { border-left: 0; border-top: 1px dashed var(--line); order: -1; }
-    .cs-side__sticky { position: static; padding: 28px 36px; }
+    .cs-side { border-left: 0; border-bottom: 1px dashed var(--line); order: -1; }
+    .cs-side__sticky { position: static; padding: 26px 32px; }
     .side-cta { display: none; }
-    .toc ul { flex-direction: row; flex-wrap: wrap; gap: 8px 18px; }
+    .toc a.is-active::before { display: none; }
+    /* leave room for the header + section picker when jumping to a section */
+    .prose > :global(h2), .prose > :global(h3), .cs-anchor { scroll-margin-top: 136px; }
+    /* sticky section picker */
+    .toc-bar { display: block; position: fixed; z-index: 35; top: 64px; left: 0; right: 0; padding: 0 var(--gutter); }
+    .toc-bar[hidden] { display: none; }
+    .toc-bar__btn {
+      width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; column-gap: 12px;
+      align-items: center; text-align: left; padding: 8px 16px 9px; min-height: 52px;
+      background: rgba(255, 255, 255, 0.96); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      border: 1px solid var(--line); border-top: 0; color: var(--ink); cursor: pointer;
+    }
+    .toc-bar__label { grid-column: 1; font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-soft); }
+    .toc-bar__current { grid-column: 1; font-size: 15px; line-height: 21px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .toc-bar__chev { grid-column: 2; grid-row: 1 / span 2; width: 32px; height: 32px; padding: 11px 9px; border: 1px solid var(--line); border-radius: 50%; transition: transform .2s var(--ease); }
+    .toc-bar.is-open .toc-bar__chev { transform: rotate(180deg); }
+    .toc-bar__list { max-height: min(60vh, 440px); overflow-y: auto; background: #fff; border: 1px solid var(--line); border-top: 0; padding: 0 16px; box-shadow: 0 12px 24px -12px rgba(20, 21, 25, 0.25); }
+    .toc-bar__list li:last-child { border-bottom: 0; }
+    .toc-bar__list a { padding: 12px 0; min-height: 44px; }
   }
   @media (max-width: 767px) {
-    .cs-hero__wrap { padding: 32px 16px 34px; }
-    .cs-bar { top: 88px; height: 26px; }
-    .cs-title { margin-top: 22px; }
-    .cs-lead { margin-top: 18px; font-size: 16.5px; line-height: 27px; }
-    .cs-meta { margin-top: 30px; }
-    .cs-meta__right { flex-wrap: wrap; }
+    .cs-footnote__text { padding: 18px 16px 20px; font-size: 12px; line-height: 19px; }
+    .cs-hero__wrap { padding: 32px 16px 32px; }
+    .cs-bar { top: 90px; height: 28px; }
+    .cs-title { margin-top: 22px; font-size: 32px; }
+    .cs-lead { margin-top: 18px; font-size: 16px; line-height: 26px; }
+    .cs-meta { margin-top: 28px; }
+    .cs-stat { padding: 24px 16px 22px; }
+    .cs-stat__bar { top: 30px; }
+    .cs-stat__value { font-size: 23px; line-height: 30px; }
+    .cs-stat__label { font-size: 13.5px; line-height: 20px; margin-top: 0; }
+    .cs-stat__sentence { font-size: 15px; line-height: 23px; }
+    .cs-disc__wrap { padding: 16px; }
     .cs-side__sticky { padding: 22px 16px; }
-    .prose { padding: 18px 16px 48px; }
-    .prose :global(h2) { font-size: 27px; margin-top: 44px; }
-    .prose :global(h3) { font-size: 20px; }
-    .prose :global(p), .prose :global(ul li), .prose :global(ol li) { font-size: 16px; line-height: 27px; }
+    .prose { padding: 8px 16px 52px; }
+    .prose > :global(h2) { font-size: 28px; margin-top: 48px; }
+    .prose > :global(h3) { font-size: 19px; }
+    .prose > :global(p:not([class])), .prose > :global(ul > li) { font-size: 16px; line-height: 27px; }
+    .cs-foot__wrap { padding: 18px 16px; }
   }
 
   .end { height: 130px; }

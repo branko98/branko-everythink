@@ -1,0 +1,26 @@
+---
+// Eyebrow above a numbered chapter heading: "01  Channel selection · budget allocation"
+interface Props { n: string; tags: string }
+const { n, tags } = Astro.props;
+---
+<p class="chapter" data-reveal>
+  <span class="chapter__n mono">{n}</span>
+  <span class="chapter__tags mono">{tags}</span>
+</p>
+
+<style>
+  .chapter {
+    position: relative;
+    margin: 88px 0 0;
+    padding-top: 22px;
+    border-top: 1px dashed var(--line);
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .chapter::before { content: ''; position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; background: var(--ink); }
+  .chapter__n { font-size: 13px; font-weight: 600; padding: 2px 7px; background: var(--ink); color: #fff; letter-spacing: 0.02em; }
+  .chapter__tags { font-size: 13px; line-height: 20px; color: var(--text-soft); }
+  @media (max-width: 767px) { .chapter { margin-top: 64px; } }
+</style>

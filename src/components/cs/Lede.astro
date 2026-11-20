@@ -1,0 +1,16 @@
+---
+// The one-line claim that opens a chapter, set larger than body text.
+interface Props { size?: 'md' | 'lg' }
+const { size = 'md' } = Astro.props;
+---
+<p class:list={['lede', `lede--${size}`]} data-reveal><slot /></p>
+
+<style>
+  .lede { margin: 18px 0 0; font-size: 21px; line-height: 30px; font-weight: 550; letter-spacing: -0.02em; color: var(--ink-strong); }
+  .lede--lg { margin-top: 22px; padding-left: 18px; border-left: 2px solid var(--ink); font-size: 25px; line-height: 34px; font-weight: 500; letter-spacing: -0.03em; }
+  .lede :global(strong) { font-weight: 650; }
+  @media (max-width: 767px) {
+    .lede { font-size: 19px; line-height: 27px; }
+    .lede--lg { font-size: 21px; line-height: 29px; }
+  }
+</style>

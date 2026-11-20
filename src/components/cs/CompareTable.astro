@@ -1,0 +1,86 @@
+---
+// Plain comparison table on the site grid. `highlight` marks the row the text argues for.
+import Figure from './Figure.astro';
+
+interface Props {
+  title?: string;
+  sub?: string;
+  caption?: string;
+  head: string[]; // first entry is the row-label column header (can be '')
+  rows: string[][];
+  highlight?: number; // row index
+  numeric?: boolean; // right-align and use tabular figures for value columns
+}
+const { title, sub, caption, head, rows, highlight = -1, numeric = false } = Astro.props;
+---
+<Figure title={title} sub={sub} caption={caption} flush>
+  <div class="ct-wrap" data-hscroll>
+  <p class="ct-hint mono" aria-hidden="true">Swipe to see more <span>→</span></p>
+  <div class="ct-scroll" tabindex="0" role="region" aria-label={title ? `${title} (scrollable)` : 'Table (scrollable)'}>
+    <table class:list={['ct', numeric && 'ct--num']}>
+      <thead>
+        <tr>{head.map((h) => <th scope="col" class="mono">{h}</th>)}</tr>
+      </thead>
+      <tbody>
+        {rows.map((r, i) => (
+          <tr class:list={[i === highlight && 'is-hl']}>
+            {r.map((c, j) => (j === 0 ? <th scope="row">{c}</th> : <td>{c}</td>))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  </div>
+</Figure>
+
+<script>
+  // When a table is wider than the screen: show the hint and an edge fade until the end is reached.
+  document.querySelectorAll<HTMLElement>('[data-hscroll]').forEach((wrap) => {
+    const box = wrap.querySelector<HTMLElement>('.ct-scroll');
+    if (!box) return;
+    const update = () => {
+      const scrollable = box.scrollWidth > box.clientWidth + 2;
+      wrap.classList.toggle('is-scrollable', scrollable);
+      wrap.classList.toggle('is-end', box.scrollLeft + box.clientWidth >= box.scrollWidth - 2);
+    };
+    box.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(box);
+    update();
+  });
+</script>
+
+<style>
+  .ct-wrap { position: relative; }
+  .ct-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .ct-scroll:focus-visible { outline-offset: -2px; }
+  .ct-hint { display: none; margin: 0; padding: 10px 14px 0; font-size: 12px; color: var(--text-soft); }
+  .ct-hint span { display: inline-block; animation: nudge 1.6s ease-in-out infinite; }
+  @keyframes nudge { 0%, 100% { transform: none; } 50% { transform: translateX(4px); } }
+  .ct-wrap.is-scrollable .ct-hint { display: block; }
+  .ct-wrap.is-scrollable::after {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 44px; pointer-events: none;
+    background: linear-gradient(to right, rgba(255,255,255,0), #fff 85%);
+    transition: opacity .2s;
+  }
+  .ct-wrap.is-end::after { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .ct-hint span { animation: none; } }
+  .ct { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 22px; }
+  .ct th, .ct td { padding: 14px 20px; text-align: left; vertical-align: top; border-bottom: 1px dashed var(--line); }
+  .ct tr > * + * { border-left: 1px dashed var(--line); }
+  .ct thead th { font-size: 12px; line-height: 17px; font-weight: 500; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.03em; vertical-align: bottom; white-space: nowrap; }
+  .ct tbody th { font-weight: 600; color: var(--ink); min-width: 150px; }
+  .ct td { color: var(--text); }
+  .ct tbody tr:last-child > * { border-bottom: 0; }
+  .ct tr.is-hl > * { background: var(--hl-bg); color: var(--hl-ink); }
+  .ct tr.is-hl td { font-weight: 550; }
+  .ct--num td { font-variant-numeric: tabular-nums; font-family: var(--font-mono); font-size: 15px; }
+  @media (max-width: 767px) {
+    .ct { font-size: 14px; line-height: 20px; }
+    .ct th, .ct td { padding: 12px 14px; }
+    .ct tbody th { min-width: 120px; }
+    .ct { min-width: 560px; }
+    .ct thead th { white-space: nowrap; }
+    /* keep the row labels in view while the values scroll */
+    .ct tbody th, .ct thead th:first-child { position: sticky; left: 0; z-index: 1; background: #fff; box-shadow: 1px 0 0 var(--line); }
+  }
+</style>

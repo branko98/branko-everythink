@@ -1,0 +1,95 @@
+---
+// The correction loop: check → alert → a person decides → leave it, or correct it with a reason.
+// A dashed line from "correct it" ends in the rule that turns repeated corrections into a defect report.
+import Figure from './Figure.astro';
+
+interface Box { title: string; text: string }
+interface Props {
+  title: string;
+  sub: string;
+  caption: string;
+  steps: Box[]; // 3, in a row
+  outcomes: Box[]; // 2: [leave it, correct it]
+  note: string;
+}
+const { title, sub, caption, steps, outcomes, note } = Astro.props;
+---
+<Figure title={title} sub={sub} caption={caption}>
+  <div class="cl">
+    {steps.map((s, i) => (
+      <div class="cl__box cl__step" style={`grid-column:${i * 2 + 1}`}>
+        <p class="cl__title">{s.title}</p>
+        <p class="cl__text">{s.text}</p>
+      </div>
+    ))}
+    <span class="cl__arr" style="grid-column:2" aria-hidden="true"></span>
+    <span class="cl__arr" style="grid-column:4" aria-hidden="true"></span>
+    <span class="cl__fork" aria-hidden="true"><span></span></span>
+
+    <div class="cl__box cl__out cl__out--leave">
+      <p class="cl__title">{outcomes[0].title}</p>
+      <p class="cl__text">{outcomes[0].text}</p>
+    </div>
+    <div class="cl__box cl__out cl__out--fix">
+      <p class="cl__title">{outcomes[1].title}</p>
+      <p class="cl__text">{outcomes[1].text}</p>
+    </div>
+
+    <span class="cl__dash" aria-hidden="true"></span>
+    <p class="cl__note">{note}</p>
+  </div>
+</Figure>
+
+<style>
+  /* steps and arrows on the left, the two outcomes stacked on the right */
+  .cl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) 24px minmax(0, 1fr) 30px minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr 30px auto;
+    row-gap: 10px;
+    align-items: center;
+  }
+  .cl__box { position: relative; border: 1px solid #c9ced6; background: #fff; padding: 11px 14px 12px; }
+  .cl__title { margin: 0; font-size: 14.5px; line-height: 20px; font-weight: 600; color: var(--ink); }
+  .cl__text { margin: 2px 0 0; font-size: 13.5px; line-height: 19px; color: var(--text-soft); }
+  .cl__step { grid-row: 1 / 3; }
+
+  .cl__arr { grid-row: 1 / 3; position: relative; height: 10px; }
+  .cl__arr::before { content: ''; position: absolute; left: 0; right: 2px; top: 50%; border-top: 1px solid var(--ink); }
+  .cl__arr::after { content: ''; position: absolute; right: 0; top: calc(50% - 4px); border: 4px solid transparent; border-left: 5px solid var(--ink); border-right: 0; }
+
+  /* the fork: in from the left at the middle, out to the centre of each outcome row */
+  .cl__fork { grid-column: 6; grid-row: 1 / 3; align-self: stretch; position: relative; }
+  .cl__fork::before { content: ''; position: absolute; left: 0; width: 50%; top: 50%; border-top: 1px solid var(--ink); }
+  .cl__fork > span { position: absolute; left: 50%; right: 0; top: calc((100% - 10px) / 4); bottom: calc((100% - 10px) / 4); border: 1px solid var(--ink); border-right: 0; }
+  .cl__fork > span::before, .cl__fork > span::after { content: ''; position: absolute; right: 0; border: 4px solid transparent; border-left: 5px solid var(--ink); border-right: 0; }
+  .cl__fork > span::before { top: -5px; }
+  .cl__fork > span::after { bottom: -5px; }
+
+  .cl__out { grid-column: 7; }
+  .cl__out--leave { grid-row: 1; }
+  .cl__out--fix { grid-row: 2; background: var(--hl-bg); border: 1.5px solid var(--ink); }
+  .cl__out--fix .cl__text { color: var(--hl-ink); }
+
+  .cl__dash { grid-column: 7; grid-row: 3; position: relative; align-self: stretch; margin: -10px 0; }
+  .cl__dash::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 4px; border-left: 1px dashed var(--ink); }
+  .cl__dash::after { content: ''; position: absolute; left: calc(50% - 4px); bottom: 0; border: 4px solid transparent; border-top: 5px solid var(--ink); border-bottom: 0; }
+  .cl__note { grid-column: 1 / -1; grid-row: 4; margin: 0; padding: 13px 16px; text-align: center; background: #f3f4f6; border: 1px solid #c9ced6; font-size: 14px; line-height: 20px; color: var(--ink); }
+
+  @media (max-width: 899px) {
+    .cl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none; row-gap: 0; column-gap: 12px; }
+    .cl > * { grid-row: auto !important; }
+    .cl__step { grid-column: 1 / -1 !important; }
+    .cl__step + .cl__step { margin-top: 26px; }
+    .cl__step + .cl__step::before { content: ''; position: absolute; left: 24px; top: -27px; height: 22px; border-left: 1px solid var(--ink); }
+    .cl__step + .cl__step::after { content: ''; position: absolute; left: 20px; top: -7px; border: 4px solid transparent; border-top: 5px solid var(--ink); border-bottom: 0; }
+    .cl__arr, .cl__fork { display: none; }
+    .cl__out { grid-column: auto; margin-top: 26px; align-self: stretch; }
+    .cl__out::before { content: ''; position: absolute; left: 24px; top: -27px; height: 22px; border-left: 1px solid var(--ink); }
+    .cl__out::after { content: ''; position: absolute; left: 20px; top: -7px; border: 4px solid transparent; border-top: 5px solid var(--ink); border-bottom: 0; }
+    .cl__out--leave { grid-column: 1; }
+    .cl__out--fix { grid-column: 2; }
+    .cl__dash { grid-column: 2; height: 28px; margin: 0; }
+    .cl__note { grid-column: 1 / -1; }
+  }
+</style>

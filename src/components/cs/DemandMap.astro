@@ -1,0 +1,78 @@
+---
+// Demand research pipeline (left) and what it found: how many of the market's pains
+// the landing pages and the creative actually covered (right).
+import Figure from './Figure.astro';
+
+interface Step { title: string; text: string }
+interface Coverage { label: string; covered: number[]; total: number; bad?: boolean } // covered = 0-based indexes
+interface Props { title: string; sub: string; caption: string; steps: Step[]; coverage: Coverage[]; note: string }
+const { title, sub, caption, steps, coverage, note } = Astro.props;
+---
+<Figure title={title} sub={sub} caption={caption}>
+  <div class="dm">
+    <ol class="dm__steps">
+      {steps.map((s, i) => (
+        <li class="dm__step">
+          <span class="dm__n mono">{String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <p class="dm__title">{s.title}</p>
+            <p class="dm__text">{s.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="dm__panel">
+      <p class="dm__panel-title mono">Coverage across the {coverage[0]?.total === 16 ? 'sixteen' : coverage[0]?.total}</p>
+      {coverage.map((c) => (
+        <div class="dm__row" role="img" aria-label={`${c.label}: ${c.covered.length} of ${c.total} pains covered`}>
+          <div class="dm__row-head">
+            <span class="dm__label">{c.label}</span>
+            <span class:list={['dm__count', c.bad && 'is-bad']}>{c.covered.length} of {c.total}</span>
+          </div>
+          <div class="dm__cells">
+            {Array.from({ length: c.total }, (_, i) => (
+              <span class:list={['dm__cell', c.covered.includes(i) && 'is-on', c.bad && 'is-bad']} style={`--i:${i}`}></span>
+            ))}
+          </div>
+        </div>
+      ))}
+      <p class="dm__note">{note}</p>
+    </div>
+  </div>
+</Figure>
+
+<style>
+  .dm { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 26px; align-items: start; }
+  .dm__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .dm__step { position: relative; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; padding: 11px 0; border-bottom: 1px dashed var(--line); }
+  .dm__step:first-child { padding-top: 0; }
+  .dm__step:last-child { border-bottom: 0; }
+  .dm__n { font-size: 11.5px; line-height: 20px; color: var(--text-soft); }
+  .dm__title { margin: 0; font-size: 14.5px; line-height: 20px; font-weight: 600; color: var(--ink); }
+  .dm__text { margin: 2px 0 0; font-size: 13.5px; line-height: 19px; color: var(--text-soft); }
+
+  .dm__panel { border: 1px solid #c9ced6; padding: 16px 18px 16px; }
+  .dm__panel-title { margin: 0 0 4px; padding-bottom: 10px; border-bottom: 1px dashed var(--line); font-size: 12px; color: var(--text-soft); }
+  .dm__row { padding: 14px 0 4px; }
+  .dm__row-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 9px; }
+  .dm__label { font-size: 14.5px; font-weight: 600; color: var(--ink); }
+  .dm__count { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--ink); }
+  .dm__count.is-bad { color: var(--red-ink); background: var(--red-bg); padding: 1px 6px; }
+  .dm__cells { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); gap: 3px; }
+  .dm__cell { height: 24px; border: 1px solid #c9ced6; background: #fff; }
+  .dm__cell.is-on { background: var(--ink); border-color: var(--ink); }
+  .dm__cell.is-bad:not(.is-on) { border-color: var(--red-line); border-style: dashed; }
+  .dm__note { margin: 14px 0 0; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 13.5px; line-height: 20px; color: var(--text-soft); }
+
+  :global(.motion) .dm__cell.is-on { transform: scaleY(0); transform-origin: bottom; transition: transform .35s var(--ease); transition-delay: calc(var(--i) * 45ms + 400ms); }
+  :global(.motion .is-in) .dm__cell.is-on { transform: none; }
+
+  @media (max-width: 899px) {
+    .dm { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 767px) {
+    .dm__cell { height: 18px; }
+    .dm__cells { gap: 2px; }
+  }
+</style>

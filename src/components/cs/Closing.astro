@@ -1,0 +1,83 @@
+---
+// Closing row of a case study: the same method as a five-step checklist for the
+// reader's own business, then the offer in a dark band.
+import Arrow from '../Arrow.astro';
+import { rich } from '../../utils/rich';
+
+interface Props {
+  closing: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    steps: { q: string; text: string }[];
+    summary: string;
+    button: { label: string; href: string };
+  };
+}
+const { closing: c } = Astro.props;
+---
+<section class="row row--line close" id="your-business" aria-labelledby="your-business-title">
+  <div class="wrap close__grid">
+    <div class="close__head">
+      <span class="close__eyebrow mono">{c.eyebrow}</span>
+      <h2 class="close__title" id="your-business-title" data-type="900">{c.title}</h2>
+      <p class="close__sub" data-reveal>{c.sub}</p>
+    </div>
+    <ol class="close__steps">
+      {c.steps.map((s, i) => (
+        <li class="close__step" data-reveal style={`--d:${i * 80}ms`}>
+          <span class="close__n mono">{String(i + 1).padStart(2, '0')}</span>
+          <p><strong>{s.q}</strong> {s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="row row--line close-cta">
+  <div class="wrap close-cta__wrap">
+    <div class="close-cta__panel">
+      <p class="close-cta__text" data-reveal set:html={rich(c.summary)} />
+      <button type="button" class="pill close-cta__btn" data-open-getstarted aria-haspopup="dialog" aria-controls="get-started">{c.button.label} <Arrow /></button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .close__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+  .close__head { padding: 44px 32px 40px 42px; border-right: 1px dashed var(--line); }
+  .close__eyebrow { font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-soft); }
+  .close__title { margin-top: 14px; font-size: clamp(28px, 2vw + 10px, 38px); line-height: 1.15; font-weight: 500; letter-spacing: -0.04em; color: var(--ink-strong); text-wrap: balance; scroll-margin-top: 100px; }
+  .close__sub { margin-top: 14px; font-size: 17px; line-height: 27px; color: var(--muted-head); font-weight: 500; letter-spacing: -0.01em; }
+
+  .close__steps { list-style: none; margin: 0; padding: 0; }
+  .close__step { position: relative; display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 6px; padding: 22px 36px 22px 32px; border-bottom: 1px dashed var(--line); }
+  .close__step:last-child { border-bottom: 0; }
+  .close__step::before { content: ''; position: absolute; left: -1px; top: 26px; width: 2px; height: 18px; background: var(--ink); }
+  .close__n { font-size: 13px; line-height: 26px; color: var(--text-soft); }
+  .close__step p { margin: 0; font-size: 16.5px; line-height: 26px; color: var(--text); }
+  .close__step strong { font-weight: 600; color: var(--ink-strong); }
+
+  .close-cta__wrap { border-color: transparent; }
+  .close-cta__panel { background: var(--dark); color: #fff; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: center; padding: 40px 48px 40px 42px; }
+  .close-cta__text { margin: 0; max-width: 680px; font-size: 19px; line-height: 29px; color: #e4e4e8; letter-spacing: -0.01em; }
+  .close-cta__text :global(strong) { color: #fff; font-weight: 600; }
+  .close-cta__btn { border: 0; cursor: pointer; font-family: inherit; background: #fff; color: var(--ink); height: 46px; padding: 0 20px 0 22px; font-size: 15.5px; }
+  .close-cta__btn:hover { background: #ececef; color: var(--ink); }
+
+  @media (max-width: 899px) {
+    .close__grid { grid-template-columns: minmax(0, 1fr); }
+    .close__title { scroll-margin-top: 136px; }
+    .close__head { border-right: 0; border-bottom: 1px dashed var(--line); }
+    .close-cta__panel { grid-template-columns: minmax(0, 1fr); }
+    .close-cta__btn { justify-self: start; }
+  }
+  @media (max-width: 767px) {
+    .close__head { padding: 30px 16px 28px; }
+    .close__step { grid-template-columns: 40px minmax(0, 1fr); padding: 18px 16px; }
+    .close__step p { font-size: 15.5px; line-height: 25px; }
+    .close-cta__wrap { width: 100%; border: 0; }
+    .close-cta__panel { padding: 34px 20px; }
+    .close-cta__text { font-size: 17px; line-height: 27px; }
+  }
+</style>

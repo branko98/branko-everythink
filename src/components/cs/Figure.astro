@@ -1,0 +1,46 @@
+---
+// Frame used by every figure inside a case study: dashed grid border, black corner
+// squares, a title + subtitle, the visual, and a mono caption underneath.
+interface Props {
+  title?: string;
+  sub?: string;
+  caption?: string;
+  flush?: boolean; // no inner padding (for tables that draw their own rows)
+}
+const { title, sub, caption, flush = false } = Astro.props;
+---
+<figure class="fig" data-reveal>
+  <div class:list={['fig__frame', flush && 'fig__frame--flush']}>
+    <span class="fig__sq fig__sq--tl" aria-hidden="true"></span>
+    <span class="fig__sq fig__sq--br" aria-hidden="true"></span>
+    {(title || sub) && (
+      <div class="fig__head">
+        {title && <p class="fig__title">{title}</p>}
+        {sub && <p class="fig__sub">{sub}</p>}
+      </div>
+    )}
+    <slot />
+  </div>
+  {caption && <figcaption class="fig__cap mono">{caption}</figcaption>}
+</figure>
+
+<style>
+  .fig { margin: 40px 0 36px; }
+  .fig__frame { position: relative; border: 1px dashed var(--line); padding: 26px 28px 26px; background: #fff; }
+  .fig__frame--flush { padding: 0; }
+  .fig__frame--flush .fig__head { padding: 24px 24px 18px; border-bottom: 1px dashed var(--line); }
+  .fig__sq { position: absolute; width: 8px; height: 8px; background: var(--ink); z-index: 1; }
+  .fig__sq--tl { left: -4px; top: -4px; }
+  .fig__sq--br { right: -4px; bottom: -4px; }
+  .fig__head { margin-bottom: 22px; }
+  .fig__frame--flush .fig__head { margin-bottom: 0; }
+  .fig__title { margin: 0; font-size: 17px; line-height: 24px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+  .fig__sub { margin: 4px 0 0; font-size: 14px; line-height: 21px; color: var(--text-soft); }
+  .fig__cap { margin-top: 12px; font-size: 12.5px; line-height: 18px; color: var(--text-soft); }
+
+  @media (max-width: 767px) {
+    .fig__frame { padding: 20px 16px; }
+    .fig__frame--flush { padding: 0; }
+    .fig__frame--flush .fig__head { padding: 18px 16px 14px; }
+  }
+</style>

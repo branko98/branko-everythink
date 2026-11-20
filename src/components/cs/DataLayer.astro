@@ -1,0 +1,135 @@
+---
+// Data layer: any number of sources feed one warehouse, nightly checks run on it and end in a Slack alert.
+// The only dashed line (and the only one going backwards) is the correction path from the alert
+// back to the CRM - deliberately different from every other arrow.
+import Figure from './Figure.astro';
+
+interface Box { title: string; text?: string }
+interface Props {
+  title: string;
+  sub: string;
+  caption: string;
+  sources: Box[]; // any number, stacked on the left
+  returnTo: number; // which source the correction path returns to
+  warehouse: Box;
+  checks: { title: string; items: string[] };
+  alert: Box;
+  returnLabel: string;
+}
+const { title, sub, caption, sources, returnTo, warehouse, checks, alert, returnLabel } = Astro.props;
+const n = sources.length;
+// rows: one per source | arrow down | checks + alert | return line
+const gridVars = `--n:${n};grid-template-rows:repeat(${n}, auto) 34px auto 44px`;
+---
+<Figure title={title} sub={sub} caption={caption}>
+  <div class="dl" style={gridVars}>
+    {sources.map((s, i) => (
+      <div class:list={['dl__box', 'dl__src', i === returnTo && 'dl__src--return']} style={`grid-row:${i + 1}`}>
+        <p class="dl__title">{s.title}</p>
+        {s.text && <p class="dl__text">{s.text}</p>}
+      </div>
+    ))}
+    {sources.map((_, i) => <span class="dl__in" style={`grid-row:${i + 1}`} aria-hidden="true"></span>)}
+
+    <div class="dl__box dl__wh" style={`grid-row:1 / ${n + 1}`}>
+      <p class="dl__title">{warehouse.title}</p>
+      {warehouse.text && <p class="dl__text">{warehouse.text}</p>}
+    </div>
+
+    <span class="dl__down" style={`grid-row:${n + 1}`} aria-hidden="true"></span>
+
+    <div class="dl__box dl__checks" style={`grid-row:${n + 2}`}>
+      <p class="dl__title">{checks.title}</p>
+      <ul class="dl__items">
+        {checks.items.map((t) => <li>{t}</li>)}
+      </ul>
+    </div>
+    <span class="dl__right" style={`grid-row:${n + 2}`} aria-hidden="true"></span>
+    <div class="dl__alertcol" style={`grid-row:${n + 2}`}>
+      <span class="dl__fill" aria-hidden="true"></span>
+      <div class="dl__box dl__alert">
+        <p class="dl__title">{alert.title}</p>
+        {alert.text && <p class="dl__text">{alert.text}</p>}
+      </div>
+      <span class="dl__fill dl__fill--ret" aria-hidden="true"></span>
+    </div>
+
+    <!-- correction path: Slack alert → back up the left side → into the CRM box -->
+    <span class="dl__ret dl__ret--up" style={`grid-row:${returnTo + 1}`} aria-hidden="true"></span>
+    <span class="dl__ret dl__ret--side" style={`grid-row:${returnTo + 2} / ${n + 3}`} aria-hidden="true"></span>
+    <span class="dl__ret dl__ret--base" style={`grid-row:${n + 3}`} aria-hidden="true"><span class="mono">{returnLabel}</span></span>
+    <span class="dl__ret dl__ret--rise" style={`grid-row:${n + 3}`} aria-hidden="true"></span>
+    <p class="dl__ret-m mono">↺ back to {sources[returnTo].title} - {returnLabel}</p>
+  </div>
+</Figure>
+
+<style>
+  /* columns: return gutter | sources | in-arrows | warehouse + checks | arrow | alert */
+  .dl {
+    --ink-line: var(--ink);
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) 44px minmax(0, 1.25fr) 40px minmax(0, .7fr);
+    row-gap: 12px;
+    align-items: center;
+  }
+  .dl__box { position: relative; border: 1px solid #c9ced6; background: #fff; padding: 11px 14px 12px; }
+  .dl__title { margin: 0; font-size: 14.5px; line-height: 20px; font-weight: 600; color: var(--ink); }
+  .dl__text { margin: 2px 0 0; font-size: 13.5px; line-height: 19px; color: var(--text-soft); }
+  .dl__items { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
+  .dl__items li { position: relative; padding-left: 14px; font-size: 13.5px; line-height: 19px; color: var(--text-soft); }
+  .dl__items li::before { content: '·'; position: absolute; left: 3px; color: var(--ink); font-weight: 700; }
+
+  .dl__src { grid-column: 2; }
+  .dl__wh { grid-column: 4; align-self: stretch; display: flex; flex-direction: column; justify-content: center; border: 1.5px solid var(--ink); }
+  .dl__checks { grid-column: 4; }
+  .dl__alertcol { grid-column: 6; align-self: stretch; display: flex; flex-direction: column; }
+  .dl__fill { flex: 1; position: relative; }
+  /* the dashed return line leaves from the bottom of the alert */
+  .dl__fill--ret::before { content: ''; position: absolute; left: 50%; top: 0; bottom: -29px; border-left: 1px dashed var(--ink); } /* down to the return line */
+  .dl__alert { background: var(--hl-bg); border: 1.5px solid var(--ink); }
+
+  /* solid arrows */
+  .dl__in { grid-column: 3; position: relative; height: 10px; }
+  .dl__in::before { content: ''; position: absolute; left: 0; right: 2px; top: 50%; border-top: 1px solid var(--ink-line); }
+  .dl__in::after { content: ''; position: absolute; right: 0; top: calc(50% - 4px); border: 4px solid transparent; border-left: 5px solid var(--ink-line); border-right: 0; }
+  .dl__down { grid-column: 4; position: relative; align-self: stretch; margin: -12px 0; }
+  .dl__down::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 2px; border-left: 1px solid var(--ink-line); }
+  .dl__down::after { content: ''; position: absolute; left: calc(50% - 4px); bottom: 0; border: 4px solid transparent; border-top: 5px solid var(--ink-line); border-bottom: 0; }
+  .dl__right { grid-column: 5; position: relative; height: 10px; }
+  .dl__right::before { content: ''; position: absolute; left: 0; right: 2px; top: 50%; border-top: 1px solid var(--ink-line); }
+  .dl__right::after { content: ''; position: absolute; right: 0; top: calc(50% - 4px); border: 4px solid transparent; border-left: 5px solid var(--ink-line); border-right: 0; }
+
+  /* the one dashed, backwards line */
+  .dl__ret { position: relative; align-self: stretch; pointer-events: none; }
+  .dl__ret--up { grid-column: 1; margin-bottom: -12px; }
+  .dl__ret--up::before { content: ''; position: absolute; left: 50%; right: 2px; top: 50%; bottom: 0; border-left: 1px dashed var(--ink); border-top: 1px dashed var(--ink); }
+  .dl__ret--up::after { content: ''; position: absolute; right: 0; top: calc(50% - 4px); border: 4px solid transparent; border-left: 5px solid var(--ink); border-right: 0; }
+  .dl__ret--side { grid-column: 1; margin: -12px 0; }
+  .dl__ret--side::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed var(--ink); }
+  .dl__ret--base { grid-column: 1 / 6; margin-top: -12px; }
+  .dl__ret--base::before { content: ''; position: absolute; left: 50%; left: 13px; right: 0; top: 0; height: 50%; border-left: 1px dashed var(--ink); border-bottom: 1px dashed var(--ink); }
+  .dl__ret--base span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap; font-size: 12px; line-height: 16px; color: var(--text-soft); background: #fff; padding: 0 8px; }
+  .dl__ret--rise { grid-column: 6; margin-top: -12px; }
+  .dl__ret--rise::before { content: ''; position: absolute; left: 0; right: 50%; top: 0; height: 50%; border-bottom: 1px dashed var(--ink); }
+  .dl__ret-m { display: none; }
+
+  /* one column on narrow screens: the return path becomes a labelled dashed note */
+  @media (max-width: 899px) {
+    .dl { grid-template-columns: minmax(0, 1fr); grid-template-rows: none !important; row-gap: 0; }
+    .dl > * { grid-column: 1 !important; grid-row: auto !important; }
+    .dl__src + .dl__src { margin-top: 8px; }
+    .dl__in, .dl__ret--up, .dl__ret--side, .dl__ret--base, .dl__ret--rise { display: none; }
+    .dl__in:last-of-type { display: block; }
+    .dl__wh, .dl__checks, .dl__alert, .dl__down, .dl__right { position: relative; }
+    .dl__fill { display: none; }
+    .dl__wh::before, .dl__checks::before, .dl__alert::before {
+      content: ''; position: absolute; left: 24px; top: -27px; height: 22px; border-left: 1px solid var(--ink);
+    }
+    .dl__wh::after, .dl__checks::after, .dl__alert::after {
+      content: ''; position: absolute; left: 20px; top: -7px; border: 4px solid transparent; border-top: 5px solid var(--ink); border-bottom: 0;
+    }
+    .dl__wh, .dl__checks, .dl__alert { margin-top: 28px; }
+    .dl__down, .dl__right, .dl__in { display: none !important; }
+    .dl__ret-m { display: block; margin: 16px 0 0; padding: 8px 0 8px 14px; border-left: 1px dashed var(--ink); font-size: 12px; line-height: 17px; color: var(--text-soft); }
+  }
+</style>

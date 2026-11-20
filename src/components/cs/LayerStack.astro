@@ -1,0 +1,59 @@
+---
+// Vertical stack of layers joined by labelled connectors. The last layer is the
+// conclusion and is highlighted. With `verdicts`, each layer gets a right-hand verdict.
+import Figure from './Figure.astro';
+
+interface Layer { title: string; text: string; note?: string; verdict?: string; link?: string } // link = label on the connector below
+interface Props { title: string; sub: string; caption: string; layers: Layer[]; verdicts?: boolean }
+const { title, sub, caption, layers, verdicts = false } = Astro.props;
+const last = layers.length - 1;
+---
+<Figure title={title} sub={sub} caption={caption}>
+  <ol class:list={['ls', verdicts && 'ls--verdicts']}>
+    {layers.map((l, i) => (
+      <li class:list={['ls__item', i === last && 'is-final']} style={`--i:${i}`}>
+        <div class="ls__box">
+          <p class="ls__title">{l.title}</p>
+          <p class="ls__text">{l.text}</p>
+          {l.note && <p class="ls__note mono">{l.note}</p>}
+        </div>
+        {verdicts && <p class="ls__verdict mono">{l.verdict}</p>}
+        {i < last && (
+          <div class="ls__link" aria-hidden="true">
+            <span class="ls__line"></span>
+            {l.link && <span class="ls__link-label mono">{l.link}</span>}
+          </div>
+        )}
+      </li>
+    ))}
+  </ol>
+</Figure>
+
+<style>
+  .ls { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .ls__item { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .ls--verdicts .ls__item { grid-template-columns: minmax(0, 1fr) 170px; column-gap: 22px; }
+  .ls__box { border: 1px solid #c9ced6; background: #fff; padding: 14px 18px 15px; }
+  .ls__title { margin: 0; font-size: 15.5px; line-height: 22px; font-weight: 600; color: var(--ink); }
+  .ls__text { margin: 3px 0 0; font-size: 14.5px; line-height: 21px; color: var(--text); }
+  .ls__note { margin: 6px 0 0; font-size: 12.5px; line-height: 18px; color: var(--text-soft); }
+  .is-final .ls__box { background: var(--hl-bg); border: 1.5px solid var(--ink); }
+  .is-final .ls__text { color: var(--hl-ink); }
+  .ls__verdict { margin: 0; align-self: center; font-size: 13px; line-height: 19px; color: var(--text-soft); }
+  .is-final .ls__verdict { color: var(--ink); font-weight: 600; }
+  .is-final .ls__verdict::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 8px; background: var(--ink); vertical-align: 1px; }
+  .ls__link { grid-column: 1; position: relative; height: 34px; display: flex; align-items: center; padding-left: calc(50% + 14px); }
+  .ls__line { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px solid var(--ink); }
+  .ls__line::after { content: ''; position: absolute; left: -4px; bottom: -1px; border: 4px solid transparent; border-top: 5px solid var(--ink); border-bottom: 0; }
+  .ls__link-label { font-size: 12.5px; color: var(--text-soft); }
+
+  :global(.motion) .ls__item { opacity: 0; transform: translateY(10px); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i) * 140ms + 200ms); }
+  :global(.motion .is-in) .ls__item { opacity: 1; transform: none; }
+
+  @media (max-width: 767px) {
+    .ls--verdicts .ls__item { grid-template-columns: minmax(0, 1fr); }
+    .ls__verdict { margin-top: 6px; }
+    .ls__link { padding-left: 34px; }
+    .ls__line { left: 20px; }
+  }
+</style>

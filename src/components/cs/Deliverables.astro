@@ -1,0 +1,28 @@
+---
+// What stays behind after the engagement: a grid of systems, two per row, on the site grid.
+interface Item { title: string; text: string }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+<ul class="dl">
+  {items.map((it, i) => (
+    <li class="dl__item" data-reveal style={`--d:${(i % 2) * 90}ms`}>
+      <span class="dl__n mono">{String(i + 1).padStart(2, '0')}</span>
+      <p class="dl__title">{it.title}</p>
+      <p class="dl__text">{it.text}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .dl { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px dashed var(--line); border-left: 1px dashed var(--line); }
+  .dl__item { position: relative; padding: 20px 22px 22px; border-right: 1px dashed var(--line); border-bottom: 1px dashed var(--line); }
+  .dl__item::before { content: ''; position: absolute; left: -1px; top: 22px; width: 2px; height: 18px; background: var(--ink); }
+  .dl__n { font-size: 12px; color: var(--text-soft); }
+  .dl__title { margin: 6px 0 0; font-size: 16.5px; line-height: 23px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+  .dl__text { margin: 8px 0 0; font-size: 15px; line-height: 24px; color: var(--text); }
+  @media (max-width: 767px) {
+    .dl { grid-template-columns: minmax(0, 1fr); }
+    .dl__item { padding: 18px 16px 20px; }
+  }
+</style>

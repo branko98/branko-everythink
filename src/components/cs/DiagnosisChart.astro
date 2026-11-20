@@ -1,0 +1,51 @@
+---
+// Headline chart on the case study: title + sub on the left, the shared growth plot on the right.
+// Same proportions as the case card on the homepage (left column, type, plot height).
+import GrowthPlot from '../GrowthPlot.astro';
+
+interface Marker { at: number; label: string; text: string }
+interface Props {
+  title: string;
+  sub: string;
+  caption: string; // used for the chart's accessible label only
+  data: number[]; // weekly values, indexed (start = 100)
+  band: { to: number; label: string; text: string }; // shaded window, in points from the start
+  markers: Marker[]; // `at` = index into data
+  months: string[];
+  delta: string;
+}
+const { title, sub, caption, data, band, markers, months, delta } = Astro.props;
+---
+<section class="row row--line dchart">
+  <div class="wrap">
+    <div class="dchart__card">
+      <div class="dchart__copy" data-reveal>
+        <p class="dchart__title">{title}</p>
+        <p class="dchart__sub">{sub}</p>
+      </div>
+      <div class="dchart__plot">
+        <GrowthPlot data={data} band={band} markers={markers} months={months} delta={delta} height={196} mobileHeight={160} label={`${title}. ${caption}`} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* mirrors .case__card on the homepage */
+  .dchart__card { display: grid; grid-template-columns: 350px minmax(0, 1fr); padding: 34px 84px 40px 0; }
+  .dchart__copy { padding-left: 36px; padding-right: 24px; }
+  .dchart__title { max-width: 300px; font-size: 22px; line-height: 30px; font-weight: 560; letter-spacing: -0.01em; color: var(--ink-strong); }
+  .dchart__sub { margin-top: 14px; max-width: 300px; font-size: 15px; line-height: 23px; color: var(--text-soft); }
+  .dchart__plot { align-self: start; margin-top: 13px; }
+
+  @media (max-width: 900px) {
+    .dchart__card { grid-template-columns: 270px minmax(0, 1fr); padding-right: 70px; }
+  }
+  @media (max-width: 767px) {
+    .dchart__card { grid-template-columns: minmax(0, 1fr); padding: 26px 0 24px; row-gap: 26px; }
+    .dchart__copy { padding: 0 14px; }
+    .dchart__title { max-width: none; font-size: 20px; line-height: 28px; }
+    .dchart__sub { max-width: none; }
+    .dchart__plot { margin: 0; }
+  }
+</style>
