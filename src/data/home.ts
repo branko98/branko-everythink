@@ -156,7 +156,7 @@ export const links = {
 const askPrompt =
   'This is everythink.pro - the site and work of Branko Jovanović, who leads growth for B2B SaaS companies. Read the homepage and the case study linked from it.\n\nIn a minute’s read: what he actually does, what he builds himself versus what he hands off, and which parts of my situation his work covers and which it doesn’t. Where the material doesn’t cover something, say whether that’s because he doesn’t do it or because this one engagement didn’t call for it.\n\n[Your website, what isn’t working, and the kind of person you think you need]';
 export const dock = {
-  label: '**Compare this** against what you need', // **bold**
+  label: '**Compare** to your needs', // **bold**
   prompt: askPrompt,
   assistants: [
     { name: 'Claude', icon: '/ask-claude.png', href: `https://claude.ai/new?prompt=${encodeURIComponent(askPrompt)}` },
