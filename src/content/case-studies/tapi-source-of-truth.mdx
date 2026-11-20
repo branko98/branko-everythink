@@ -1,0 +1,173 @@
+---
+title: 'One source of truth for marketing and revenue - Tapi case study'
+titleStrong: 'One source of truth for marketing and revenue'
+titleMuted: '- the reporting and AI layer built on top of the measurement rebuild.'
+titleStrongFirst: true
+lead: 'Tapi had a well-configured HubSpot and still couldn’t say, with one number, **which marketing channel produced customers** - or !!which system to believe when two of them disagreed!!.'
+date: 2026-11-19
+tag: 'B2B SaaS'
+client:
+  name: 'Tapi'
+  category: 'Property Maintenance Software'
+  logo: '/tapi.png'
+results:
+  - value: '32% → 88%'
+    label: 'of new customers arriving with a known marketing channel'
+  - value: 'under 5%'
+    label: 'unexplained gap between the platforms and the CRM, down from 15–20%'
+  - value: '2–3 hours'
+    label: 'to close the monthly report, down from about three working days'
+  - value: '1–2 days'
+    label: 'to detect a data failure, instead of weeks or months'
+disciplines:
+  - 'Data architecture and reporting'
+  - 'Revenue measurement and attribution'
+  - 'AI systems'
+  - 'Marketing operations'
+closing:
+  eyebrow: 'Your business'
+  title: 'What this looks like in your business'
+  sub: 'The same questions, asked of your stack.'
+  steps:
+    - q: 'Which system is official for each number?'
+      text: 'Revenue, channel, conversions, lead volume - one source for each, written down, and a defined outcome when two of them disagree.'
+    - q: 'Do the platforms and the CRM make independent claims?'
+      text: 'Or the same claim twice, which is the setup where a wrong number looks confirmed instead of caught.'
+    - q: 'Does every new customer arrive with a channel?'
+      text: 'And is it frozen at the first conversion, or overwritten by whatever touched the record last.'
+    - q: 'Would you know within a day if a feed stopped?'
+      text: 'A channel gone quiet, spend that moved on its own, a lead count that won’t reconcile.'
+    - q: 'Can you tell which records a machine changed?'
+      text: 'Every correction traceable to a person and a reason - so a repeated one points at the source.'
+    - q: 'Only then, the automation on top.'
+      text: 'Reporting and models over inputs that survive a question.'
+  summary: 'You get that back as a written diagnosis: **a ranked list of where revenue is leaking, what each one is worth, and the order I’d fix them in**. Fixed scope, fixed price, three to four weeks. **What happens after it is a separate decision.**'
+  button:
+    label: 'Book a diagnosis call'
+    href: 'https://calendly.com/branko-everythink/30-minute-meeting'
+footnote: 'This case study focuses on operational challenges, implemented solutions, and measurable outcomes. To protect commercially sensitive information, internal processes and areas for improvement are discussed at a high level, while performance is reported using relative metrics rather than absolute spend, revenue, or customer figures. Proprietary details and sensitive business data are intentionally excluded.'
+testimonial:
+  logo: '/tapi-logo.svg'
+  name: 'Caleb Frost'
+  role: 'CMO'
+  company: 'Tapi'
+  companyHref: 'https://www.tapihq.com'
+  avatar: '/caleb.jpg'
+  paragraphs:
+    - '“Branko has a rare mix of analytical depth and commercial instinct.'
+    - 'He thinks in systems. He doesn’t just run campaigns. He looks at how data, tools and teams connect, spots where things break, and fixes the foundations so the whole engine performs better. That instinct has laid the groundwork for better reporting and sharper growth decisions across our markets.'
+    - '[[He also builds what he recommends - the tracking, the workflows, the AI layer over our sales calls are his own work, not a spec handed to someone else.]]'
+    - 'He pairs that rigour with a real bias for action, and he takes full ownership of the outcomes he’s responsible for. Exactly the kind of marketer you want in a fast-growing business.”'
+  details:
+    - label: 'Industry'
+      value: 'Property Management'
+    - label: 'Definition'
+      value: 'PM software that uses AI to speed up how agencies handle tenant requests.'
+      hideOnMobile: true
+    - label: 'Markets'
+      value: 'UK, AU, NZ'
+    - label: 'URL'
+      value: 'www.tapihq.com'
+      href: 'https://www.tapihq.com'
+      hideOnMobile: true
+---
+import Chapter from '../../components/cs/Chapter.astro';
+import Lede from '../../components/cs/Lede.astro';
+import Flag from '../../components/cs/Flag.astro';
+import CompareTable from '../../components/cs/CompareTable.astro';
+import DataLayer from '../../components/cs/DataLayer.astro';
+import CorrectionLoop from '../../components/cs/CorrectionLoop.astro';
+import * as fig from '../../data/case-studies/tapi-source-of-truth';
+
+## Where this sits
+
+That isn’t a CRM problem. A B2B buyer moves across channels, devices and months, and every tool in the stack sees one slice of that. Each one is right on its own terms. **Nobody had decided which one was official for which question.**
+
+This is the reporting and AI layer built on top of the measurement rebuild described in the [main growth case study](/case-studies/tapi/#revenue-measurement-and-attribution). Same engagement, built once the diagnosis was done and the first fixes were holding. No new platform, and nothing moved out of the systems it already lived in.
+
+## What was actually wrong
+
+<Lede>None of this is unusual. It’s what a reporting stack looks like after a few years of tools being added one at a time, each for a good reason.</Lede>
+
+- **Every system told a different story.** <Flag>Ad platforms and the CRM disagreed by 15–20%</Flag>, and nobody could say which side was right, or why.
+- **Two thirds of new customers had no marketing channel at all.** Contacts from an old CRM migration, phone calls and event lists all entered as Offline.
+- **The monthly report took three working days**, and <Flag>four versions of the same number were in circulation</Flag> while it was being assembled.
+- **Failures were silent.** The in-app browser form failure in the main case study was found by working down four layers by hand. Nothing in the stack would have flagged it.
+
+<Chapter n="01" tags="Data governance · metric ownership" />
+
+## Three rules, then the build
+
+<Lede>The architecture follows from three decisions. Every one of them is about authority and risk, not about tooling - which is why the tools stayed where they were.</Lede>
+
+**One official source for every metric.** MRR comes from billing. Channel comes from the first conversion in the CRM, frozen at that point so a later touch can’t overwrite it. A second system cross-checks each one, and there’s a defined outcome when they conflict.
+
+**The agent flags, people decide.** Nothing is written back to the CRM automatically. A correction is a human action with a reason attached to it.
+
+**Estimates stay separate from facts.** View-through is reported as a channel-level estimate and never attached to an individual customer, because at the level of a person it isn’t knowable.
+
+<DataLayer {...fig.sourceMap} />
+
+The sources on the left keep doing their own jobs. The warehouse is the only place any of them are combined, and **the only loop back is a human correction with a reason attached**.
+
+<Chapter n="02" tags="Metric definitions · conflict rules" />
+
+## The table the whole thing rests on
+
+<Lede>This is the least impressive artefact in the build and the one that did the most work. Until it existed, every disagreement was a meeting.</Lede>
+
+<CompareTable {...fig.authority} />
+
+<Chapter n="03" tags="Data warehouse · capture path · build vs buy" />
+
+## How it was built
+
+**The foundation came first.** Two separated measurement layers, a lead capture path on a first-party domain with a Worker recording every submission before it posts, and lifecycle stages flowing back to the ad platforms as offline conversions. That work is the subject of the [main case study](/case-studies/tapi/) and everything below depends on it - **a reporting layer over unreliable inputs is a faster way to be confidently wrong**.
+
+**Then the layer on top.** The warehouse joins ad spend, the CRM and billing. The ChatGPT Ads test has no connector, so those results are imported weekly rather than inferred into the pipeline. A small internal app logs every manual correction with a reason, writes factual fixes back to the CRM once a person approves them, and locks the monthly report once it’s closed.
+
+**And one piece of judgement work that isn’t arithmetic.** Free-text answers to *how did you hear about us* get sorted into channels by model, which gives a third independent view alongside click attribution and CRM channel. It’s the one place in the system where a model decides anything, and it’s there because the input is language and nothing else can read it.
+
+**Build versus buy.** Off-the-shelf attribution platforms were evaluated before any of this. None of them would have answered the question that caused the problem: which system is official when two disagree, and what happens to the record when they do. **That is a decision a company makes once, not a feature a licence supplies.** The build also keeps the first-party data portable into whatever gets built on it next.
+
+<Chapter n="04" tags="AI agents · deterministic checks · human in the loop" />
+
+## What the agent is allowed to do
+
+<Lede>The agent is the nightly checks and the alerts they raise. It reads, compares and reports. It does not write.</Lede>
+
+Almost all of it is deterministic - rules written once and run on a schedule. A model is involved in one place only, where the input is language. Arithmetic doesn’t need judgement, and judgement shouldn’t be applied to arithmetic.
+
+That sounds like a limitation and it’s the opposite. An automation with write access to the CRM is a system where <Flag>a wrong inference becomes a wrong record</Flag>, and the person who finds it six weeks later has no way to tell which ones were machine-made. An automation that only flags leaves every change traceable to a person and a reason.
+
+**The cost of being wrong is what decides the boundary.** A bad alert in Slack costs someone ninety seconds. A bad write to a customer record costs a quarter of reporting.
+
+<CorrectionLoop {...fig.correctionLoop} />
+
+Eight checks run every night. After tuning, roughly one alert in eight is a false positive; early on it was closer to one in three. That rate is worth stating rather than hiding: a check tuned never to cry wolf is a check that misses things, and **which way to err is a decision, not an accident**.
+
+## What changed
+
+<Lede>Most of the improvement came from the first step - fixing the inputs.</Lede>
+
+The layer on top brought something harder to put a number on: gaps are now explained rather than argued about, and **a failure surfaces in a day or two instead of at the end of a quarter**.
+
+<CompareTable {...fig.beforeAfter} numeric />
+
+### And what it changed about decisions.
+
+**Budget moved on one number.** Cost per property entering pipeline is read from the same locked report every month. The audience reallocation in the main case study rested on figures nobody disputed - which is the only reason it survived contact with the people whose plan it overturned.
+
+**A channel was cut in one market on evidence, not on patience.** LinkedIn in Australia showed no contribution at any pipeline stage within weeks, which matched the structural read - the profession doesn’t gather on that network in that market. The budget moved to the UK instead of waiting out a quarter of argument.
+
+**Events were measured by outcome for the first time.** Contacts from conferences are now tied to the deals they become, which decides which ones stay in next year’s plan.
+
+## What this generalises to
+
+**The problem was never a bad CRM.** It was the absence of a rule about which system is official for which metric. That rule costs nothing to write and is the thing almost nobody writes.
+
+**The model is useful where judgement is needed, not where arithmetic is.** The system calculates. The model reads language - free-text answers, call transcripts - and a person approves anything that leaves the building.
+
+**Manual corrections are fine as long as they leave a trail.** The trail is what turns a repeated correction from an annoyance into a defect report against the source.
+
+**One limitation stands.** View-through and word-of-mouth without a link can’t be seen at the level of a person, so they’re reported as estimates and nothing in this system pretends otherwise.

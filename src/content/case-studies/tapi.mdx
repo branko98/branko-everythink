@@ -1,95 +1,303 @@
 ---
-title: 'How Tapi went from 1.4 to 2.2 demo bookings a day in three months, on the same spend'
-lead: '[One or two sentences: what was broken, what changed and what it did to pipeline, without touching the budget.]'
-date: 2026-09-30
+title: '60% more demos, 35% cheaper - Tapi case study'
+# headline: black part first, then the grey part
+titleStrong: '60% more demos, 35% cheaper'
+titleMuted: '- by proving the channel was never the problem. Same daily budget.'
+titleStrongFirst: true
+lead: 'I took over growth at a B2B SaaS where the working assumption was that !!the main acquisition channel had run out of room and the market had been exhausted!!. I tested that assumption across four other channels before accepting or rejecting it, rebuilt the measurement underneath it, and then found **the problem was never the market**.'
+date: 2026-10-31
 tag: 'B2B SaaS'
 client:
   name: 'Tapi'
   category: 'Property Maintenance Software'
   logo: '/tapi.png'
-chart:
-  data: [2, 6, 10, 16, 22, 24, 26, 30, 36, 43, 53, 60, 73, 82, 91, 92, 97]
-  labels: ['July', 'August', 'September']
-  metrics:
-    - label: 'Demo bookings / day'
-      value: '1.4 → 2.2'
-    - label: 'Ad spend'
-      value: 'Same'
-  caption: '[What the chart shows and where the data comes from, e.g. booked demos per day from the CRM, 7-day average.]'
+results:
+  - value: '−35%'
+    label: 'cost per booked demo, over three months'
+  - value: '+60%'
+    label: 'demo volume, on the same daily spend'
+  - value: '1.2% → 2.8%'
+    label: 'submissions per visitor, after the capture path was rebuilt'
+  - value: '22%'
+    # shown as a sentence instead of a big number (**bold**)
+    sentence: '**22% of demo requests were never reaching a human.** Nothing in the ad account would ever have shown it.'
+disciplines:
+  - 'Paid media strategy'
+  - 'Revenue measurement and attribution'
+  - 'Conversion rate optimisation'
+  - 'Demand research and messaging'
+  - 'Marketing operations'
+  - 'Data architecture and reporting'
+  - 'Market entry'
+footnote: 'This case study focuses on operational challenges, implemented solutions, and measurable outcomes. To protect commercially sensitive information, internal processes and areas for improvement are discussed at a high level, while performance is reported using relative metrics rather than absolute spend, revenue, or customer figures. Proprietary details and sensitive business data are intentionally excluded.'
 testimonial:
-  logo: 'Tapi'
-  name: '[Client name]'
-  role: '[Role]'
+  logo: '/tapi-logo.svg'
+  name: 'Caleb Frost'
+  role: 'CMO'
   company: 'Tapi'
+  companyHref: 'https://www.tapihq.com'
+  avatar: '/caleb.jpg'
   paragraphs:
-    - '“[Short quote from the Tapi team about working together, with [[the outcome they would repeat to a peer]] highlighted.]”'
+    - '“Branko has a rare mix of analytical depth and commercial instinct.'
+    - 'He thinks in systems. He doesn’t just run campaigns. He looks at how data, tools and teams connect, spots where things break, and fixes the foundations so the whole engine performs better. That instinct has laid the groundwork for better reporting and sharper growth decisions across our markets.'
+    - '[[He also builds what he recommends - the tracking, the workflows, the AI layer over our sales calls are his own work, not a spec handed to someone else.]]'
+    - 'He pairs that rigour with a real bias for action, and he takes full ownership of the outcomes he’s responsible for. Exactly the kind of marketer you want in a fast-growing business.”'
   details:
     - label: 'Industry'
-      value: 'Property Maintenance Software'
+      value: 'Property Management'
     - label: 'Definition'
-      value: '[One or two sentences on what Tapi does, who it serves and at what scale.]'
-    - label: 'Headquarters'
-      value: '[City]'
+      value: 'PM software that uses AI to speed up how agencies handle tenant requests.'
+      hideOnMobile: true
+    - label: 'Markets'
+      value: 'UK, AU, NZ'
     - label: 'URL'
-      value: '[tapi-url.com]'
-      href: '#'
+      value: 'www.tapihq.com'
+      href: 'https://www.tapihq.com'
+      hideOnMobile: true
+heroChart:
+  title: 'Demos booked per day rose 60% in three months, on unchanged spend'
+  sub: 'Nothing about the market changed - only where the budget pointed, and what it landed on'
+  caption: 'demos booked per day, indexed to the starting week · three months, unchanged daily spend'
+  # weekly, indexed to the starting week (= 100); the endpoint is the reported +60%
+  data: [100, 97, 103, 99, 101, 109, 121, 118, 126, 140, 134, 149, 160]
+  band:
+    to: 4
+    label: 'Weeks 1–4'
+    text: 'Full-funnel diagnosis - tracking, landing pages, CRM and the sales handoff, audited end to end'
+  markers:
+    - at: 4
+      label: '1'
+      text: 'Budget moved to the sourced audience, creative rotation rebuilt'
+    - at: 8
+      label: '2'
+      text: 'Landing pages and the lead capture path rebuilt'
+  months: ['July', 'August', 'September']
+  delta: '+60%'
+closing:
+  eyebrow: 'Your business'
+  title: 'What this looks like in your business'
+  sub: 'The same order of operations, in your account.'
+  steps:
+    - q: 'Is the diagnosis you’re working from yours, or inherited?'
+      text: 'Which channel and audience assumptions have actually been tested, and which of your market’s problems your spend is arguing.'
+    - q: 'Can you trust what you’re measuring?'
+      text: 'Whether the platforms and the CRM agree, which conversions are real, and what the reporting stack is quietly getting wrong.'
+    - q: 'Can you see past the lead?'
+      text: 'Whether the chain from ad to closed revenue exists at all, and what a customer costs by campaign - not what a lead costs.'
+    - q: 'Where does the path lose what you’ve already paid for?'
+      text: 'Every step between the ad and the record in your CRM, verified as both working and recorded.'
+    - q: 'Who owns the lead once it lands?'
+      text: 'Who picks it up, how long it waits, and how many never reach a person.'
+    - q: 'Only then, the campaigns.'
+      text: 'Budget, structure and creative, on numbers that survive a question.'
+  summary: 'You get that back as a written diagnosis: **a ranked list of where revenue is leaking, what each one is worth, and the order I’d fix them in**. Fixed scope, fixed price, three to four weeks. **What happens after it is a separate decision.**'
+  button:
+    label: 'Book a diagnosis call'
+    href: 'https://calendly.com/branko-everythink/30-minute-meeting'
 ---
+import Chapter from '../../components/cs/Chapter.astro';
+import Lede from '../../components/cs/Lede.astro';
+import Flag from '../../components/cs/Flag.astro';
+import StatCallout from '../../components/cs/StatCallout.astro';
+import ChannelLog from '../../components/cs/ChannelLog.astro';
+import CompareTable from '../../components/cs/CompareTable.astro';
+import BeforeAfter from '../../components/cs/BeforeAfter.astro';
+import LayerStack from '../../components/cs/LayerStack.astro';
+import CapturePath from '../../components/cs/CapturePath.astro';
+import DemandMap from '../../components/cs/DemandMap.astro';
+import Deliverables from '../../components/cs/Deliverables.astro';
+import DataLayer from '../../components/cs/DataLayer.astro';
+import ReadMore from '../../components/cs/ReadMore.astro';
+import * as fig from '../../data/case-studies/tapi';
 
-## Results
+## The company
 
-In short, what changed over three months of working with Tapi:
+Tapi is a property maintenance SaaS selling to property management agencies across Australia, New Zealand and the UK. Demo-led sales, a cycle running up to 30 days, and deals measured in managed properties rather than seats - one agency can carry several times the portfolio of another. **The gap between a cheap lead and a valuable one is therefore enormous**, and <Flag>nothing in an ad platform can see it</Flag>.
 
-- **1.4 → 2.2** demo bookings a day
-- **Same** ad spend
-- **3 months** from start to result
-- **[Metric]** [what it measures]
+I owned growth end to end: paid across every channel, landing pages and conversion, measurement and attribution, the reporting layer on top of it, messaging and creative strategy, and the lifecycle architecture in the CRM. Everything below happened inside the first four months.
 
-<ResultChart data={props.chart} />
+<Flag>The measurement layer existed, but it couldn’t be trusted</Flag>. Tracking had accumulated in layers over years of site changes, bot traffic was inflating the main conversion, and the ad platform and the CRM disagreed by 15–20% - close enough to look fine on a dashboard, far enough to send budget to the wrong place.
 
-## Client
+None of that is unusual. It’s the normal condition of a B2B SaaS that has grown faster than its plumbing - and it’s the reason the saturation diagnosis was wrong.
 
-[Who Tapi is, who they sell to and how their sales motion works. Two or three short paragraphs.]
+## How I work
 
-[Where paid media, the website, the CRM and sales sat when we started, and who owned each part.]
+<Lede size="lg"><strong>Connect spend to customers before scaling anything.</strong></Lede>
 
-## Challenges
+That’s an order of operations, not a philosophy. Test the diagnosis you’ve been handed rather than inheriting it. Verify the path from ad to CRM record actually works before blaming the campaigns. Fix what’s cheap before building what’s expensive. Reallocate budget on revenue, not on platform metrics.
 
-[What was going wrong before, in the client's own terms.]
+What follows is the same method applied in seven places.
 
-- **[Challenge one]** - [One sentence on what it was and why it cost money.]
-- **[Challenge two]** - [One sentence.]
-- **[Challenge three]** - [One sentence.]
+<Chapter n="01" tags="Channel selection · budget allocation · paid media management" />
 
-The goals for the engagement were:
+## Paid acquisition and channel strategy
 
-1. [First goal, stated as an outcome]
-2. [Second goal, stated as an outcome]
+<Lede>The brief was built on a diagnosis nobody had tested.</Lede>
 
-## What I did
+The belief inside the business was that the primary paid channel had saturated: cost per acquisition had tripled over four months, frequency was climbing, and the conclusion drawn was that <Flag>the addressable market had simply been exhausted</Flag>. The implied next move was to go looking elsewhere.
 
-[One paragraph on the approach: where the diagnosis started and what it found.]
+That conclusion may have been right. I wasn’t going to accept it or reject it on instinct, so I went and found out - which meant testing the alternatives properly rather than arguing about them.
 
-1. **[Fix one]** [and what it changed]
-2. **[Fix two]** [and what it changed]
-3. **[Fix three]** [and what it changed]
+**Search answered a bigger question than the one I asked it.** Non-brand search ran expensive immediately. Before writing that off as a bidding problem, I ran the same queries on a second search network where the identical intent was available at a fraction of the cost per click. Same conclusion, with price eliminated as the variable: **the volume of people actively searching for this category is too thin to build acquisition on**. This is a market where buyers don’t know the category exists, so the channel has to create demand rather than capture it. That finding reframed everything downstream, including why the primary channel was the right one all along. Non-brand was shut down inside a week rather than spending a month proving the point; brand defence stayed on, since competitors were bidding on the company name.
 
-### 1. [First fix, in detail]
+**Where intent did exist, I found it.** On OpenAI’s ad platform, conversions came through specifically on must-have categories - the problems a buyer can’t defer. The channel is young and unstable for targeting, so rather than treat an early signal as a strategy I narrowed to the single campaign and ad set that were converting and left it there.
 
-[How it was done, what tools and data were involved, and what broke along the way.]
+**And where the audience wasn’t, I said so.** LinkedIn produced nothing in Australia, for a structural reason: the profession doesn’t gather on that network in that market. Rather than keep paying to discover that twice, I moved the channel to the UK, where the audience is genuinely present, and built the entry strategy there - thought leadership at the top, lead gen beneath it, and retargeting against engagement.
 
-- **[Step]** - [Detail.]
-- **[Step]** - [Detail.]
+<ChannelLog {...fig.channelLog} />
 
-### 2. [Second fix, in detail]
+### Then back to the original channel, with evidence.
 
-[How it was done.]
+The account wasn’t competing against an exhausted market. It was competing against itself: <Flag>roughly 44% of ad sets were overlapping into the same audience</Flag>, the winning creative had been left running long past the point where it was still working, and the measurement stopped at the booked demo so nothing downstream could inform the bidding.
 
-## Outcome
+I rebuilt the ad set structure to stop the internal competition and retired the exhausted creative. Then I went back through the library rather than commissioning anything new, on the principle that an asset switched off early is not a spent asset. One set of customer videos had been switched off before it had enough data to judge - the usual fate of an asset that launches in a bad week. Returned to rotation, it became the strongest performer in the account at roughly **40% below** the static set it replaced.
 
-[What the numbers look like now, what the team does differently, and what is next.]
+### The budget decision that the data forced.
 
-## Start with the diagnosis
+Two audiences were running. One was a lookalike built from existing customers. The other was a list of named property managers - sourced and verified through Clay, then matched into the ad platform as a custom audience. On cost per demo it wasn’t close: the lookalike was booking demos at less than half the cost, and <Flag>the plan on the table was to cut the sourced list to a minimum</Flag>.
 
-Three to four weeks, fixed scope. A ranked list of where the money leaks, what each one is worth, and the order I’d fix them in.
+Once the chain from ad to closed deal was connected, the picture inverted. <Flag>The cheap demos were barely converting to customers</Flag> - a lookalike optimises toward people who resemble your buyers in platform behaviour, not toward people who actually run property portfolios. The sourced list converted from demo to customer at a far higher rate, and brought in accounts carrying more properties with them. We moved budget and focus there, against the plan.
 
-[Book a call](/#contact) to see whether it fits.
+<CompareTable {...fig.segments} />
+
+Measured by what each audience actually won rather than by what a demo cost, it isn’t close. **Roughly three quarters of every property won through paid came from the sourced list**, at a cost per property won about **40% below** the audience the ad platform rated 2.3× more efficient. The plan on the table would have cut it to a minimum.
+
+That’s also why the primary KPI moved from cost per lead to cost per property entering pipeline. In this category a deal isn’t a deal - one agency can carry several times the portfolio of another, so any metric that counts them the same will send the budget to the wrong place every time.
+
+<BeforeAfter {...fig.beforeAfter} />
+
+**The strategic read.** In most B2B SaaS I’d expect search and LinkedIn to carry acquisition and social to play a supporting role. Here the opposite was true, and it was true for a reason I could name: **in a category the buyer doesn’t know exists, demand has to be created before it can be captured**. That’s a channel decision made on evidence about market maturity, not a preference.
+
+<Chapter n="02" tags="Market entry · channel strategy · partner-led growth" />
+
+## Entering a second market
+
+<Lede>The same method, pointed forward rather than at a repair.</Lede>
+
+The AU/NZ work answered where demand sits in this category: it has to be created, not captured. The UK is the same product in a different market, so the question was which of those findings travel.
+
+Most of them do. Buyers there don’t search for a category they don’t know exists either, so paid social goes in carrying the same job - with the structure that worked in AU as the starting hypothesis rather than a fresh guess, and the pain map built from AU sales calls transferring at the level of the problem even where the vocabulary doesn’t.
+
+**One finding reverses, and it’s the one that matters.** <Flag>LinkedIn produced nothing in AU because the profession doesn’t gather there</Flag>. **In the UK it does**: property management has a visible professional layer on the platform, with the agency networks and the software they run identifiable by name. That makes targeting possible in a way it simply wasn’t before.
+
+So the UK went in as a three-layer funnel rather than a campaign - executive thought leadership at the top, lead generation beneath it, retargeting against the people who actually watched - alongside a partner email channel into an established list of UK agencies. **A borrowed audience rather than a bought one**, which is how you enter <Flag>a market where nobody knows your name yet</Flag>.
+
+**And the demand map is a build order, not an audit.** The economic buyer had no asset addressing them at all; the one capability no competitor offers had neither a page nor an ad. Those are the first two things to produce - not as a matter of creative preference, but because one of them decides the purchase and the other is the only argument a competitor cannot answer.
+
+<Chapter n="03" tags="Measurement architecture · attribution · build vs buy" />
+
+## Revenue measurement and attribution
+
+<Lede>The budget decision above only exists because this was rebuilt first, inside the opening weeks.</Lede>
+
+The audit came before the architecture. I traced the entire data path end to end - what fires in the browser, what each platform actually receives, what reaches the CRM, and precisely where the two stop agreeing - and the numbers the business was steering on turned out to be wrong in four compounding ways at once. Bot traffic inflating the primary conversion. Tags layered on top of each other through successive site migrations, so some events counted themselves twice. <Flag>A single global consent configuration applied everywhere, discarding data in markets where no law required it</Flag>. And attribution stopping dead at the booked demo, which meant every optimisation decision in the account was being made on the cheapest audience rather than the most valuable one. The net result was <Flag>a 15–20% gap between platform and CRM, inside a reporting stack everyone treated as reliable</Flag>.
+
+**I rebuilt it in two layers, deliberately separated.** A browser layer handling click attribution across every paid channel, alongside behavioural analytics recording what people actually do between the click and the booked demo - the stretch the previous setup was blind to. A server and CRM layer holding identity, deal value and lifecycle stage. Platform signals and revenue signals now make independent claims instead of the same claim twice, which is **the only configuration in which you can catch one of them lying**.
+
+Lifecycle stages then flow back out of the CRM into every paid channel as offline conversions, so each platform optimises toward qualified pipeline rather than toward form fills - and all of them learn from the same definition of a good lead rather than four different ones. Consent runs on a regional split: default-denied where the law requires it, notice and opt-out where it doesn’t, so we stay compliant where it matters without discarding data where it isn’t.
+
+<LayerStack {...fig.architecture} />
+
+**I also changed what the business measured itself against.** Cost per lead was retired as the primary KPI and replaced with cost per property entering pipeline - a number tied to what a deal is actually worth. That single change is what made the reallocation obvious in hindsight and invisible beforehand.
+
+**Build versus buy.** Before committing, I evaluated the attribution platforms that would have bought this off the shelf. For a company that needs its own first-party data portable into AI systems downstream, the build wins - and what got built on top of it is the next chapter.
+
+<Chapter n="04" tags="Data architecture · reporting · AI systems" />
+
+## One source of truth
+
+Rebuilt measurement answers whether a number is right. It doesn’t answer which system to believe when two of them disagree - and that question came up every month.
+
+So the rules got written down. One official source for every metric, a second one to check it against, and a defined outcome when they conflict. MRR comes from billing. Channel comes from the first conversion in HubSpot, frozen at that point so a later touch can’t overwrite it. Ad spend, CRM and billing then join in one warehouse, which is the only place any of it is combined.
+
+On top of that sits an agent that runs a fixed set of checks every night and posts what it finds to the same Slack channel as the capture-path reconciliation - a channel that stopped reporting, spend that moved without a campaign change, a lead count that doesn’t reconcile between two sources. Same principle as the capture path in the next chapter, widened from one path to the whole data layer.
+
+It flags; it doesn’t act. Nothing in the CRM changes on its own, and manual corrections are logged with a reason - so a correction that keeps repeating becomes a signal that something upstream is broken rather than a habit.
+
+<DataLayer {...fig.dataLayer} />
+
+Three numbers came out of it. New customers arriving with a known channel went from roughly a third to nearly nine in ten. The monthly report went from about three working days to under three hours. The 15–20% gap the rebuild started with is now under 5%, and what’s left is mostly view-through, reported as a channel-level estimate and never attached to an individual customer.
+
+<ReadMore {...fig.fullBuild} />
+
+<Chapter n="05" tags="Conversion rate optimisation · funnel engineering" />
+
+## Conversion path integrity
+
+<Lede>A paid funnel can break at several points between the ad and the CRM record, and no platform reports any of them.</Lede>
+
+It reports that the click was delivered. <Flag>It cannot tell you whether the page accepted it, whether the form submitted, or whether the record arrived</Flag>. Twice in this engagement the problem turned out to be the path rather than the campaign - and neither time did anything in the ad account say so.
+
+So before changing campaign structure, I walk the conversion path as a user does - every ad, every page, every form, in every browser context the traffic actually arrives in - and verify that each step both completes and is recorded.
+
+### The case that mattered.
+
+<Flag>Conversions collapsed while everything before the click stayed flat</Flag>. The obvious reading was that the ads had stopped working. I worked down instead:
+
+<LayerStack {...fig.elimination} verdicts />
+
+**I replaced the capture path rather than patching it.** A custom form on our own domain with identical fields, validation and hidden attribution parameters. A Cloudflare Worker that records every submission before anything else happens, posts it to the CRM with retry logic, and verifies 45 minutes later that it actually landed. A daily reconciliation comparing what was submitted against what the CRM holds, with an alert on any gap. Field-level tracking, so we can see exactly where people abandon.
+
+<CapturePath {...fig.capturePath} />
+
+<CompareTable {...fig.funnel} numeric />
+
+Both the step where the failure sat and the rate across the whole path improved. Across the full traffic base, **submissions per visitor more than doubled**.
+
+**The landing page, isolated.** I rebuilt the page template around message-match with the ad it followed, and put the property-count field into the form so the bidding had a value signal to learn from. Tested with the page as the only variable - same campaign, same period, same form on both - the rebuilt page held **43% more visitors** past the one-minute mark and **67% more** past two minutes.
+
+That combination is the point: a page that earns attention, feeding a capture path that cannot silently drop what it earns.
+
+<Chapter n="06" tags="Voice of customer · messaging strategy · creative planning" />
+
+## Demand research and message coverage
+
+<Lede>Four of the sixteen problems this market talks about had advertising against them.</Lede>
+
+Creative isn’t a writing problem. It’s a listening problem with a production step on the end. So rather than brief from internal assumptions about what the market cares about, I built the demand side as a repeatable research pipeline and put the whole market through it.
+
+Sales call transcripts across eight agencies in both markets. Every distinct problem extracted verbatim - in the words the customer used, not the words we use internally. Each one weighted with the people who hear them daily, and attributed to the role in the buying group that actually feels it. Each conversation tied back to the ad that produced it and to whether it closed. The product then mapped the same way, module by module: which pain it answers, which buyer it speaks to. And the whole map checked against the creative, landing pages and ad copy that actually existed.
+
+<DemandMap {...fig.demandMap} />
+
+Laying one against the other produced three findings that changed the plan.
+
+**Sixteen documented pains. Four of them had creative against them.** The library held four assets, one per pain - and not the sharpest or most valuable points, but the easiest ones to film. **The entire paid budget was making four arguments out of sixteen available.**
+
+**The economic buyer had nothing.** Every asset in the library spoke to the daily user. The person who signs the contract - who carries the liability, the hiring cost and the churn risk - had no creative addressing them at all. In a demo-led B2B sale, that’s the audience that decides.
+
+<Flag>The capability with the sharpest differentiation had no advertising and no page.</Flag> The one thing in the product that no competitor in the category appeared to offer at all was entirely absent from the market-facing surface.
+
+Also surfaced: a module demoed on nearly every sales call that appeared nowhere on the website, and a pain that four independent agencies raised unprompted with zero coverage against it.
+
+That map is now the testing order - which pain, against which buyer, with which asset, in what sequence. It converts creative from a queue of requests into a plan with a hypothesis attached to each item, and it means the next three months of spend argues the points the market actually raised rather than the ones that were convenient to produce.
+
+<Chapter n="07" tags="Marketing operations · CRM lifecycle · revenue process" />
+
+## Lifecycle and sales handoff
+
+<StatCallout value="22%" text="of demo requests were never reaching a human." note="found in the CRM, not the ad account" />
+
+Most growth roles stop at the lead. I kept following it, and found that a fifth of all demo requests were arriving in the CRM and going nowhere at all.
+
+The cause was structural. Franchise branches had been consolidated into a single company record per domain, covering around 15% of the database. When a new contact attached itself to one of those existing records, the routing rules didn’t fire and no owner was assigned. The contact existed, correctly created, fully invisible. The CRM vendor confirmed there was no native fix.
+
+Underneath it sat the bigger problem: <Flag>the handoff from marketing to sales had no owner and no clock</Flag>. Nothing in the system defined who picks up an inbound lead or by when, which meant acquisition could out-produce the process it fed and nothing in any report would show it.
+
+**What I built and specified:**
+
+- A workflow catching contacts that land on existing company records and returning them to owner assignment
+- Fallback owner assignment with an alert when a lead sits unowned past 15 minutes, escalating at 24, 48 and 72 hours
+- Marketing reporting rebuilt so the numbers the team steers on reflect demand rather than inbound volume
+
+This is the least glamorous chapter in the document and the one with the most money sitting in it. Acquisition was working. A fifth of what it produced was being lost to a CRM configuration nobody had a reason to look at - and at any spend level, that’s the most expensive thing in the funnel, because **it’s money already paid**.
+
+## What runs without me
+
+<Lede>The difference between a contractor and an operator is what’s still working six months after they’ve gone.</Lede>
+
+<Deliverables items={fig.leftBehind} />
+
+**I build what I propose.** The tracking, the Worker, the forms, the landing pages, the automation - none of it was specified and handed to someone else to implement. That’s the difference a developer background makes, and it’s why recommendations here turn into systems rather than documents.
+
+**A note on scale.** These mechanisms scale with the budget, not with the account. Spend pointed at the wrong audience because measurement stops at the lead costs a $150k-a-month programme proportionally more than it cost here, not less - and a capture path that silently drops a share of submissions is losing a share of a larger number. The bigger the spend, the more each of these is worth finding.
