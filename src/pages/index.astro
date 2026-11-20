@@ -19,10 +19,10 @@ import { site, testimonials, engineering } from '../data/home';
   <Header />
   <main>
     <Hero />
-    <div class="row row--line before-about" aria-hidden="true"><div class="wrap"></div></div>
+    <div class="row row--line before-case" aria-hidden="true"><div class="wrap"></div></div>
     <CaseCard />
     <Stats />
-    <div class="row row--line before-about" aria-hidden="true"><div class="wrap"></div></div>
+    <div class="row row--line before-featured" aria-hidden="true"><div class="wrap"></div></div>
     <FeaturedTestimonial />
     <Idea />
     <Questions />
@@ -68,7 +68,7 @@ import { site, testimonials, engineering } from '../data/home';
 </Base>
 
 <style>
-  .before-about { height: 72px; }
+  .before-about, .before-case, .before-featured { height: 72px; }
   .after-builds { height: 190px; }
   /* 190px spacer carrying the closing line of the section above: top left, a 2px bar on the grid line */
   .eng-note-row__wrap { height: 190px; padding: 28px 0 0 30px; }
@@ -83,7 +83,11 @@ import { site, testimonials, engineering } from '../data/home';
   .m-gap { display: none; }
   @media (max-width: 767px) { .m-gap { display: block; height: 190px; } }
   .after-about { height: 158px; }
-  @media (max-width: 767px) { .before-about { height: 40px; } }
+  @media (max-width: 767px) {
+    .before-about { height: 40px; }
+    .before-case { height: 65px; }
+    .before-featured { height: 95px; }
+  }
   @media (max-width: 767px) { .after-about { height: 64px; } }
   .end { height: 130px; } /* room so the fixed buttons never cover the last content */
 </style>

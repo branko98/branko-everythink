@@ -47,7 +47,7 @@ const f = (Astro.props.data ?? featured) as T;
     .details__item:first-child { padding-left: 30px; }
   }
   @media (max-width: 767px) {
-    .details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; padding: 28px 14px 28px 16px; }
+    .details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; padding: 28px 14px 28px 16px; min-height: 100px; }
     .details__item:first-child { padding-left: 0; }
     .details__item--desk { display: none; }
   }

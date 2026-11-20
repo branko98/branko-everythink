@@ -154,7 +154,7 @@ export const links = {
 
 // Floating bar fixed to the bottom of the screen: hand the site to an AI assistant with a ready prompt.
 const askPrompt =
-  'Read https://everythink.pro, including the Tapi case study, and tell me in plain terms: who Branko Jovanovic is, what he actually builds for B2B SaaS companies, what changed for Tapi and how it was measured, and whether a call with him is worth it for a company like mine.';
+  'This is the site and work of Branko Jovanović, a B2B SaaS growth consultant. Read the homepage and the case study linked from it, including the detailed breakdowns of the measurement and attribution work.\n\nThen tell me, in plain terms: what he actually does, how he works, what he builds himself versus what he advises on, and what kind of company and situation this fits.\n\nBase it on the specifics in the material rather than the headline claims. My situation: [describe what you’re dealing with]';
 export const dock = {
   label: '**Check this** instead of reading it', // **bold**
   prompt: askPrompt,
