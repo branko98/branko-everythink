@@ -159,8 +159,8 @@ export const dock = {
   label: '**Check this** instead of reading it', // **bold**
   prompt: askPrompt,
   assistants: [
-    { name: 'Claude', icon: '/ask-claude.png', href: `https://claude.ai/new?q=${encodeURIComponent(askPrompt)}` },
-    { name: 'ChatGPT', icon: '/ask-chatgpt.png', href: `https://chatgpt.com/?q=${encodeURIComponent(askPrompt)}` },
+    { name: 'Claude', icon: '/ask-claude.png', href: `https://claude.ai/new?prompt=${encodeURIComponent(askPrompt)}` },
+    { name: 'ChatGPT', icon: '/ask-chatgpt.png', href: `https://chatgpt.com/?prompt=${encodeURIComponent(askPrompt)}` },
   ],
 };
 

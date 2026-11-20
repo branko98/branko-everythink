@@ -3,19 +3,34 @@ import { dock } from '../data/home';
 import { rich } from '../utils/rich';
 ---
 <!-- Fixed to the bottom of the screen at all times: hand this site to an AI assistant with a ready prompt -->
-<nav class="dock" aria-label="Ask an AI assistant about this site">
+<nav class="dock" aria-label="Ask an AI assistant about this site" data-dock-prompt={dock.prompt}>
   <div class="dock__inner">
     <span class="dock__label" set:html={rich(dock.label)} />
     <svg class="dock__arrow" width="22" height="10" viewBox="0 0 22 10" fill="none" aria-hidden="true"><path d="M1 5h19M16 1.5L20 5l-4 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
     <span class="dock__ais">
       {dock.assistants.map((a) => (
-        <a class:list={['dock__ai', `dock__ai--${a.name.toLowerCase()}`]} href={a.href} target="_blank" rel="noopener" aria-label={`Ask ${a.name} about this site`} title={`Ask ${a.name}`}>
+        <a class:list={['dock__ai', `dock__ai--${a.name.toLowerCase()}`]} href={a.href} target="_blank" rel="noopener" aria-label={`Ask ${a.name} about this site`} title={`Ask ${a.name}`} data-dock-ai>
           <img src={a.icon} alt="" width="40" height="40" decoding="async" />
         </a>
       ))}
     </span>
   </div>
 </nav>
+
+<script>
+  // Copy the prompt to clipboard on click, then let the link open the AI chat in a new tab.
+  // The ?prompt= param pre-fills the input (ideally without auto-submitting); clipboard is a
+  // belt-and-braces fallback so the user can paste if the URL param gets dropped.
+  const dock = document.querySelector<HTMLElement>('[data-dock-prompt]');
+  const prompt = dock?.dataset.dockPrompt ?? '';
+  if (dock && prompt && navigator.clipboard) {
+    dock.querySelectorAll<HTMLAnchorElement>('[data-dock-ai]').forEach((a) => {
+      a.addEventListener('click', () => {
+        navigator.clipboard.writeText(prompt).catch(() => {});
+      });
+    });
+  }
+</script>
 
 <style>
   .dock {
