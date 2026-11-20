@@ -1,7 +1,11 @@
 ---
 import Arrow from './Arrow.astro';
-import LineChart from './LineChart.astro';
+import GrowthPlot from './GrowthPlot.astro';
+import { getEntry } from 'astro:content';
 import { caseCard as c } from '../data/home';
+
+const cs = await getEntry('case-studies', c.caseStudy);
+const chart = cs?.data.heroChart;
 ---
 <section class="row row--line case">
   <div class="wrap">
@@ -20,11 +24,18 @@ import { caseCard as c } from '../data/home';
       </div>
 
       <div class="case__plot">
-        <LineChart
-          data={c.chart}
-          labels={c.chartLabels}
-          label={`Growth chart, ${c.chartLabels[0]} to ${c.chartLabels[c.chartLabels.length - 1]}: ${c.highlight}${c.text}`}
-        />
+        {chart && (
+          <GrowthPlot
+            data={chart.data}
+            band={chart.band}
+            markers={chart.markers}
+            months={chart.months}
+            delta={chart.delta}
+            height={196}
+            mobileHeight={160}
+            label={`${chart.title}. ${chart.caption}`}
+          />
+        )}
       </div>
     </article>
   </div>
@@ -37,7 +48,7 @@ import { caseCard as c } from '../data/home';
     display: grid;
     grid-template-columns: 350px minmax(0, 1fr);
     min-height: 244px;
-    padding: 34px 42px 28px 0;
+    padding: 34px 84px 28px 0;
     margin-bottom: 22px;
   }
   .case__info { padding-left: 36px; display: flex; flex-direction: column; align-items: flex-start; }
@@ -55,12 +66,12 @@ import { caseCard as c } from '../data/home';
   .case__plot { align-self: start; margin-top: 13px; }
 
   @media (max-width: 900px) {
-    .case__card { grid-template-columns: 270px minmax(0, 1fr); padding-right: 28px; }
+    .case__card { grid-template-columns: 270px minmax(0, 1fr); padding-right: 70px; }
   }
   @media (max-width: 767px) {
-    .case__card { grid-template-columns: minmax(0, 1fr); padding: 26px 20px 8px 0; row-gap: 26px; }
-    .case__info { padding-left: 14px; }
-    .case__stat { max-width: 280px; font-size: 20px; line-height: 28px; }
-    .case__plot { margin: 0 0 0 14px; }
-    }
+    .case__card { grid-template-columns: minmax(0, 1fr); padding: 26px 0 8px 0; row-gap: 26px; }
+    .case__info { padding-left: 14px; padding-right: 14px; }
+    .case__stat { max-width: none; font-size: 20px; line-height: 28px; }
+    .case__plot { margin: 0; }
+  }
 </style>

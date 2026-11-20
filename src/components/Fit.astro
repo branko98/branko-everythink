@@ -1,73 +1,61 @@
 ---
+// Headline row, then the supporting text in the middle columns of the grid.
 import { fit } from '../data/home';
 import { rich } from '../utils/rich';
-const rows = fit.good.map((g, i) => ({ good: g, bad: fit.bad[i] ?? '' }));
 ---
 <section class="row row--line fit-head">
-  <div class="wrap">
-    <h2 class="fit__title" data-type="1100">{fit.title}</h2>
+  <div class="wrap fit-head__grid">
+    <h2 class="fit__title" data-type="1300">{fit.title.map((t, i) => <>{i > 0 && ' '}<span class:list={[t.muted && 'muted']}>{t.text}</span></>)}</h2>
+    <span class="fit-head__side" aria-hidden="true"></span>
   </div>
 </section>
 
 <section class="row row--line fit">
-  <div class="wrap">
-    <div class="fit__table" role="table" aria-label="Who this is for">
-      <div class="fit__col fit__col--good" role="rowgroup">
-        <div class="fit__head mono" role="columnheader">{fit.goodLabel}</div>
-        {rows.map((r, i) => (
-          <div class="fit__cell mono" role="cell" data-reveal style={`--d:${i * 120}ms`}>
-            <p set:html={rich(r.good, 'blue')} />
-          </div>
-        ))}
-      </div>
-      <div class="fit__col fit__col--bad" role="rowgroup">
-        <div class="fit__head mono" role="columnheader">{fit.badLabel}</div>
-        {rows.map((r, i) => (
-          <div class="fit__cell mono" role="cell" data-reveal style={`--d:${120 + i * 120}ms`}>
-            <p set:html={rich(r.bad, 'red')} />
-          </div>
-        ))}
-      </div>
+  <div class="wrap fit__grid">
+    <span class="fit__side" aria-hidden="true"></span>
+    <div class="fit__body">
+      {fit.paragraphs.map((p, i) => (
+        <p data-reveal style={`--d:${i * 120}ms`} set:html={rich(p)} />
+      ))}
     </div>
+    <span class="fit__side fit__side--right" aria-hidden="true"></span>
   </div>
 </section>
 
 <style>
+  /* headline row: title over 4/5 of the column, empty fifth on the right */
+  .fit-head__grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 1fr); }
   .fit__title {
-    max-width: 680px;
-    padding: 10px 0 7px;
-    font-size: clamp(32px, 2.6vw + 8px, 48px);
-    line-height: 1.19;
+    padding: 8px 40px 50px 0;
+    border-right: 1px dashed var(--line);
+    font-size: clamp(29px, 2.2vw + 10px, 40px); /* same size as the Idea headline */
+    line-height: 1.3;
     font-weight: 500;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.035em;
     color: #121320;
   }
-  .fit .wrap { padding-bottom: 176px; }
-  .fit__table { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .fit__col--good { border-right: 1px dashed var(--line); }
-  .fit__head {
-    height: 52px;
-    padding: 0 18px;
-    display: flex;
-    align-items: center;
-    font-size: 12.5px;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    border-bottom: 1px dashed var(--line);
-  }
-  .fit__cell { padding: 24px 20px; font-size: 15px; line-height: 25px; color: #1a1b20; border-bottom: 1px dashed var(--line); }
-  .fit__cell:nth-of-type(2) { min-height: 150px; }
-  .fit__cell:nth-of-type(3) { min-height: 165px; }
-  .fit__cell p { max-width: 440px; }
-  .fit__col--bad .fit__cell { border: 1px dashed var(--red-line); border-top: 0; }
-  .fit__col--bad .fit__cell + .fit__cell { border-top: 0; }
+  .fit__title .muted { color: var(--muted-head); }
 
+  /* text row: empty fifth | text over three fifths | empty fifth */
+  .fit__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 1fr); }
+  .fit__side { border-right: 1px dashed var(--line); }
+  .fit__side--right { border-right: 0; border-left: 1px dashed var(--line); }
+  .fit__body { padding: 46px 40px 50px; display: flex; flex-direction: column; gap: 24px; }
+  .fit__body p { margin: 0; font-size: 17px; line-height: 30px; color: #1a1b20; }
+  .fit__body :global(strong) { font-weight: 650; color: var(--ink-strong); }
+
+  @media (max-width: 899px) {
+    .fit__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 5fr); }
+    .fit__side--right { display: none; }
+    .fit__body { padding: 40px 28px 44px; }
+  }
   @media (max-width: 767px) {
-    .fit__title { padding: 20px 14px 22px; }
-    .fit .wrap { padding-bottom: 56px; }
-    .fit__table { grid-template-columns: minmax(0, 1fr); }
-    .fit__col--good { border-right: 0; }
-    .fit__col--bad .fit__head { border-top: 1px dashed var(--line); margin-top: 28px; }
-    .fit__cell { min-height: 0 !important; padding: 18px 16px; font-size: 14.5px; line-height: 24px; }
+    .fit-head__grid { grid-template-columns: minmax(0, 1fr); }
+    .fit-head__side { display: none; }
+    .fit__title { padding: 20px 14px 26px; border-right: 0; }
+    .fit__grid { grid-template-columns: minmax(0, 1fr); }
+    .fit__side { display: none; }
+    .fit__body { padding: 30px 16px 40px; gap: 18px; }
+    .fit__body p { font-size: 16px; line-height: 27px; }
   }
 </style>

@@ -1,6 +1,7 @@
 ---
 import Arrow from './Arrow.astro';
 import { site } from '../data/home';
+import GetStarted from './GetStarted.astro';
 ---
 <!-- Sticky bar: always visible at the top while scrolling -->
 <header class="header" data-header>
@@ -8,9 +9,10 @@ import { site } from '../data/home';
     <a href="/" class="logo" aria-label="Branko / Everythink – home">
       <img src="/logo.png" alt="branko / everythink" width="904" height="150" />
     </a>
-    <a href={site.ctaHref} class="pill header__cta">{site.ctaLabel} <Arrow /></a>
+    <button type="button" class="pill header__cta" data-open-getstarted aria-haspopup="dialog" aria-controls="get-started">{site.ctaLabel} <Arrow /></button>
   </div>
 </header>
+<GetStarted />
 <!-- keeps the original empty band under the logo (design spacing + grid lines) -->
 <div class="row row--line header-space" aria-hidden="true"><div class="wrap"></div></div>
 
@@ -31,7 +33,7 @@ import { site } from '../data/home';
 
   .logo { display: block; width: 296px; }
   .logo img { width: 100%; height: auto; }
-  .header__cta { height: 40px; border: 1px solid #dcdce0; color: var(--ink); background: #fff; }
+  .header__cta { height: 40px; border: 1px solid #dcdce0; color: var(--ink); background: #fff; cursor: pointer; }
   .header__cta:hover { color: var(--ink); border-color: #b9b9c0; }
 
   @media (max-width: 767px) {

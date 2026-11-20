@@ -7,7 +7,6 @@ export const site = {
   description:
     'Seven years building growth for B2B SaaS - the channels, the tracking, the CRM, and the systems that connect them.',
   ctaLabel: 'Get started',
-  ctaHref: '/#contact',
 };
 
 export const hero = {
@@ -16,110 +15,168 @@ export const hero = {
   sub: 'Seven years building growth for B2B SaaS - the channels, the tracking, the CRM, and the systems that connect them.',
 };
 
+// Homepage case card. The chart and the numbers under it come from the case study itself
+// (src/content/case-studies/tapi.mdx: heroChart + results), so they always match.
 export const caseCard = {
+  caseStudy: 'tapi',
   tag: 'B2B SaaS',
-  highlight: '1.4 → 2.2',
-  text: ' demo bookings a day. In three months, on the same spend.',
+  highlight: '60% more demos, 35% cheaper',
+  text: ' - by proving the channel was never the problem',
   client: 'Tapi',
   clientCategory: 'Property Maintenance Software',
   logo: '/tapi.png',
   linkLabel: 'Case study',
   href: '/case-studies/tapi/',
-  // y-values 0–100 (growth curve), evenly spaced on x
-  chart: [2, 6, 10, 16, 22, 24, 26, 30, 36, 43, 53, 60, 73, 82, 91, 92, 97],
-  // labels under the chart: first sits left, last sits right, the rest spread evenly
-  chartLabels: ['July', 'August', 'September'],
 };
 
-export const stats = [
-  { value: '8.4M+', label: 'Attributed organic signups in 2024' },
-  { value: '80K+', label: 'Pages created in 2024' },
-  { value: '+426.7%', label: 'Average YoY Organic Traffic Increase' },
-  { value: '00', label: 'Vanity metrics' },
-];
+// The homepage testimonial under the hero is taken from the featured case study (src/content/case-studies/tapi.mdx).
 
-export const featuredTestimonial = {
-  logo: '[Client logo]',
-  name: '[Client name]',
-  role: '[Role]',
-  company: '[Company]',
-  avatar: '', // photo path, e.g. '/avatars/name.jpg' (put the file in public/avatars)
-  paragraphs: [
-    '“[Testimonial, paragraph one. What working together looked like week to week, how quickly things moved and the one result the client cares about most, with that [[key outcome highlighted]] so the quote scans at a glance. Keep it close to this length for the layout to hold.]',
-    '[Paragraph two. How communication felt, how problems were handled and what made it [[different from other partners]], especially when numbers or priorities changed mid-way.]',
-    '[Paragraph three. The two or three concrete benefits the client would name to a peer: [[clear ownership of the full funnel]], [[speed and openness to feedback]], and the fact that the work kept improving over time.]”',
-  ],
-  details: [
-    { label: 'Industry', value: 'Fintech / FX' },
-    { label: 'Definition', value: '[One or two sentences on what the client does, who it serves and at what scale.]' },
-    { label: 'Headquarters', value: '[City]' },
-    { label: 'URL', value: '[client-url.com]', href: '#client' },
-  ],
-};
-
+// Headline: `strong` (black) comes first, then `muted` (grey) and the everythink wordmark, also grey.
 export const idea = {
-  muted: 'Every agency owns one of these. The money is lost between them. ',
-  strong: "That's the whole idea behind",
+  strong: 'Growth doesn’t break inside a channel. It breaks between them. ',
+  muted: "That's the whole idea behind",
 };
 
 export const questions = [
   {
-    title: 'What looks profitable only because you stop counting at the lead?',
-    body: 'Cost per demo is a platform number. Cost per customer only exists once the ad, the CRM and the closed deal are connected and then the campaign that looked best usually isn’t.',
+    title: 'Measurement you can argue with',
+    body: 'Every decision downstream is only as good as the numbers under it. Platforms and the CRM should make independent claims, not the same claim twice - that’s the setup where a number that’s wrong gets caught instead of acted on.',
   },
   {
-    title: 'Does every button on your landing page fire?',
-    body: 'By leveraging **research, company data, and pre-programmed rules,** SEO effectively automates the creation.',
+    title: 'Revenue-led budget allocation',
+    body: 'Platform metrics tell you what a lead cost. They can’t tell you what a customer cost, which campaign produced it, or which segment is worth paying more for. That answer lives in the CRM, and most accounts never connect the two.',
   },
   {
-    title: 'How long does a paid lead sit before someone calls it?',
-    body: '**Traditional SEO methods are often labor-intensive and time-consuming,** while the outcomes generated',
+    title: 'The path from click to closed deal, verified',
+    body: 'Between the ad and the CRM record sits the page, the form, the handoff to sales. The most expensive leak in B2B SaaS isn’t the ad spend, it’s demand that arrives and nobody picks up.',
   },
   {
-    title: 'How long does a paid lead sit before someone calls it?',
-    body: '**Traditional SEO methods are often labor-intensive and time-consuming,** while the outcomes generated',
+    title: 'Built, not specified',
+    body: 'Every one of those is a data problem before it’s a marketing one. The tracking, the capture path, the CRM workflows, the automation - I write them rather than describe them to someone who will.',
   },
 ];
 
+// "Engineering" section after the staircase. Title parts: muted = grey, otherwise black.
+// In the paragraphs, **text** = bold.
 export const fit = {
-  title: "This works when you're already spending, and it isn't working.",
-  goodLabel: 'Good example',
-  badLabel: 'Bad example',
-  good: [
-    '[[B2B SaaS, seed to Series B.]] Spending at least a few thousand a month on paid, with a CRM you already use and a sales team that takes the calls.',
-    '[[B2B SaaS, seed to Series B.]] Spending at least a few thousand a month on paid, with a CRM you already use and a sales team that takes the calls.',
+  title: [
+    { text: 'Wiring a few tools together is the easy part.' },
+    { text: 'It works on the first ten runs, which is exactly what makes it dangerous.', muted: true },
   ],
-  bad: [
-    "[[You've been told the problem is the campaigns]]. It usually isn't, and you already suspect that.",
-    "[[You've been told the problem is the campaigns]]. It usually isn't, and you already suspect that.",
+  paragraphs: [
+    'The failures come later and they come quietly - a model that confidently returns the wrong thing, a workflow that stops firing and nobody notices for three weeks. None of that is an AI problem. It’s decided before anything gets built: how much judgement a model is allowed, what each run costs, and what happens on the day it’s wrong.',
   ],
 };
 
-export const testimonials = [
+// "How the system is built": three plates (SVGs in src/components/engineering/) with copy.
+export const engineering = {
+  label: 'How the system is built',
+  // closing line under the three units, applies to all of them
+  note: 'All of it is mine to write, which is why the recommendation and the build are the same conversation rather than two quotes from two vendors.',
+  units: [
+    {
+      title: 'The data model first, the workflow second',
+      body: 'Every call, lead and closed deal lands in one place I control, joined through the APIs of the CRM, the ad platforms and product analytics.',
+      tags: ['Supabase', 'HubSpot API', 'Meta CAPI', 'Google Ads API', 'PostHog', 'server-side GTM'],
+    },
+    {
+      title: 'Code for the mechanics, the model for the language',
+      body: 'Parsing, joining, routing and scoring are code - cheaper, faster, auditable. The model reads what a customer actually said; it doesn’t decide what happens next.',
+      tags: ['Claude Code', 'n8n', 'Cloudflare Workers', 'Claude API'],
+    },
+    {
+      title: 'The cost of being wrong decides how much runs alone',
+      body: 'Anything that reaches a customer fills a fixed structure and a person approves it. Retries, verification, daily reconciliation, an alert when the numbers disagree - an unwatched automation is a leak with better branding.',
+      tags: ['retries', 'reconciliation', 'Slack alerting', 'human-in-the-loop'],
+    },
+  ],
+};
+
+// "Other builds": one featured write-up on dark, two smaller ones beside it.
+// Write-ups: the featured one links to its case study; the two smaller ones show a "coming soon" note until they have one (href: '').
+export const builds = {
+  label: 'Other builds',
+  soon: 'Write-up coming soon',
+  featured: {
+    strong: 'The same architecture, running at',
+    brand: 'tapi',
+    muted: 'Data model, pipelines and nightly checks, holding up a live growth programme.',
+    text: 'Ad spend, lead quality and closed revenue only line up when the data model underneath them does. Known channel went from a third to nearly nine in ten; the monthly report from about three working days to under three hours.',
+    cta: 'See how it’s built',
+    href: '/case-studies/tapi-source-of-truth/',
+  },
+  items: [
+    { title: 'One URL in, a finished research brief out', text: 'A week of research, gone - across 40+ accounts.', cta: 'Case study', href: '' },
+    { title: 'A conversation that qualifies the lead', text: 'Sales opens the call already knowing the budget and the problem.', cta: 'Case study', href: '' },
+  ],
+};
+
+export const testimonials: {
+  logo: string; name: string; role: string; company: string; companyHref?: string;
+  avatar: string; quote: string; paragraphs?: string[];
+}[] = [
   {
-    logo: '[Client logo]',
-    name: '[Client name]',
-    role: '[Role]',
-    company: '[Company]',
-    avatar: '',
-    quote:
-      '“[Short testimonial. One or two sentences on what changed after working together, ending with [[the outcome the client would repeat to a peer.]]]”',
+    logo: '/impactable-logo.png',
+    name: 'Justin Rowe',
+    role: 'Founder & CEO',
+    company: 'Impactable',
+    companyHref: 'https://impactable.com',
+    avatar: '/justin.jpg',
+    quote: '',
+    paragraphs: [
+      '“Branko was our Head of Paid Search - 40+ B2B accounts, team of five.',
+      'What I’d actually point to is what he did around that. This was before everyone had AI in their stack, and [[he was already building automation in n8n for the stuff that was eating our strategists’ days]] - search terms, the research layer in onboarding. Then he got the team to actually use it, which is the harder half.',
+      'SOPs came out of that. Less of his time needed as it went on, not more.”',
+    ],
   },
   {
-    logo: '[LOGO]',
-    name: '[Client name]',
-    role: '[Role]',
-    company: '[Company]',
-    avatar: '',
-    quote:
-      '“[Short testimonial. How ownership and speed felt from the client’s side, ending with [[the line that makes the quote memorable.]]]”',
+    logo: '/insightful-logo.svg',
+    name: 'Dusan Cujic',
+    role: 'Head of PPC',
+    company: 'Insightful',
+    companyHref: 'https://insightful.io',
+    avatar: '/dusan.jpg',
+    quote: '',
+    paragraphs: [
+      '“Google Ads was the brief. Structure, keywords, negatives, RSAs, all of that got rebuilt.',
+      'But then he’d send me stuff I hadn’t asked for. Landing pages that didn’t say what the ad said. [[He went campaign by campaign on the pages and reworked them until the rates came up.]]',
+      'In B2B SaaS most people in paid search hand you the account and that’s the relationship. Took me a minute to get used to someone going into the parts nobody owns.”',
+    ],
   },
 ];
 
 // Floating buttons fixed to the bottom of the screen
+// Booking + profile links, used by every "Book a call" / "LinkedIn" button on the site
+export const links = {
+  calendly: 'https://calendly.com/branko-everythink/30-minute-meeting',
+  linkedin: 'https://www.linkedin.com/in/branko-jovanovic-2b0238103/',
+};
+
+// Floating bar fixed to the bottom of the screen: hand the site to an AI assistant with a ready prompt.
+const askPrompt =
+  'Read https://everythink.pro, including the Tapi case study, and tell me in plain terms: who Branko Jovanovic is, what he actually builds for B2B SaaS companies, what changed for Tapi and how it was measured, and whether a call with him is worth it for a company like mine.';
 export const dock = {
-  primary: { label: 'Partner with us', href: '/#contact' }, // TODO: link
-  secondary: { label: 'Book a call', href: '#meeting' }, // TODO: calendar link
+  label: '**Check this** instead of reading it', // **bold**
+  prompt: askPrompt,
+  assistants: [
+    { name: 'Claude', icon: '/ask-claude.png', href: `https://claude.ai/new?q=${encodeURIComponent(askPrompt)}` },
+    { name: 'ChatGPT', icon: '/ask-chatgpt.png', href: `https://chatgpt.com/?q=${encodeURIComponent(askPrompt)}` },
+  ],
+};
+
+// "Get started" side panel (header button and the dark CTA open it)
+export const getStarted = {
+  label: 'Get started',
+  intro: 'I’m Branko - everything on this site is my own work, and this goes straight to me. Tell me what isn’t adding up and I’ll tell you whether I’m the right person for it. **No pitch, no sequence.**',
+  pick: 'Pick whichever is easiest - all three reach me directly.',
+  // the address the email button writes to
+  email: 'branko.j.98@gmail.com',
+  emailSubject: 'Something isn’t adding up',
+  options: {
+    call: { title: 'Book a call', text: '30 minutes, pick a time that suits you' },
+    email: { title: 'Send an email', text: 'Opens a new Gmail message to me' },
+    linkedin: { title: 'Message me on LinkedIn', text: 'If that’s where you already are' },
+  },
 };
 
 // About me + short CTA (dark)
@@ -128,15 +185,15 @@ export const about = {
   photo: '/branko.jpg',
   name: 'Branko Jovanovic',
   tagline: 'Growth for B2B SaaS',
-  taglineMuted: 'from the first ad to the closed deal.',
+  signature: '/signature.png',
   paragraphs: [
     'Seven years in B2B, most of it in SaaS. I started by running channels and ended up owning the system behind them.',
-    'Paid across five platforms. Landing pages. CRM lifecycle and attribution from first click to closed revenue. An AI layer that turns sales calls back into messaging and targeting. Not four vendors — one person who can see where one breaks the next.',
+    'Paid across five platforms. Landing pages. CRM lifecycle and attribution from first click to closed revenue. An AI layer that turns sales calls back into messaging and targeting. Not four vendors - one person who can see where one breaks the next.',
     'Developer background, which is why the fixes get built instead of handed over as a document.',
   ],
   cta: {
     title: 'Start with the diagnosis.',
     text: 'Three to four weeks, fixed scope. A ranked list of where the money leaks, what each one is worth, and the order I’d fix them in.',
-    button: { label: 'Book a call', href: '#meeting' }, // TODO: calendar link
+    button: { label: 'Get started' }, // opens the Get started panel
   },
 };

@@ -24,11 +24,13 @@ import { about } from '../data/home';
       ))}
     </div>
 
-    <span class="about__corner" aria-hidden="true"></span>
+    <span class="about__corner" aria-hidden="true" data-reveal>
+      <img class="about__sig" src={about.signature} alt="" width="480" height="199" decoding="async" />
+    </span>
 
     <div class="about__id">
       <h2 class="about__name" id="about-name" data-type="700">{about.name}</h2>
-      <p class="about__tagline" data-reveal style="--d:120ms">{about.tagline} / {about.taglineMuted}</p>
+      <p class="about__tagline" data-reveal style="--d:120ms">{about.tagline}</p>
     </div>
 
     <div class="about__cta" id="contact">
@@ -36,7 +38,7 @@ import { about } from '../data/home';
         <h2 class="about__cta-title" data-type="700">{about.cta.title}</h2>
         <p class="about__cta-text" data-reveal style="--d:150ms">{about.cta.text}</p>
       </div>
-      <a class="pill about__cta-btn" href={about.cta.button.href}>{about.cta.button.label} <Arrow /></a>
+      <button type="button" class="pill about__cta-btn" data-open-getstarted aria-haspopup="dialog" aria-controls="get-started">{about.cta.button.label} <Arrow /></button>
     </div>
   </div>
 </section>
@@ -44,7 +46,7 @@ import { about } from '../data/home';
 <style>
   .about__grid {
     display: grid;
-    grid-template-columns: 204px minmax(0, 1fr) calc(100% / 3);
+    grid-template-columns: 192px minmax(0, 1fr) 28%;
     grid-template-rows: auto auto;
     grid-template-areas:
       'photo body cta'
@@ -56,7 +58,7 @@ import { about } from '../data/home';
     grid-area: photo;
     position: relative;
     margin: 0;
-    padding: 12px 15px 20px;
+    padding: 12px 14px 24px;
     border-right: 1px dashed var(--line);
     border-bottom: 1px dashed var(--line);
   }
@@ -69,7 +71,7 @@ import { about } from '../data/home';
   /* story cell */
   .about__body {
     grid-area: body;
-    padding: 20px 28px 24px 24px;
+    padding: 20px 34px 16px 25px;
     border-bottom: 1px dashed var(--line);
     display: flex;
     flex-direction: column;
@@ -79,12 +81,17 @@ import { about } from '../data/home';
     color: var(--text);
   }
 
-  .about__corner { grid-area: corner; border-right: 1px dashed var(--line); }
+  .about__corner { grid-area: corner; position: relative; border-right: 1px dashed var(--line); }
+  /* signature: deliberately runs a little past the cell's lines */
+  .about__sig { position: absolute; left: 20px; top: 4px; width: 180px; height: auto; max-width: none; z-index: 2; pointer-events: none; }
+  :global(.motion) .about__corner[data-reveal] { opacity: 1; transform: none; }
+  :global(.motion) .about__corner .about__sig { clip-path: inset(0 100% 0 0); transition: clip-path 1.4s cubic-bezier(.6, .1, .3, 1) .3s; }
+  :global(.motion) .about__corner.is-in .about__sig { clip-path: inset(-10px -10px -10px -10px); }
 
   /* name cell */
-  .about__id { grid-area: id; padding: 18px 28px 22px 24px; }
-  .about__name { font-size: 26px; line-height: 1.15; font-weight: 500; letter-spacing: -0.035em; color: var(--ink-strong); }
-  .about__tagline { margin-top: 4px; font-size: 15px; line-height: 22px; color: var(--text-soft); }
+  .about__id { grid-area: id; padding: 13px 34px 13px 25px; }
+  .about__name { font-size: 24px; line-height: 1.15; font-weight: 500; letter-spacing: -0.035em; color: var(--ink-strong); }
+  .about__tagline { margin-top: 3px; font-size: 15px; line-height: 22px; color: var(--text-soft); }
 
   /* dark CTA: last third, full height of the row */
   .about__cta {
@@ -100,7 +107,7 @@ import { about } from '../data/home';
   .about__cta-title { font-size: 28px; line-height: 1.15; font-weight: 500; letter-spacing: -0.035em; }
   .about__cta-title :global(.caret) { background: #fff; }
   .about__cta-text { margin-top: 12px; font-size: 15.5px; line-height: 24px; color: #c9cad1; }
-  .about__cta-btn { align-self: flex-start; background: #fff; color: var(--ink); height: 44px; padding: 0 18px 0 20px; font-size: 15.5px; }
+  .about__cta-btn { align-self: flex-start; border: 0; cursor: pointer; font-family: inherit; background: #fff; color: var(--ink); height: 44px; padding: 0 18px 0 20px; font-size: 15.5px; }
   .about__cta-btn:hover { background: #ececef; color: var(--ink); }
 
   /* photo reveal: wipe down instead of the default fade-up */
@@ -111,6 +118,7 @@ import { about } from '../data/home';
   @media (max-width: 1000px) {
     .about__grid { grid-template-columns: 170px minmax(0, 1fr) minmax(0, 0.9fr); }
     .about__body { font-size: 15px; }
+    .about__sig { left: 14px; width: 166px; top: 6px; }
   }
   @media (max-width: 899px) {
     .about__grid {

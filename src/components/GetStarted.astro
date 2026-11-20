@@ -1,0 +1,189 @@
+---
+// "Get started" side panel. Opened by any element with [data-open-getstarted]
+// (header button, the dark CTA cards). Slides in from the right on desktop, full screen on phones.
+// No form: a short note from me and three direct ways to reach me.
+import Arrow from './Arrow.astro';
+import { getStarted as g, about, links } from '../data/home';
+import { rich } from '../utils/rich';
+
+const gmail = g.email
+  ? `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(g.email)}&su=${encodeURIComponent(g.emailSubject)}`
+  : undefined;
+---
+<div class="gs" id="get-started" data-gs hidden>
+  <div class="gs__backdrop" data-gs-close></div>
+  <section class="gs__panel" role="dialog" aria-modal="true" aria-labelledby="gs-title" tabindex="-1">
+    <header class="gs__head">
+      <h2 class="gs__label mono" id="gs-title">{g.label}</h2>
+      <button class="gs__x" type="button" aria-label="Close" data-gs-close>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+      </button>
+    </header>
+
+    <div class="gs__me">
+      <span class="gs__frame" aria-hidden="true">
+        <img class="gs__photo" src={about.photo} alt="" width="120" height="150" loading="lazy" decoding="async" />
+        <span class="gs__sq gs__sq--tl"></span><span class="gs__sq gs__sq--br"></span>
+      </span>
+      <div>
+        <p class="gs__name">{about.name}</p>
+        <p class="gs__tag">{about.tagline}</p>
+      </div>
+    </div>
+
+    <p class="gs__intro" set:html={rich(g.intro)} />
+
+    <span class="gs__gap" aria-hidden="true"></span>
+    <div class="gs__ways">
+      <p class="gs__pick mono">{g.pick}</p>
+      <ul class="gs__list">
+        <li>
+          <a class="gs__way gs__way--main" href={links.calendly} data-gs-first>
+            <span class="gs__icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2" stroke="currentColor" stroke-width="1.7" /><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg>
+            </span>
+            <span class="gs__txt"><span class="gs__t">{g.options.call.title}</span><span class="gs__s">{g.options.call.text}</span></span>
+            <Arrow />
+          </a>
+        </li>
+        <li>
+          <a class="gs__way" href={gmail} target="_blank" rel="noopener" aria-disabled={gmail ? undefined : 'true'}>
+            <span class="gs__icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7" /><path d="M3.5 6.5l8.5 6.5 8.5-6.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" /></svg>
+            </span>
+            <span class="gs__txt"><span class="gs__t">{g.options.email.title}</span><span class="gs__s">{g.options.email.text}</span></span>
+            <Arrow />
+          </a>
+        </li>
+        <li>
+          <a class="gs__way" href={links.linkedin} target="_blank" rel="noopener">
+            <span class="gs__icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+            </span>
+            <span class="gs__txt"><span class="gs__t">{g.options.linkedin.title}</span><span class="gs__s">{g.options.linkedin.text}</span></span>
+            <Arrow />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-gs]')!;
+  const panel = root.querySelector<HTMLElement>('.gs__panel')!;
+  let lastFocus: Element | null = null;
+
+  function open() {
+    lastFocus = document.activeElement;
+    root.hidden = false;
+    document.documentElement.classList.add('gs-lock');
+    requestAnimationFrame(() => root.classList.add('is-open'));
+    setTimeout(() => root.querySelector<HTMLElement>('[data-gs-first]')?.focus({ preventScroll: true }), 250);
+  }
+  function close() {
+    root.classList.remove('is-open');
+    document.documentElement.classList.remove('gs-lock');
+    setTimeout(() => { root.hidden = true; }, 320);
+    (lastFocus as HTMLElement | null)?.focus?.({ preventScroll: true });
+  }
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-open-getstarted]')) { e.preventDefault(); open(); }
+    else if (t.closest('[data-gs-close]')) close();
+    // booking opens Calendly's popup over the page: close the panel so they don't stack
+    else if (!root.hidden && t.closest('a[href*="calendly.com"]')) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (root.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'Tab') {
+      const f = [...panel.querySelectorAll<HTMLElement>('button, a[href]')].filter((el) => el.offsetParent);
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+</script>
+
+<style>
+  .gs { position: fixed; inset: 0; z-index: 100; }
+  .gs[hidden] { display: none; }
+  :global(html.gs-lock) { overflow: hidden; }
+  .gs__backdrop { position: absolute; inset: 0; background: rgba(20, 21, 25, 0.28); opacity: 0; transition: opacity .3s ease; }
+  .gs__panel {
+    position: absolute; top: 0; right: 0; bottom: 0;
+    width: min(540px, 100%);
+    display: flex; flex-direction: column;
+    background: #fff;
+    border-left: 1px solid var(--line);
+    box-shadow: -24px 0 48px -24px rgba(20, 21, 25, 0.25);
+    padding: 28px 44px 40px;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform .32s var(--ease);
+    outline: none;
+  }
+  .gs.is-open .gs__backdrop { opacity: 1; }
+  .gs.is-open .gs__panel { transform: none; }
+
+  .gs__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .gs__label { font-size: 12.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-soft); }
+  .gs__x { width: 44px; height: 44px; margin-right: -10px; display: inline-flex; align-items: center; justify-content: center; border: 0; background: none; color: var(--text); cursor: pointer; border-radius: 50%; }
+  .gs__x:hover { background: #f0f0f2; color: var(--ink); }
+
+  /* who you're writing to */
+  .gs__me { margin-top: 36px; display: flex; align-items: center; gap: 22px; }
+  /* same treatment as the About photo: 4:5, square corners, two black corner marks */
+  .gs__frame { position: relative; flex: none; display: block; }
+  .gs__photo { display: block; width: 96px; height: 120px; object-fit: cover; background: #eceef1; }
+  .gs__sq { position: absolute; width: 6px; height: 6px; background: var(--ink); }
+  .gs__sq--tl { left: -3px; top: -3px; }
+  .gs__sq--br { right: -3px; bottom: -3px; }
+  .gs__name { margin: 0; font-size: 21px; line-height: 27px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink-strong); }
+  .gs__tag { margin: 2px 0 0; font-size: 12.5px; letter-spacing: 0.03em; text-transform: uppercase; color: #6b7080; }
+
+  .gs__intro { margin: 26px 0 0; font-size: 21px; line-height: 31px; font-weight: 450; letter-spacing: -0.015em; color: var(--ink); }
+  .gs__intro :global(strong) { font-weight: 600; color: var(--ink-strong); }
+
+  /* three ways in: the call first and dark, the other two as quiet rows */
+  /* the ways in sit in the lower part of the panel, but not pinned to the bottom edge */
+  .gs__gap { flex: 1 1 0; min-height: 36px; }
+  .gs__panel::after { content: ''; flex: 1.4 1 0; }
+  .gs__ways { padding-top: 0; }
+  .gs__pick { margin: 0 0 14px; padding-top: 18px; border-top: 1px dashed var(--line); font-size: 13px; line-height: 20px; color: var(--text-soft); }
+  .gs__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .gs__way {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px 14px 14px;
+    border: 1px solid #d6d8de; border-radius: 10px; background: #fff; color: var(--ink);
+    transition: border-color .2s, background-color .2s;
+  }
+  .gs__way:hover { border-color: var(--ink); color: var(--ink); }
+  .gs__way:not([href]) { opacity: .5; cursor: default; }
+  .gs__way:not([href]):hover { border-color: #d6d8de; }
+  .gs__way :global(.arrow) { margin-left: auto; transition: transform .2s var(--ease); }
+  .gs__way:hover :global(.arrow) { transform: translateX(2px); }
+  .gs__icon { width: 38px; height: 38px; flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; background: #f0f0f2; color: var(--ink); }
+  .gs__txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .gs__t { font-size: 16px; line-height: 22px; font-weight: 600; }
+  .gs__s { font-size: 13.5px; line-height: 19px; color: var(--text-soft); }
+
+  .gs__way--main { background: var(--dark); border-color: var(--dark); color: #fff; }
+  .gs__way--main:hover { background: #000; border-color: #000; color: #fff; }
+  .gs__way--main .gs__icon { background: rgba(255, 255, 255, 0.1); color: #fff; }
+  .gs__way--main .gs__s { color: #b9bac1; }
+
+  @media (max-width: 767px) {
+    .gs__panel { width: 100%; border-left: 0; padding: calc(16px + env(safe-area-inset-top, 0px)) 20px calc(28px + env(safe-area-inset-bottom, 0px)); }
+    .gs__me { margin-top: 24px; }
+    .gs__photo { width: 80px; height: 100px; }
+    .gs__name { font-size: 20px; line-height: 26px; }
+    .gs__intro { margin-top: 20px; font-size: 18px; line-height: 27px; }
+    .gs__gap { min-height: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gs__panel, .gs__backdrop { transition: none; }
+  }
+</style>

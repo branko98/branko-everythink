@@ -1,15 +1,22 @@
 ---
 import Testimonial from './Testimonial.astro';
 import Arrow from './Arrow.astro';
-import { featuredTestimonial } from '../data/home';
+import { getEntry } from 'astro:content';
+import { caseCard } from '../data/home';
 
-// Defaults to the homepage testimonial; case studies pass their own.
-interface Props { data?: typeof featuredTestimonial }
-const f = Astro.props.data ?? featuredTestimonial;
+// Case studies pass their own testimonial. Without one (the homepage) it uses the testimonial of
+// the case study featured on the homepage, so both pages always show the same quote.
+interface T {
+  logo: string; name: string; role: string; company: string; companyHref?: string; avatar?: string;
+  paragraphs: string[]; details: { label: string; value: string; href?: string; hideOnMobile?: boolean }[];
+}
+interface Props { data?: T }
+const featured = (await getEntry('case-studies', caseCard.caseStudy))?.data.testimonial;
+const f = (Astro.props.data ?? featured) as T;
 ---
 <section class="row featured">
   <div class="wrap wrap--line">
-    <Testimonial size="featured" logo={f.logo} name={f.name} role={f.role} company={f.company} avatar={f.avatar || undefined} paragraphs={f.paragraphs} />
+    <Testimonial size="featured" logo={f.logo} name={f.name} role={f.role} company={f.company} companyHref={(f as any).companyHref} avatar={f.avatar || undefined} paragraphs={f.paragraphs} />
   </div>
 </section>
 
@@ -17,7 +24,7 @@ const f = Astro.props.data ?? featuredTestimonial;
   <div class="wrap wrap--line">
     <dl class="details">
       {f.details.map((d, i) => (
-        <div class="details__item" data-reveal style={`--d:${i * 80}ms`}>
+        <div class:list={['details__item', (d as any).hideOnMobile && 'details__item--desk']} data-reveal style={`--d:${i * 80}ms`}>
           <dt>{d.label}</dt>
           <dd>{d.href ? <a href={d.href} target="_blank" rel="noopener">{d.value} <Arrow dir="out" /></a> : d.value}</dd>
         </div>
@@ -27,8 +34,8 @@ const f = Astro.props.data ?? featuredTestimonial;
 </section>
 
 <style>
-  .details { margin: 0; display: grid; grid-template-columns: 280px 380px 200px minmax(0, 1fr); min-height: 135px; padding: 46px 0 32px; }
-  .details__item:first-child { padding-left: 42px; }
+  .details { margin: 0; display: grid; grid-template-columns: 236px 380px 200px minmax(0, 1fr); /* first column lines up with the testimonial's */ min-height: 135px; padding: 46px 0 32px; }
+  .details__item:first-child { padding-left: 30px; } /* same inset as the logo and name above */
   .details__item { padding-right: 24px; }
   dt { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
   dd { margin: 14px 0 0; font-size: 15px; line-height: 22px; color: var(--text); max-width: 340px; }
@@ -36,11 +43,12 @@ const f = Astro.props.data ?? featuredTestimonial;
   dd a:hover { color: var(--ink); text-decoration: underline; }
 
   @media (max-width: 900px) {
-    .details { grid-template-columns: 220px minmax(0, 1.4fr) minmax(0, .8fr) minmax(0, 1fr); }
-    .details__item:first-child { padding-left: 32px; }
+    .details { grid-template-columns: 200px minmax(0, 1.4fr) minmax(0, .8fr) minmax(0, 1fr); }
+    .details__item:first-child { padding-left: 30px; }
   }
   @media (max-width: 767px) {
     .details { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; padding: 28px 14px 28px 16px; }
     .details__item:first-child { padding-left: 0; }
+    .details__item--desk { display: none; }
   }
 </style>

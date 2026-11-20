@@ -1,12 +1,19 @@
 ---
-import Arrow from './Arrow.astro';
 import { dock } from '../data/home';
+import { rich } from '../utils/rich';
 ---
-<!-- Fixed to the bottom of the screen at all times -->
-<nav class="dock" aria-label="Get in touch">
+<!-- Fixed to the bottom of the screen at all times: hand this site to an AI assistant with a ready prompt -->
+<nav class="dock" aria-label="Ask an AI assistant about this site">
   <div class="dock__inner">
-    <a class="pill dock__primary" href={dock.primary.href}>{dock.primary.label} <Arrow /></a>
-    <a class="pill dock__secondary" href={dock.secondary.href}>{dock.secondary.label} <Arrow /></a>
+    <span class="dock__label" set:html={rich(dock.label)} />
+    <svg class="dock__arrow" width="22" height="10" viewBox="0 0 22 10" fill="none" aria-hidden="true"><path d="M1 5h19M16 1.5L20 5l-4 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    <span class="dock__ais">
+      {dock.assistants.map((a) => (
+        <a class:list={['dock__ai', `dock__ai--${a.name.toLowerCase()}`]} href={a.href} target="_blank" rel="noopener" aria-label={`Ask ${a.name} about this site`} title={`Ask ${a.name}`}>
+          <img src={a.icon} alt="" width="40" height="40" decoding="async" />
+        </a>
+      ))}
+    </span>
   </div>
 </nav>
 
@@ -24,18 +31,35 @@ import { dock } from '../data/home';
   .dock__inner {
     pointer-events: auto;
     display: flex;
-    gap: 14px;
-    padding: 7px;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 8px 8px 18px;
     border-radius: 999px;
-    background: rgba(243, 243, 245, 0.9);
+    background: rgba(243, 243, 245, 0.92);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
-  .dock .pill { height: 40px; font-size: 15px; font-weight: 500; padding: 0 14px 0 14px; gap: 12px; }
-  .dock__primary { background: #000; color: #fff; }
-  .dock__primary:hover { background: #26272c; color: #fff; }
-  .dock__secondary { background: #e6e6e9; color: var(--ink); }
-  .dock__secondary:hover { background: #dadadf; color: var(--ink); }
+  .dock__label { font-size: 15px; font-weight: 400; color: var(--ink); white-space: nowrap; }
+  .dock__label :global(strong) { font-weight: 650; }
+  .dock__arrow { width: 22px; height: 10px; flex: none; color: var(--text-soft); }
+  .dock__ais { display: flex; gap: 4px; }
+  /* round badge in the icon's own colour, logo set smaller inside so it never touches the edge */
+  .dock__ai { display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; overflow: hidden; transition: transform .2s var(--ease), box-shadow .2s; }
+  .dock__ai img { display: block; width: 76%; height: 76%; }
+  .dock__ai--claude { background: #d77655; }
+  .dock__ai--chatgpt { background: #000; }
+  .dock__ai:hover { transform: translateY(-2px); box-shadow: 0 6px 14px -6px rgba(20, 21, 25, 0.35); }
+
+  /* desktop: dark bar so it stands out; ChatGPT flips to white so it doesn't vanish into it */
+  @media (min-width: 768px) {
+    .dock__inner { background: rgba(24, 25, 28, 0.94); box-shadow: 0 10px 30px -12px rgba(20, 21, 25, 0.45); }
+    .dock__label { color: #d4d5da; }
+    .dock__label :global(strong) { color: #fff; }
+    .dock__arrow { color: #8f9098; }
+    .dock__ai--chatgpt { background: #fff; }
+    .dock__ai--chatgpt img { filter: invert(1); }
+    .dock__ai:hover { box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.6); }
+  }
 
   /* entrance */
   :global(.motion) .dock__inner { transform: translateY(140%); animation: dock-in .8s var(--ease) .9s forwards; }
@@ -43,10 +67,12 @@ import { dock } from '../data/home';
 
   @media (max-width: 767px) {
     .dock { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding: 0 12px; }
-    .dock__inner { gap: 8px; padding: 5px; }
-    .dock .pill { height: 44px; padding: 0 16px; }
+    .dock__inner { gap: 10px; padding: 8px 8px 8px 18px; }
+    .dock__label { font-size: 14px; }
   }
   @media (max-width: 360px) {
-    .dock .pill { padding: 0 12px; font-size: 13.5px; gap: 8px; }
+    .dock__inner { gap: 8px; padding-left: 14px; }
+    .dock__label { font-size: 13px; }
+    .dock__arrow { width: 16px; }
   }
 </style>

@@ -1,0 +1,118 @@
+---
+// Featured build on a dark panel (the one that matters), two smaller builds stacked beside it.
+import Arrow from './Arrow.astro';
+import tapiIcon from './builds/tapi-icon.svg?raw';
+import { builds as b } from '../data/home';
+const f = b.featured;
+---
+<section class="row row--line builds" aria-label={b.label}>
+  <div class="wrap builds__grid">
+    <div class="bx" data-reveal>
+      <h2 class="bx__title">
+        <span class="bx__strong">{f.strong} <span class="bx__brand"><span class="bx__icon" set:html={tapiIcon} />{f.brand}.</span></span>
+        {' '}<span class="bx__muted">{f.muted}</span>
+      </h2>
+      <div class="bx__foot">
+        <p class="bx__text">{f.text}</p>
+        <a class="bx__cta" href={f.href}>{f.cta} <Arrow /></a>
+      </div>
+    </div>
+
+    <div class="bs">
+      {b.items.map((it, i) => (
+        <div class="bs__item" data-reveal style={`--d:${(i + 1) * 100}ms`}>
+          <h3 class="bs__title">{it.title}</h3>
+          <p class="bs__text">{it.text}</p>
+          {it.href ? (
+            <a class="bs__link" href={it.href}>{it.cta} <Arrow /></a>
+          ) : (
+            <span class="bs__soonwrap">
+              <button type="button" class="bs__link" data-soon aria-describedby={`soon-${i}`}>{it.cta} <Arrow /></button>
+              <span class="bs__soon mono" id={`soon-${i}`} role="status">{b.soon}</span>
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // "Case study" on a write-up that isn't out yet: show a short note instead of going nowhere
+  document.querySelectorAll<HTMLButtonElement>('[data-soon]').forEach((btn) => {
+    const wrap = btn.parentElement!;
+    let t = 0;
+    btn.addEventListener('click', () => {
+      wrap.classList.add('is-on');
+      clearTimeout(t);
+      t = window.setTimeout(() => wrap.classList.remove('is-on'), 2400);
+    });
+    btn.addEventListener('blur', () => wrap.classList.remove('is-on'));
+  });
+</script>
+
+<style>
+  .builds__grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+
+  /* ---- featured, dark ---- */
+  .bx {
+    position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 56px;
+    min-height: 320px; padding: 36px 40px 32px;
+    background: var(--dark); color: #fff;
+  }
+  .bx__title { margin: 0; font-size: clamp(28px, 2vw + 12px, 38px); line-height: 1.2; font-weight: 500; letter-spacing: -0.035em; }
+  .bx__strong { color: #fff; }
+  .bx__muted { color: #8f9098; }
+  .bx__brand { color: #f8f175; white-space: nowrap; }
+  .bx__icon { display: inline-block; width: 0.72em; height: 0.9em; margin: 0 0.16em 0 0.08em; vertical-align: -0.1em; }
+  .bx__icon :global(svg) { display: block; width: 100%; height: 100%; }
+
+  .bx__foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 32px; }
+  .bx__text { margin: 0; max-width: 440px; font-size: 15px; line-height: 24px; color: #c9cad0; }
+  /* the call to action carries the brand yellow so it reads as the way in, not an afterthought */
+  .bx__cta {
+    display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+    padding: 13px 20px; border-radius: 999px; background: #f8f175; color: var(--ink-strong);
+    font-size: 15.5px; font-weight: 600;
+  }
+  .bx__cta :global(.arrow) { transition: transform .2s var(--ease); }
+  .bx__cta:hover :global(.arrow) { transform: translateX(3px); }
+
+  /* ---- two smaller builds ---- */
+  .bs { display: grid; grid-template-rows: 1fr 1fr; }
+  .bs__item { padding: 28px 28px 26px 32px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+  .bs__item + .bs__item { border-top: 1px dashed var(--line); }
+  .bs__title { margin: 0; font-size: 21px; line-height: 28px; font-weight: 560; letter-spacing: -0.02em; color: var(--ink-strong); }
+  .bs__text { margin: 5px 0 0; font-size: 15px; line-height: 23px; color: var(--text-soft); }
+  .bs__link { margin-top: 5px; display: inline-flex; align-items: center; gap: 8px; font-size: 15.5px; font-weight: 600; }
+  .bs__link :global(.arrow) { transition: transform .2s var(--ease); }
+  .bs__link:hover :global(.arrow) { transform: translateX(2px); }
+  button.bs__link { padding: 0; border: 0; background: none; font-family: inherit; color: var(--link); cursor: pointer; }
+
+  /* small note that pops up beside a write-up that isn't published yet */
+  .bs__soonwrap { position: relative; margin-top: 5px; display: inline-flex; }
+  .bs__soonwrap .bs__link { margin-top: 0; }
+  .bs__soon {
+    position: absolute; left: calc(100% + 12px); top: 50%; z-index: 5;
+    padding: 7px 11px; border-radius: 6px; background: var(--ink); color: #fff;
+    font-size: 12px; line-height: 16px; white-space: nowrap;
+    opacity: 0; transform: translate(-4px, -50%); pointer-events: none;
+    transition: opacity .18s ease, transform .18s var(--ease);
+  }
+  .bs__soon::after { content: ''; position: absolute; right: 100%; top: 50%; margin-top: -5px; border: 5px solid transparent; border-right-color: var(--ink); }
+  .bs__soonwrap.is-on .bs__soon { opacity: 1; transform: translate(0, -50%); }
+
+  @media (max-width: 899px) {
+    .builds__grid { grid-template-columns: minmax(0, 1fr); }
+    .bx { min-height: 0; gap: 40px; padding: 32px 28px 30px; }
+    .bs { grid-template-rows: none; }
+    .bs__item { padding: 28px 28px 26px; border-top: 1px dashed var(--line); }
+  }
+  @media (max-width: 767px) {
+    .bx { padding: 28px 16px 26px; gap: 32px; }
+    .bx__foot { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .bx__cta { justify-self: start; }
+    .bs__item { padding: 26px 16px 24px; }
+    .bs__title { font-size: 19px; line-height: 26px; }
+  }
+</style>

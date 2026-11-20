@@ -1,0 +1,117 @@
+---
+// "How the system is built": three stacked plates that separate on scroll, each with its copy.
+// The plate SVGs are copied byte-for-byte from the design file and injected as raw HTML,
+// so nothing (not even Astro's scoping attributes) touches them. Classes inside them that
+// the animation relies on: .rs (thread), .ch (growth chart), .dt (fine details).
+// Note: the site typing effect also uses .ch for letters, so SVG rules are always scoped to .eng__plw.
+// Base markup = final state (plates apart, copy visible). engineering.ts arms the animation.
+import plate1 from './engineering/plate1.svg?raw';
+import plate2 from './engineering/plate2.svg?raw';
+import plate3 from './engineering/plate3.svg?raw';
+import { engineering as e } from '../data/home';
+
+const plates = [plate1, plate2, plate3];
+---
+<section class="row row--line eng-row" aria-label={e.label}>
+  <div class="wrap">
+    <div class="eng" data-eng>
+      {e.units.map((u, i) => (
+        <div class:list={['eng__unit', `eng__unit--${i + 1}`]} data-eng-unit>
+          <div class="eng__plate">
+            <div class="eng__plw" data-eng-plw set:html={plates[i]} />
+          </div>
+          <div class="eng__copy" data-eng-copy>
+            <h2 class="eng__title" data-eng-title>{u.title}</h2>
+            <p class="eng__body">{u.body}</p>
+            <ul class="eng__tags" aria-label="Tools">
+              {u.tags.map((t) => <li class="eng__tag mono">{t}</li>)}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initEngineering } from '../scripts/engineering';
+  document.querySelectorAll<HTMLElement>('[data-eng]').forEach(initEngineering);
+</script>
+
+<style is:global>
+  /* Scoped by the .eng prefix (global so the raw SVG children can be targeted). */
+  /* --eng-col: plate column; --eng-row: minimum row height. A row grows with its copy, so the
+     space from one unit's tags to the next title stays ~130px whatever the text length. */
+  .eng { --eng-col: 500px; --eng-row: 330px; position: relative; padding: 72px 0 40px; }
+  /* the column divider runs the full height of the section, through the top and bottom padding */
+  .eng::before { content: ''; position: absolute; top: 0; bottom: 0; left: var(--eng-col); border-left: 1px dashed var(--line); pointer-events: none; }
+  .eng__unit { display: grid; grid-template-columns: minmax(0, var(--eng-col)) minmax(0, 1fr); }
+  .eng__plate { position: relative; min-height: var(--eng-row); }
+  .eng__unit--1 .eng__plate { z-index: 3; }
+  .eng__unit--2 .eng__plate { z-index: 2; }
+  .eng__unit--3 .eng__plate { z-index: 1; }
+  /* out of flow on desktop: the drawing may hang into the next row's empty top, the row height comes from --eng-row / the copy */
+  /* 95% of the column, centred horizontally; vertically centred on the copy's text block
+     (copy padding is 56px top / 74px bottom, hence the -9px). The plate's height is
+     95% x 520/740 of the column width, and a % margin resolves against that width, so
+     margin-top: -33.38% pulls it up by exactly half its own height. */
+  .eng__plw { position: absolute; left: 2.5%; width: 95%; top: calc(50% - 9px); margin-top: -33.38%; will-change: transform; transition: transform 1s cubic-bezier(.65, 0, .35, 1); }
+  .eng__plw svg { display: block; width: 100%; height: auto; overflow: visible; max-width: none; }
+
+  .eng__copy { position: relative; z-index: 4; padding: 56px 40px 74px 48px; display: flex; flex-direction: column; gap: 14px; }
+  .eng__title { font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.025em; color: var(--ink-strong); }
+  .eng__body { margin: 0; font-size: 15px; line-height: 22px; color: var(--text); }
+  .eng__tags { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .eng__tag { font-size: 12.5px; padding: 5px 10px; border-radius: 4px; background: #f0f0f2; color: var(--ink); }
+
+  /* --- animation states (only ever set by engineering.ts; base = final state) --- */
+  .eng__plw .rs { transition: opacity .4s ease .8s; }
+  .eng__plw .ch { transform-box: fill-box; transition: opacity .5s ease .9s, transform .6s cubic-bezier(.2, .7, .2, 1) .9s; }
+  .eng.is-closed .eng__plw .rs, .eng.is-closed .eng__plw .ch { opacity: 0; }
+  .eng.is-closed .eng__plw .ch { transform: translateY(14px); }
+
+  .eng__body { transition: opacity .45s ease .15s, transform .45s ease .15s; }
+  .eng__tag { transition: opacity .3s ease; }
+  .eng__unit.is-off .eng__body { opacity: 0; transform: translateY(8px); transition-delay: 0s; }
+  .eng__unit.is-off .eng__tag { opacity: 0; transition-delay: 0s; }
+  .eng__unit:not(.is-off) .eng__tag:nth-child(1) { transition-delay: .35s; }
+  .eng__unit:not(.is-off) .eng__tag:nth-child(2) { transition-delay: .4s; }
+  .eng__unit:not(.is-off) .eng__tag:nth-child(3) { transition-delay: .45s; }
+  .eng__unit:not(.is-off) .eng__tag:nth-child(4) { transition-delay: .5s; }
+  .eng__unit:not(.is-off) .eng__tag:nth-child(5) { transition-delay: .55s; }
+  .eng__unit:not(.is-off) .eng__tag:nth-child(6) { transition-delay: .6s; }
+  /* the site's typing effect: letters stay hidden until typed in */
+  .eng [data-eng-title] .ch { opacity: 0; }
+  .eng [data-eng-title] .ch.on { opacity: 1; }
+
+  .eng.is-instant .eng__plw, .eng.is-instant .eng__plw .rs, .eng.is-instant .eng__plw .ch,
+  .eng.is-instant .eng__body, .eng.is-instant .eng__tag { transition: none !important; }
+
+  /* --- one column (phones, small tablets) --- */
+  @media (max-width: 899px) {
+    .eng { padding: 40px 16px; }
+    .eng::before { display: none; }
+    .eng__plw { position: relative; left: auto; width: auto; top: auto; margin-top: 0; }
+    .eng__unit { grid-template-columns: minmax(0, 1fr); }
+    .eng__plate { min-height: 0; max-width: 520px; width: 100%; margin: 0 auto; }
+    /* fade on the moving wrapper, not its parent, so moving plates are never clipped */
+    /* fades the lower third of each plate drawing to white so the title over it reads cleanly */
+    .eng__plw {
+      -webkit-mask-image: linear-gradient(to bottom, #000 60%, rgba(0, 0, 0, .45) 72%, rgba(0, 0, 0, .12) 81%, transparent 88%);
+      mask-image: linear-gradient(to bottom, #000 60%, rgba(0, 0, 0, .45) 72%, rgba(0, 0, 0, .12) 81%, transparent 88%);
+    }
+    .eng__copy { padding: 0 0 56px; margin-top: -44px; gap: 14px; }
+    .eng__title { font-size: 25px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.2; }
+    .eng__body { font-size: 16px; line-height: 27px; }
+    .eng__copy { gap: 14px; }
+    .eng__plw .rs, .eng__plw .dt { display: none; }
+  }
+  @media (max-width: 767px) {
+    .eng { padding: 32px 0 8px; }
+    .eng__copy { padding: 0 16px 48px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eng__plw, .eng__plw .rs, .eng__plw .ch, .eng__body, .eng__tag { transition: none !important; }
+  }
+</style>

@@ -11,18 +11,33 @@ import Fit from '../components/Fit.astro';
 import Testimonial from '../components/Testimonial.astro';
 import Dock from '../components/Dock.astro';
 import About from '../components/About.astro';
-import { site, testimonials } from '../data/home';
+import Engineering from '../components/Engineering.astro';
+import Builds from '../components/Builds.astro';
+import { site, testimonials, engineering } from '../data/home';
 ---
 <Base title={site.title} description={site.description}>
   <Header />
   <main>
     <Hero />
+    <div class="row row--line before-about" aria-hidden="true"><div class="wrap"></div></div>
     <CaseCard />
     <Stats />
+    <div class="row row--line before-about" aria-hidden="true"><div class="wrap"></div></div>
     <FeaturedTestimonial />
     <Idea />
     <Questions />
+    <div class="row row--line m-gap" aria-hidden="true"><div class="wrap"></div></div>
     <Fit />
+    <div class="row row--line before-about" aria-hidden="true"><div class="wrap"></div></div>
+    <Engineering />
+    <!-- spacer row that carries the closing line of the section above -->
+    <div class="row row--line eng-note-row">
+      <div class="wrap eng-note-row__wrap">
+        <p class="eng-note mono" data-reveal>{engineering.note}</p>
+      </div>
+    </div>
+    <Builds />
+    <div class="row row--line after-builds" aria-hidden="true"><div class="wrap"></div></div>
     <About />
     <div class="row after-about" aria-hidden="true">
       <div class="wrap wrap--line">
@@ -39,8 +54,9 @@ import { site, testimonials } from '../data/home';
             name={t.name}
             role={t.role}
             company={t.company}
+            companyHref={t.companyHref}
             avatar={t.avatar || undefined}
-            paragraphs={[t.quote]}
+            paragraphs={t.paragraphs ?? [t.quote]}
             logoStyle={i === 1 ? 'caps' : 'wordmark'}
           />
         </div>
@@ -52,7 +68,22 @@ import { site, testimonials } from '../data/home';
 </Base>
 
 <style>
+  .before-about { height: 72px; }
+  .after-builds { height: 190px; }
+  /* 190px spacer carrying the closing line of the section above: top left, a 2px bar on the grid line */
+  .eng-note-row__wrap { height: 190px; padding: 28px 0 0 30px; }
+  .eng-note { position: relative; margin: 0; max-width: none; padding-right: 30px; font-size: 13.5px; line-height: 22px; color: #6b6a6a; }
+  .eng-note::before { content: ''; position: absolute; left: -31px; top: 0; bottom: 0; width: 2px; background: var(--ink); }
+  @media (max-width: 767px) {
+    .eng-note-row__wrap { height: 220px; padding: 24px 16px 0; }
+    .eng-note { font-size: 13px; line-height: 21px; }
+    .eng-note::before { left: -17px; }
+  }
+  /* phones only: the desktop layout already has room between the questions and the next headline */
+  .m-gap { display: none; }
+  @media (max-width: 767px) { .m-gap { display: block; height: 190px; } }
   .after-about { height: 158px; }
+  @media (max-width: 767px) { .before-about { height: 40px; } }
   @media (max-width: 767px) { .after-about { height: 64px; } }
   .end { height: 130px; } /* room so the fixed buttons never cover the last content */
 </style>

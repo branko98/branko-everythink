@@ -1,5 +1,11 @@
 ---
-import { stats } from '../data/home';
+import { getEntry } from 'astro:content';
+import { caseCard } from '../data/home';
+import { rich } from '../utils/rich';
+
+// the same headline numbers as the case study shown above
+const cs = await getEntry('case-studies', caseCard.caseStudy);
+const stats = cs?.data.results ?? [];
 ---
 <section class="row row--line stats" aria-label="Results">
   <div class="wrap">
@@ -7,8 +13,14 @@ import { stats } from '../data/home';
       {stats.map((s, i) => (
         <li class="stat" data-reveal style={`--d:${i * 90}ms`}>
           <span class="stat__bar" aria-hidden="true"></span>
-          <span class="stat__value" data-count={s.value}>{s.value}</span>
-          <span class="stat__label">{s.label}</span>
+          {s.sentence ? (
+            <span class="stat__sentence" set:html={rich(s.sentence)} />
+          ) : (
+            <>
+              <span class="stat__value" data-count={s.value}>{s.value}</span>
+              <span class="stat__label">{s.label}</span>
+            </>
+          )}
         </li>
       ))}
     </ul>
@@ -20,8 +32,10 @@ import { stats } from '../data/home';
   .stat { position: relative; padding: 33px 28px 26px; display: flex; flex-direction: column; border-right: 1px dashed var(--line); }
   .stat:last-child { border-right: 0; }
   .stat__bar { position: absolute; left: -1px; top: 41px; width: 2px; height: 24px; background: var(--ink); }
-  .stat__value { font-size: 34px; line-height: 40px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .stat__label { margin-top: 20px; max-width: 200px; font-size: 14.5px; line-height: 21px; color: var(--text-soft); }
+  .stat__value { font-size: 32px; line-height: 40px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-strong); font-variant-numeric: tabular-nums; }
+  .stat__sentence { padding-top: 0; font-size: 16px; line-height: 24px; color: var(--text); }
+  .stat__sentence :global(strong) { font-weight: 600; color: var(--ink-strong); }
+  .stat__label { margin-top: 0; padding-top: 5px; max-width: 200px; font-size: 14.5px; line-height: 21px; color: var(--text-soft); }
 
   @media (max-width: 767px) {
     .stats__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -29,7 +43,8 @@ import { stats } from '../data/home';
     .stat:nth-child(2) { border-right: 0; }
     .stat:nth-child(-n + 2) { border-bottom: 1px dashed var(--line); }
     .stat__bar { top: 32px; }
-    .stat__value { font-size: 28px; line-height: 34px; }
-    .stat__label { margin-top: 14px; }
+    .stat__value { font-size: 23px; line-height: 30px; white-space: nowrap; }
+    .stat__label { margin-top: 0; }
+    .stat__sentence { font-size: 15px; line-height: 23px; }
   }
 </style>

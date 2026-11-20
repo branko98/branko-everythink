@@ -13,7 +13,7 @@
   --red-ink: #5b0f14;
   --red-line: #e26a6a;
   --link: #1f6fe5;
-  --dark: #202125;
+  --dark: #18191c;
   --dark-2: #3a3b40;
 
   --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -86,6 +86,14 @@ button { font: inherit; }
   background-repeat: no-repeat;
   background-size: 100% 100%;
   padding: 1px 0;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.flag {
+  font-weight: 600;
+  color: var(--red-ink);
+  background: var(--red-bg);
+  padding: 1px 2px;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }

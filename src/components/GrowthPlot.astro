@@ -1,0 +1,84 @@
+---
+// The growth plot used on the case study and on the homepage case card:
+// weekly series, shaded diagnosis window, numbered markers, end dot with the delta, months underneath.
+interface Props {
+  data: number[];
+  band: { to: number };
+  markers: { at: number; label: string }[];
+  months: string[];
+  delta: string;
+  label: string; // accessible description
+  height?: number;
+  mobileHeight?: number;
+}
+const { data, band, markers, months, delta, label, height = 300, mobileHeight = 210 } = Astro.props;
+
+const W = 1000;
+const H = 300;
+const min = Math.min(...data) - 8;
+const max = Math.max(...data) + 6;
+const n = data.length;
+const x = (i: number) => (i / (n - 1)) * W;
+const y = (v: number) => H - ((v - min) / (max - min)) * H;
+const pts = data.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+const pct = (i: number, v: number) => ({ left: (x(i) / W) * 100, top: (y(v) / H) * 100 });
+const end = pct(n - 1, data[n - 1]);
+const bandW = (band.to / (n - 1)) * 100;
+---
+<div class="gp" style={`--h:${height}px;--hm:${mobileHeight}px`}>
+  <div class="gp__plot chart" role="img" aria-label={label}>
+    <div class="gp__band" style={`width:${bandW}%`}><span class="mono">Diagnosis</span></div>
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <g class="chart-grid" stroke="#e8e8eb" stroke-width="1">
+        {data.map((_, i) => <line x1={x(i)} y1="0" x2={x(i)} y2={H} style={`--i:${i}`} vector-effect="non-scaling-stroke" />)}
+      </g>
+      <line x1="0" y1={H - 0.5} x2={W} y2={H - 0.5} stroke="#d0d5dd" stroke-width="1" vector-effect="non-scaling-stroke" />
+      <polyline class="chart-line" points={pts} stroke="#141413" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+    </svg>
+    {markers.map((m) => {
+      const p = pct(m.at, data[m.at]);
+      return (
+        <span class="gp__marker" style={`left:${p.left}%;top:${p.top}%`}>
+          <span class="gp__marker-n mono">{m.label}</span>
+        </span>
+      );
+    })}
+    <span class="gp__end" style={`left:${end.left}%;top:${end.top}%`}>
+      <span class="chart-dot-pulse"></span>
+      <span class="chart-dot"></span>
+      <span class="gp__delta">{delta}</span>
+    </span>
+  </div>
+  <ul class="gp__months mono" aria-hidden="true">
+    {months.map((m) => <li>{m}</li>)}
+  </ul>
+</div>
+
+<style>
+  .gp__plot { position: relative; height: var(--h); }
+  .gp__plot svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .gp__band {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: repeating-linear-gradient(135deg, #f6f7f9 0 6px, #eef0f3 6px 7px);
+    border-right: 1px dashed #b9bec7;
+  }
+  .gp__band span { position: absolute; left: 10px; top: 10px; font-size: 12px; font-weight: 600; color: var(--text-soft); }
+  .gp__marker { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; background: var(--ink); outline: 4px solid #fff; z-index: 2; }
+  .gp__marker-n { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); font-size: 12px; font-weight: 600; padding: 1px 6px; background: var(--ink); color: #fff; }
+  .gp__end { position: absolute; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; z-index: 2; }
+  .gp__end .chart-dot, .gp__end .chart-dot-pulse { position: absolute; inset: 0; border-radius: 50%; background: var(--ink); }
+  .gp__end .chart-dot-pulse { opacity: 0; }
+  .gp__delta { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 22px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-strong); white-space: nowrap; }
+  .gp__months { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); font-size: 13.5px; color: var(--ink); }
+  /* first month at the start of the axis, the middle one centred, the last one at the end */
+  .gp__months li { text-align: center; }
+  .gp__months li:first-child { text-align: left; }
+  .gp__months li:last-child { text-align: right; }
+
+  @media (max-width: 767px) {
+    .gp__plot { height: var(--hm); }
+    /* on phones the plot runs to the right edge: the delta sits above-left of the end dot, clear of the line */
+    .gp__delta { font-size: 17px; left: auto; right: 4px; top: auto; bottom: 10px; transform: none; }
+    .gp__months { font-size: 12px; }
+  }
+</style>

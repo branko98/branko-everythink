@@ -6,16 +6,18 @@ interface Props {
   name: string;
   role: string;
   company: string;
+  companyHref?: string;
   paragraphs: string[];
   avatar?: string;
   size?: 'featured' | 'compact';
   logoStyle?: 'wordmark' | 'caps';
 }
-const { logo, name, role, company, paragraphs, avatar, size = 'compact', logoStyle = 'wordmark' } = Astro.props;
+const { logo, name, role, company, companyHref, paragraphs, avatar, size = 'compact', logoStyle = 'wordmark' } = Astro.props;
 ---
 <figure class:list={['t', `t--${size}`]} data-reveal>
-  <span class="t__bar" aria-hidden="true"></span>
-  <div class:list={['t__logo', `t__logo--${logoStyle}`]}>{logo}</div>
+  <div class:list={['t__logo', `t__logo--${logoStyle}`]}>
+    {/\.(svg|png|jpe?g|webp)$/i.test(logo) ? <img class="t__logo-img" src={logo} alt={company} height="30" /> : logo}
+  </div>
 
   <blockquote class="t__quote mono">
     {paragraphs.map((p) => <p set:html={rich(p)} />)}
@@ -23,12 +25,12 @@ const { logo, name, role, company, paragraphs, avatar, size = 'compact', logoSty
 
   <figcaption class="t__who">
     <span class="t__name">{name}</span>
-    <span class="t__role">{role}{size === 'featured' ? <br /> : ' '}@ {company}</span>
+    <span class="t__role">{role} @ {companyHref ? <a class="t__company" href={companyHref} target="_blank" rel="noopener">{company}</a> : company}</span>
   </figcaption>
 
   <div class="t__face">
     <span class="cursor-wrap" aria-hidden="true">
-      <svg class="cursor" width="14" height="14" viewBox="0 0 14 14"><path d="M1 1 L13 6 L7.5 7.5 L6 13 Z" fill="#c9cad0" /></svg>
+      <svg class="cursor" width="22" height="22" viewBox="0 0 14 14"><path d="M1 1 L13 6 L7.5 7.5 L6 13 Z" fill="#c9cad0" /></svg>
     </span>
     {avatar ? <img class="t__avatar" src={avatar} alt="" width="64" height="64" loading="lazy" /> : <span class="t__avatar" aria-hidden="true"></span>}
   </div>
@@ -39,7 +41,8 @@ const { logo, name, role, company, paragraphs, avatar, size = 'compact', logoSty
     position: relative;
     margin: 0;
     display: grid;
-    grid-template-columns: 280px minmax(0, 540px) minmax(0, 1fr);
+    /* logo + name | quote | photo - the quote gets the widest column */
+    grid-template-columns: 236px minmax(0, 644px) minmax(0, 1fr);
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
       'logo quote face'
@@ -48,27 +51,33 @@ const { logo, name, role, company, paragraphs, avatar, size = 'compact', logoSty
     padding: 44px 0 30px;
   }
   .t--featured { padding: 40px 0 34px; min-height: 240px; }
-  .t--featured .t__bar { top: 44px; }
   .t--compact { min-height: 224px; }
 
-  .t__bar { position: absolute; left: -1px; top: 48px; width: 2px; height: 22px; background: var(--ink); }
-  .t__logo { grid-area: logo; padding-left: 41px; font-weight: 700; letter-spacing: -0.03em; font-size: 23px; line-height: 30px; }
+  .t__logo { grid-area: logo; position: relative; align-self: start; padding-left: 30px; font-weight: 700; letter-spacing: -0.03em; font-size: 23px; line-height: 30px; }
   .t--compact .t__logo { font-size: 17px; }
+  /* the bar on the grid line matches the logo's own height, whatever the logo */
+  .t__logo::before { content: ''; position: absolute; left: -1.5px; top: 0; bottom: 0; width: 3px; background: var(--ink); }
+  .t__logo-img { display: block; height: 35px; width: auto; }
   .t__logo--caps { font-size: 26px !important; font-weight: 800; letter-spacing: 0.01em; }
 
-  .t__quote { grid-area: quote; margin: 0; font-size: 16px; line-height: 26px; color: #1a1b20; display: flex; flex-direction: column; gap: 26px; }
+  /* sits lower than the logo, and ends well above the name and photo */
+  .t__quote { grid-area: quote; margin: 70px 0 70px; font-size: 16px; line-height: 26px; color: #1a1b20; display: flex; flex-direction: column; gap: 26px; }
 
-  .t__who { grid-area: who; align-self: end; padding-left: 42px; display: flex; flex-direction: column; gap: 10px; }
+  .t__who { grid-area: who; align-self: end; padding-left: 30px; display: flex; flex-direction: column; gap: 10px; }
   .t__name { font-size: 18px; font-weight: 500; letter-spacing: -0.01em; }
-  .t__role { font-size: 12.5px; line-height: 20px; letter-spacing: 0.03em; color: #6b7080; text-transform: uppercase; }
+  .t__company { color: inherit; text-decoration: underline; text-decoration-color: #c5c7cf; text-underline-offset: 3px; }
+  .t__company:hover { color: var(--ink); text-decoration-color: currentColor; }
+  /* one line: role @ company (may run under the quote, which ends well above it) */
+  .t__role { white-space: nowrap; font-size: 12.5px; line-height: 20px; letter-spacing: 0.03em; color: #6b7080; text-transform: uppercase; }
 
   .t__face { grid-area: face; align-self: end; justify-self: center; position: relative; padding-left: 12px; margin-left: 30px; }
   .t__avatar { display: block; width: 76px; height: 76px; border-radius: 50%; background: #dcdde1; border: 1px solid #ececef; object-fit: cover; }
-  .cursor-wrap { position: absolute; left: 0; top: -16px; }
+  .cursor-wrap { position: absolute; left: -6px; top: -24px; }
 
   @media (max-width: 900px) {
-    .t { grid-template-columns: 220px minmax(0, 1fr) 110px; }
-    .t__logo, .t__who { padding-left: 32px; }
+    .t { grid-template-columns: 200px minmax(0, 1fr) 110px; }
+    .t__quote { margin: 56px 0 56px; }
+    .t__logo, .t__who { padding-left: 30px; }
     .t__face { margin-left: 0; }
   }
   @media (max-width: 767px) {
@@ -83,10 +92,11 @@ const { logo, name, role, company, paragraphs, avatar, size = 'compact', logoSty
       row-gap: 22px;
       padding: 30px 16px 26px 0;
     }
-    .t__bar { top: 32px; }
+    .t__logo-img { height: 32px; }
     .t__logo, .t__who { padding-left: 16px; }
-    .t__quote { padding-left: 16px; font-size: 14.5px; line-height: 24px; gap: 20px; }
+    .t__quote { margin: 0; padding-left: 16px; font-size: 14.5px; line-height: 24px; gap: 20px; }
     .t__who { align-self: center; }
+    .t__role { white-space: normal; }
     .t__face { align-self: center; }
     .t__avatar { width: 52px; height: 52px; }
   }
