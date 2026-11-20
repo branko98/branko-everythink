@@ -75,7 +75,7 @@ import { site, testimonials, engineering } from '../data/home';
   .eng-note { position: relative; margin: 0; max-width: none; padding-right: 30px; font-size: 13.5px; line-height: 22px; color: #6b6a6a; }
   .eng-note::before { content: ''; position: absolute; left: -31px; top: 0; bottom: 0; width: 2px; background: var(--ink); }
   @media (max-width: 767px) {
-    .eng-note-row__wrap { height: 220px; padding: 24px 16px 0; }
+    .eng-note-row__wrap { height: 270px; padding: 24px 16px 0; }
     .eng-note { font-size: 13px; line-height: 21px; }
     .eng-note::before { left: -17px; }
   }
@@ -83,11 +83,12 @@ import { site, testimonials, engineering } from '../data/home';
   .m-gap { display: none; }
   @media (max-width: 767px) { .m-gap { display: block; height: 190px; } }
   .after-about { height: 158px; }
+  .end { height: 130px; } /* room so the fixed buttons never cover the last content */
   @media (max-width: 767px) {
     .before-about { height: 40px; }
-    .before-case { height: 65px; }
+    .before-case { height: 110px; }
     .before-featured { height: 95px; }
+    .after-about { height: 150px; }
+    .end { height: 190px; }
   }
-  @media (max-width: 767px) { .after-about { height: 64px; } }
-  .end { height: 130px; } /* room so the fixed buttons never cover the last content */
 </style>
