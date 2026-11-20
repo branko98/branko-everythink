@@ -187,9 +187,10 @@ export const about = {
   tagline: 'Growth for B2B SaaS',
   signature: '/signature.png',
   paragraphs: [
-    'Seven years in B2B, most of it in SaaS. I started by running channels and ended up owning the system behind them.',
-    'Paid across five platforms. Landing pages. CRM lifecycle and attribution from first click to closed revenue. An AI layer that turns sales calls back into messaging and targeting. Not four vendors - one person who can see where one breaks the next.',
-    'Developer background, which is why the fixes get built instead of handed over as a document.',
+    'Seven years in B2B SaaS growth. Before this I ran paid search and automation at an agency, leading a team of five across forty-plus B2B SaaS accounts - mostly US, sales-led and self-serve. I started by running channels and ended up owning the system behind them.',
+    'Paid across five platforms. Landing pages. CRM lifecycle and attribution from first click to closed revenue. Not four vendors - one person who can see where one breaks the next.',
+    'Developer background, so the fixes get built instead of written up - attribution, capture paths, and the automations where the input is language rather than arithmetic.',
+    'What’s listed is what I’ve shipped, not what I’d be willing to try.',
   ],
   cta: {
     title: 'Start with the diagnosis.',
