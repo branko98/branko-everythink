@@ -24,6 +24,7 @@ import { site, testimonials, engineering } from '../data/home';
     <Stats />
     <div class="row row--line before-featured" aria-hidden="true"><div class="wrap"></div></div>
     <FeaturedTestimonial />
+    <div class="row row--line after-featured" aria-hidden="true"><div class="wrap"></div></div>
     <Idea />
     <Questions />
     <div class="row row--line m-gap" aria-hidden="true"><div class="wrap"></div></div>
@@ -68,7 +69,7 @@ import { site, testimonials, engineering } from '../data/home';
 </Base>
 
 <style>
-  .before-about, .before-case, .before-featured { height: 72px; }
+  .before-about, .before-case, .before-featured, .after-featured { height: 72px; }
   .after-builds { height: 190px; }
   /* 190px spacer carrying the closing line of the section above: top left, a 2px bar on the grid line */
   .eng-note-row__wrap { height: 190px; padding: 28px 0 0 30px; }
@@ -87,7 +88,8 @@ import { site, testimonials, engineering } from '../data/home';
   @media (max-width: 767px) {
     .before-about { height: 40px; }
     .before-case { height: 110px; }
-    .before-featured { height: 95px; }
+    .before-featured { height: 150px; }
+    .after-featured { height: 150px; }
     .after-about { height: 150px; }
     .end { height: 190px; }
   }

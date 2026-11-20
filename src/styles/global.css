@@ -68,7 +68,7 @@ button { font: inherit; }
 
 /* ---------- type ---------- */
 .display {
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.035em;
   color: var(--muted-head);
   font-size: clamp(30px, 2.4vw + 10px, 42px);
