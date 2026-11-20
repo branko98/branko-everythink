@@ -154,7 +154,7 @@ export const links = {
 
 // Floating bar fixed to the bottom of the screen: hand the site to an AI assistant with a ready prompt.
 const askPrompt =
-  'This is the site and work of Branko Jovanović, a B2B SaaS growth consultant. Read the homepage and the case study linked from it, including the detailed breakdowns of the measurement and attribution work.\n\nThen tell me, in plain terms: what he actually does, how he works, what he builds himself versus what he advises on, and what kind of company and situation this fits.\n\nBase it on the specifics in the material rather than the headline claims. My situation: [describe what you’re dealing with]';
+  'This is everythink.pro, the site and work of Branko Jovanović, who leads growth for B2B SaaS companies. Read the homepage and the case study linked from it, including the detailed breakdowns of the measurement and attribution work.\n\nKeep your answer short enough to read in a minute. Cover only: what he actually does, what he builds himself versus what he hands off, and which parts of my situation below his work covers and which parts it doesn’t. Base it on the specifics in the material rather than the headline claims. Where the material doesn’t cover something, say whether it’s absent because he doesn’t do it, or simply because this engagement didn’t require it.\n\n[Paste your website, what isn’t working, and the kind of person you think you need]';
 export const dock = {
   label: '**Check this** instead of reading it', // **bold**
   prompt: askPrompt,
