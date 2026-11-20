@@ -10,9 +10,9 @@ export const site = {
 };
 
 export const hero = {
-  muted: "B2B SaaS companies don't have an ads problem. They have a leak between the ad, the site, the CRM and sales and ",
-  strong: 'nobody owns the whole chain.',
-  sub: 'Seven years building growth for B2B SaaS - the channels, the tracking, the CRM, and the systems that connect them.',
+  muted: 'The ad, the site, the CRM and the handoff to sales are four jobs. ',
+  strong: 'In B2B SaaS, growth breaks where they meet and that’s one job.',
+  sub: 'Seven years doing all four myself. Leading a team across forty-plus B2B SaaS accounts is what teaches you to stop guessing which one is broken.',
 };
 
 // Homepage case card. The chart and the numbers under it come from the case study itself
