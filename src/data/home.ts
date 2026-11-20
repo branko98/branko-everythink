@@ -3,7 +3,7 @@
 // Inside quotes/table text, wrap a phrase in [[double brackets]] to highlight it.
 
 export const site = {
-  title: 'Everythink – B2B SaaS growth, from the first ad to the closed deal',
+  title: 'branko/everythink – B2B SaaS growth, from the first ad to the closed deal',
   description:
     'Seven years building growth for B2B SaaS - the channels, the tracking, the CRM, and the systems that connect them.',
   ctaLabel: 'Get started',
